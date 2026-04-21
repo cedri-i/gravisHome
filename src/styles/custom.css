@@ -1,0 +1,7 @@
+@import "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"; /* 数学公式样式 */
+
+mark {
+    background-color: #ffd700;
+    color: black;
+    padding: 0 2px;
+}
