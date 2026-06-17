@@ -4,6 +4,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { remarkObsidianColor } from './remark-obsidian-color.mjs';
+import { remarkObsidianHighlight } from './remark-obsidian-highlight.mjs';
 import { remarkCodeLanguageAliases } from './remark-code-language-aliases.mjs';
 import { rehypeMermaid } from './rehype-mermaid.mjs';
 
@@ -44,6 +45,7 @@ export default defineConfig({
             [remarkGfm, { singleTilde: false }],
             remarkMath,
             remarkObsidianColor,
+            remarkObsidianHighlight,
             remarkCodeLanguageAliases,
         ],
         rehypePlugins: [rehypeKatex, rehypeMermaid],
