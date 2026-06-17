@@ -1,28 +1,51 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-import { remarkObsidianColor } from './remark-obsidian-color.mjs'; // 确保你创建了这个文件
+import { remarkObsidianColor } from './remark-obsidian-color.mjs';
+import { remarkCodeLanguageAliases } from './remark-code-language-aliases.mjs';
+import { rehypeMermaid } from './rehype-mermaid.mjs';
+
+function mermaidClient() {
+    return {
+        name: 'mermaid-client',
+        hooks: {
+            'astro:config:setup': ({ injectScript }) => {
+                injectScript(
+                    'page',
+                    `import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({ startOnLoad: false, theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default' });
+await mermaid.run({ querySelector: '.mermaid' });`
+                );
+            },
+        },
+    };
+}
 
 export default defineConfig({
-    site: 'https://gravis-home.vercel.app',
+    site: 'https://gravis-home-xi.vercel.app',
     integrations: [
         starlight({
             title: 'My Docs',
-            // 如果你后面创建了自定义CSS，可以在这里取消注释
-            // customCss: ['./src/styles/custom.css'], 
+            customCss: ['./src/styles/custom.css'],
             sidebar: [
                 {
                     label: 'My Notes',
-                    autogenerate: { directory: 'notes' }, 
+                    autogenerate: { directory: 'notes' },
                 },
             ],
         }),
+        mermaidClient(),
     ],
     markdown: {
-        // remarkPlugins 处理 Markdown 语法（数学公式解析、自定义颜色语法）
-        remarkPlugins: [remarkMath, remarkObsidianColor],
-        // rehypePlugins 处理 HTML 转换（把公式渲染成漂亮的样式）
-        rehypePlugins: [rehypeKatex],
+        gfm: false,
+        remarkPlugins: [
+            [remarkGfm, { singleTilde: false }],
+            remarkMath,
+            remarkObsidianColor,
+            remarkCodeLanguageAliases,
+        ],
+        rehypePlugins: [rehypeKatex, rehypeMermaid],
     },
 });

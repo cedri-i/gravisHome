@@ -1,7 +1,66 @@
-@import "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"; /* 数学公式样式 */
+@import "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css";
+
+:root {
+    --obsidian-red: #d64545;
+    --obsidian-orange: #c76f1d;
+    --obsidian-yellow: #a97900;
+    --obsidian-green: #2f8f46;
+    --obsidian-cyan: #008c9e;
+    --obsidian-blue: #3b6fd8;
+    --obsidian-purple: #8756c5;
+    --obsidian-pink: #c24f86;
+}
+
+:root[data-theme='dark'] {
+    --obsidian-red: #ff7b72;
+    --obsidian-orange: #f2a65a;
+    --obsidian-yellow: #f6d365;
+    --obsidian-green: #7ee787;
+    --obsidian-cyan: #76e4f7;
+    --obsidian-blue: #79c0ff;
+    --obsidian-purple: #d2a8ff;
+    --obsidian-pink: #ff9ecb;
+}
+
+.obsidian-color {
+    font-weight: inherit;
+}
+
+.obsidian-color-red {
+    color: var(--obsidian-red);
+}
+
+.obsidian-color-orange {
+    color: var(--obsidian-orange);
+}
+
+.obsidian-color-yellow {
+    color: var(--obsidian-yellow);
+}
+
+.obsidian-color-green {
+    color: var(--obsidian-green);
+}
+
+.obsidian-color-cyan {
+    color: var(--obsidian-cyan);
+}
+
+.obsidian-color-blue {
+    color: var(--obsidian-blue);
+}
+
+.obsidian-color-purple {
+    color: var(--obsidian-purple);
+}
+
+.obsidian-color-pink {
+    color: var(--obsidian-pink);
+}
 
 mark {
-    background-color: #ffd700;
-    color: black;
-    padding: 0 2px;
+    border-radius: 0.18rem;
+    background-color: color-mix(in srgb, var(--obsidian-yellow) 28%, transparent);
+    color: inherit;
+    padding: 0 0.14em;
 }
