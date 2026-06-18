@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" role="img" aria-label="Computer systems circuit motif">
+  <defs>
+    <linearGradient id="chip" x1="40" y1="28" x2="210" y2="150" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22c55e"/>
+      <stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 90H74M186 90h42M130 32v38M130 110v38M52 44l32 28M176 108l32 28M52 136l32-28M176 72l32-28" stroke="#64748b" stroke-width="7"/>
+    <rect x="78" y="66" width="104" height="48" rx="10" fill="url(#chip)" opacity=".72" stroke="#0f172a" stroke-width="5"/>
+    <path d="M100 90h60M112 80h36M112 100h28" stroke="#f8fafc" stroke-width="5" opacity=".85"/>
+    <circle cx="32" cy="90" r="10" fill="#38bdf8" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="228" cy="90" r="10" fill="#22c55e" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="130" cy="30" r="10" fill="#f59e0b" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="130" cy="150" r="10" fill="#a78bfa" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="48" cy="40" r="8" fill="#94a3b8"/>
+    <circle cx="212" cy="40" r="8" fill="#94a3b8"/>
+    <circle cx="48" cy="140" r="8" fill="#94a3b8"/>
+    <circle cx="212" cy="140" r="8" fill="#94a3b8"/>
+  </g>
+</svg>
