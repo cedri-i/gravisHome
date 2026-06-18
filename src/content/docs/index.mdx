@@ -6,17 +6,15 @@ hero:
   tagline: "还是蠢笨地，收下一切吧"
   actions:
     - text: 查看文档
-      link: /computer-systems/
+      link: /my-notes/
       icon: right-arrow
       variant: primary
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
-## 知识分类
+## 入口
 
 <CardGrid>
-  <Card title="计算机系统" icon="setting" href="/computer-systems/">
-    从机器级表示、汇编、内存到缓存，收纳系统相关的课程笔记。
-  </Card>
+  <LinkCard title="My Notes" href="/my-notes/" description="从这里进入所有笔记分类。" />
 </CardGrid>
