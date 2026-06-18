@@ -62,12 +62,12 @@ sumstore:
     popq    %rbx
     ret
 ```
-这些`%`就是寄存器的实际名称
-- `push:`将东西推到栈上
-- `mov:`将它从一个地方==复制==到另一个地方
-- `call:`调用一些指令
-- `pop: push`的对应指令
-- `ret:`从一个特定的函数返回
+这些 `%` 就是寄存器的实际名称
+- `push:` 将东西推到栈上
+- `mov:` 将它从一个地方==复制==到另一个地方
+- `call:` 调用一些指令
+- `pop: push` 的对应指令
+- `ret:` 从一个特定的函数返回
 ### Command
 `gcc -Og -S sum.c`
 Produces file `sum.s`
@@ -100,7 +100,7 @@ sumstore:
 ### Data Types
 #### Integer data of 1, 2, 4, or 8 bytes
 - Data values
-- ==不区分signed和unsigned==
+- ==不区分 signed 和 unsigned==
 - Addresses (untyped pointers)
 #### Floating point data of 4, 8, or 10 bytes
 #### ~={pink}No aggregate types=~ such as arrays or structures
@@ -145,8 +145,8 @@ sumstore:
 #### `objdump -d sum`
 - 编译时变量名丢失，变成一大堆位置，所以反汇编~={yellow}**无法**=~回到源代码层次
 	- 但这一说法并非完全正确
-	- 若编译时加上`-g`参数（e.g. `gcc -g test.c -o test`）
-	- Compiler会在二进制文件中添加一个叫**DWARF**的调试信息段，记录~={green}机器码地址和源代码行号=~的对应关系，以及~={green}变量名=~
+	- 若编译时加上 `-g` 参数（e.g. `gcc -g test.c -o test`）
+	- Compiler 会在二进制文件中添加一个叫**DWARF**的调试信息段，记录~={green}机器码地址和源代码行号=~的对应关系，以及~={green}变量名=~
 # Assembly Basics: Registers, Operands, Move
 ## x86-64 Integer Registers
 $$
@@ -177,10 +177,10 @@ $$
 \end{array}
 \end{array}
 $$
-- `%e`版本得到32位
-- `%r`版本得到64位
-- `%e`版本是`%r`版本的低32位
-- `%rsp`是最==特殊、危险==的一个
+- `%e` 版本得到 32 位
+- `%r` 版本得到 64 位
+- `%e` 版本是 `%r` 版本的低 32 位
+- `%rsp` 是最==特殊、危险==的一个
 ### Moving Data
 `movq`*Source, Dest*
 ## Operand Types
@@ -224,8 +224,8 @@ $$
 $$
 
 > 寄存器没有“地址”，它们不在内存里，==不参与内存编址==
-> 写`movq %rax, %rdx`时，就是“把`%rax`盒子里装的东西复制到`%rdx`盒子里面去”
-> `(%rdx)`就是把该盒子装的东西本身当作一个地址，到内存里寻找这个地址对应的内容
+> 写 `movq %rax, %rdx` 时，就是“把 `%rax` 盒子里装的东西复制到 `%rdx` 盒子里面去”
+> `(%rdx)` 就是把该盒子装的东西本身当作一个地址，到内存里寻找这个地址对应的内容
 
 ## Simple Memory Addressing Modes
 - **Normal** $\qquad$ **(R)** $\qquad$ **Mem\[Reg\[R\]\]**
@@ -237,7 +237,7 @@ $$
     - Register **R** specifies start of memory region
     - Constant displacement **D** specifies offset
     - **`movq 8(%rbp), %rdx`**
-    - ~={cyan}*不直接使用寄存器中的地址，而是将地址偏移D*=~
+    - ~={cyan}*不直接使用寄存器中的地址，而是将地址偏移 D*=~
 	    - 对于访问~={yellow}**不同的数据结构**=~非常有用！
 ### Example
 ```C
@@ -258,7 +258,7 @@ swap:
     ret                     # 返回
 ```
 ~={red}**源（Source）和目的（Dest）不能同时为内存地址=~**
-**~={red}也就是不能写`movq (%rdi), (%rax)`** =~
+**~={red}也就是不能写 `movq (%rdi), (%rax)`** =~
 ## Complete Memory Addressing Modes
 ### Most General Form
 #### ~={yellow}D(Rb, Ri, S)         Mem\[Reg\[Rb] + S \* Reg\[Ri] + D]=~
@@ -274,7 +274,7 @@ swap:
 - Src is address mode expression
 - Set Dst to address denoted by expression
 - `lea` = ~={yellow}**load effective address**=~
-- 基本上就是`C`的`&`操作
+- 基本上就是 `C` 的 `&` 操作
 ### Uses
 - Computing addresses without a memory reference
 	- E.g., translation of `p = &x[i];`
@@ -293,8 +293,8 @@ m12:
     salq    $2, %rax                 # return t << 2  (3x * 4 = 12x)
     ret                              # 返回结果
 ```
-编译器很讨厌`imulq`（乘法指令），因为乘法电路==**很慢**==。它发现$12x$可以拆解成$(x+2x)\times4$
-- `%rdi`是根据调用约定存放第一个参数`x`的地方
+编译器很讨厌 `imulq`（乘法指令），因为乘法电路==**很慢**==。它发现 $12x$ 可以拆解成 $(x+2x)\times4$
+- `%rdi` 是根据调用约定存放第一个参数 `x` 的地方
 ## Some Arithmetic Operations
 ### ~={blue}Two=~ Operand Instructions:
 $$

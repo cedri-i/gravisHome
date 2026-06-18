@@ -55,13 +55,13 @@ block-beta
 - 虽然 CPU 的寄存器是 64 位的，但目前主流的处理器（如 Intel/AMD）在物理硬件上并没有连接全部 64 根地址线，而是只实现了 ~={orange}**48 位**=~ 虚拟地址
 - 因为用户空间的地址最高位**必须固定为 0**，那么剩下的可以自由变动的位数就只有 **47 位** 了（从 bit 0 到 bit 46）
 - $$用户空间大小 = 2^{47} \text{ 字节} = 128 \text{ TB}$$
-- 而若第47位是1，则地址属于~={yellow}**内核空间**=~
+- 而若第 47 位是 1，则地址属于~={yellow}**内核空间**=~
 
 ### Brief Introduction
 
 #### Stack
-- 在常用的系统上，栈的大小是8MB
-	- 一旦访问一个超出该值的栈，就会产生`segmentation fault`
+- 在常用的系统上，栈的大小是 8MB
+	- 一旦访问一个超出该值的栈，就会产生 `segmentation fault`
 
 #### `ulimit -a`
 
@@ -89,15 +89,15 @@ file locks                          (-x) unlimited
 #### Others
 - `text`（文本段）用于存放可执行区域
 
-- `data`用来存放程序开始时分配的数据
+- `data` 用来存放程序开始时分配的数据
 
-- `heap`用来存放`malloc`或相关的函数申请的变量
+- `heap` 用来存放 `malloc` 或相关的函数申请的变量
 	- 它们会动态变化
-	- 若不`free`就会越来越大
+	- 若不 `free` 就会越来越大
 
-- `shared libraries`同样用来存放代码
-	- 其存储的是类似`printf`和`malloc`这样的~={purple}库函数=~
-	- library code被存储在磁盘上
+- `shared libraries` 同样用来存放代码
+	- 其存储的是类似 `printf` 和 `malloc` 这样的~={purple}库函数=~
+	- library code 被存储在磁盘上
 	- 程序开始执行之初它们被加载到程序当中，称之为“动态加载”
 	- dynamic linking
 
@@ -151,7 +151,7 @@ double fun(int i) {
     
 - `fun(4) -> 3.14`
     
-- `fun(6) -> Segmentation fault`~={yellow}已经越过了整个结构体`s`的领地=~
+- `fun(6) -> Segmentation fault`~={yellow}已经越过了整个结构体 `s` 的领地=~
 
 - **C 语言不检查数组越界**：它给你极大的自由，也给了你写出 Bug 的无限可能。
     
@@ -199,9 +199,9 @@ void call_echo() {
 	echo();
 }
 ```
-- 23个字符时可行（还要加上一个`'\0'`）
-- 24个字符时`segmentation fault`
-- 为什么是24和25？
+- 23 个字符时可行（还要加上一个 `'\0'`）
+- 24 个字符时 `segmentation fault`
+- 为什么是 24 和 25？
 	- 观察（反）汇编代码：
 ```Assembly
 00000000004006cf <echo>:
@@ -222,12 +222,12 @@ call_echo:
   4006fa:    c3                       retq
 ```
 
-在x86-64的System V ABI里：
+在 x86-64 的 System V ABI 里：
 
-- 执行`call`之前，`%rsp`必须是~={cyan}**16字节对齐**=~
-- `call`会压入**8字节返回地址**
-- 故函数入口时`%rsp % 16 == 8`
-- 编译器需要通过`sub %rsp, X`来~={cyan}恢复对齐=~
+- 执行 `call` 之前，`%rsp` 必须是~={cyan}**16 字节对齐**=~
+- `call` 会压入**8 字节返回地址**
+- 故函数入口时 `%rsp % 16 == 8`
+- 编译器需要通过 `sub %rsp, X` 来~={cyan}恢复对齐=~
 
 调用函数时，需要：
 - 栈 16 字节对齐
@@ -235,24 +235,20 @@ call_echo:
 
 ### Buffer Overflow Stack
 
-当我输入23以上的字符时，我将破坏返回地址的字节表示
+当我输入 23 以上的字符时，我将破坏返回地址的字节表示
 
 ### Code Injection Attacks
 
 <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; color: #333; font-family: sans-serif; max-width: 500px; margin: 10px auto; border: 1px solid #ddd;">
-    
     <div style="text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 16px;">
         Stack after call to <code style="background: #eee; padding: 2px 4px; border-radius: 4px;">gets()</code>
     </div>
-
     <div style="display: flex; align-items: stretch; justify-content: center;">
-        
         <div style="display: flex; flex-direction: column; justify-content: flex-end; padding-right: 10px; text-align: right; font-size: 13px; min-width: 100px;">
             <div style="margin-bottom: 60px;">data written<br>by <code>gets()</code></div>
             <div style="font-weight: bold; height: 30px; display: flex; align-items: center; justify-content: flex-end;">B →</div>
             <div style="height: 60px;"></div>
         </div>
-
         <div style="width: 140px; border: 2px solid #000; background: #fff; display: flex; flex-direction: column;">
             <div style="height: 80px; border-bottom: 2px solid #000; display: flex; align-items: center; justify-content: center;">P frame</div>
             <div style="height: 35px; border-bottom: 2px solid #000; padding-left: 8px; display: flex; align-items: center; background: #fff; font-weight: bold;">B</div>
@@ -260,17 +256,15 @@ call_echo:
             <div style="height: 60px; border-bottom: 2px solid #000; padding-left: 8px; display: flex; align-items: center; background: #9fa8da;">exploit<br>code</div>
             <div style="height: 50px; background: #e8eaf6;"></div>
         </div>
-
         <div style="display: flex; flex-direction: column; padding-left: 10px; font-size: 13px;">
             <div style="height: 80px; display: flex; align-items: center; font-weight: bold;"> P stack frame</div>
             <div style="height: 165px; display: flex; align-items: center; font-weight: bold;"> Q stack frame</div>
         </div>
-
     </div>
 </div>
 
 
-- `gets()`函数~={red}**非常危险**=~，因为不检查输入字符串的长度
+- `gets()` 函数~={red}**非常危险**=~，因为不检查输入字符串的长度
 - **攻击发生：** 攻击者构造了一个特殊的输入字符串：
 
 1. **Exploit Code（恶意代码）：** 字符串的前半部分是攻击者想要运行的机器指令（比如开启一个远程控制端口）
@@ -291,8 +285,8 @@ call_echo:
 
 ### 2. 栈随机化
 
-- 每次程序启动，操作系统都会在栈的起始位置随机加上一个“偏移量”（Offset），这意味着`buf`的地址每次都在变
-- 为了让黑客猜不到，随机化的位（Entropy）通常在16到30位之间，这意味着栈顶的位置可能在几MB甚至几GB的范围浮动
+- 每次程序启动，操作系统都会在栈的起始位置随机加上一个“偏移量”（Offset），这意味着 `buf` 的地址每次都在变
+- 为了让黑客猜不到，随机化的位（Entropy）通常在 16 到 30 位之间，这意味着栈顶的位置可能在几 MB 甚至几 GB 的范围浮动
 
 ### 3. Stack Canaries can help
 栈金丝雀
@@ -310,10 +304,10 @@ call_echo:
 
 - 若攻击者想要修改掉返回地址，由于栈是连续的，他必须先横扫过这个金丝雀位置
 
-- 在执行`ret`之前，系统会增加一步操作，即~={yellow}**取回刚才埋进去的值，和原始值比对**=~
+- 在执行 `ret` 之前，系统会增加一步操作，即~={yellow}**取回刚才埋进去的值，和原始值比对**=~
 - 若数值变了，程序就会意识到自己正受到攻击
 	- 为保护系统不受攻击，程序会立即崩溃并报错
-		- 通常是`Stack smashing detected`
+		- 通常是 `Stack smashing detected`
 
 #### Protected Buffer Disassembly
 
@@ -339,32 +333,24 @@ echo:
 #### Setting Up Canary
 
 <div style="background-color: white; padding: 30px; font-family: 'Segoe UI', Arial, sans-serif; color: black; line-height: 1.2;">
-    
     <div style="font-size: 32px; font-weight: bold; margin-bottom: 5px;">Setting Up Canary</div>
     <div style="color: #A52A2A; font-style: italic; font-weight: bold; font-size: 18px; margin-bottom: 20px;">Before call to gets</div>
-
     <div style="display: flex; align-items: flex-start; gap: 40px;">
-        
         <div style="display: flex; flex-direction: column; align-items: flex-start;">
             <div style="width: 180px; border: 2.5px solid black; border-bottom: none; background-color: white;">
-                
                 <div style="height: 90px; border-bottom: 2.5px solid black; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-weight: bold; font-size: 18px;">
                     <div>Stack Frame</div>
                     <div>for <span style="font-family: monospace;">call_echo</span></div>
                 </div>
-
                 <div style="height: 70px; border-bottom: 2.5px solid black; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 17px;">
                     <div>Return Address</div>
                     <div>(8 bytes)</div>
                 </div>
-
                 <div style="height: 50px; background-color: #E8E8FF; border-bottom: 2.5px solid black;"></div>
-
                 <div style="height: 70px; background-color: #C0C0FF; border-bottom: 2.5px solid black; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 17px;">
                     <div>Canary</div>
                     <div>(8 bytes)</div>
                 </div>
-
                 <div style="height: 40px; display: flex; border-bottom: 2.5px solid black;">
                     <div style="flex: 1; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; font-family: monospace; font-weight: bold;">[3]</div>
                     <div style="flex: 1; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; font-family: monospace; font-weight: bold;">[2]</div>
@@ -372,14 +358,12 @@ echo:
                     <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-family: monospace; font-weight: bold;">[0]</div>
                 </div>
             </div>
-
             <div style="display: flex; align-items: center; margin-top: 8px; font-family: monospace; font-size: 18px; font-weight: bold;">
                 <span>buf</span>
                 <span style="margin: 0 15px; font-size: 24px;">&larr;</span>
                 <span>%rsp</span>
             </div>
         </div>
-
         <div style="background-color: #FFF9D6; border: 1px solid #999; padding: 20px; min-width: 450px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); border-radius: 2px;">
             <pre style="margin: 0; font-family: 'Courier New', Courier, monospace; font-size: 19px; line-height: 1.4; color: black; background: transparent; border: none;">
 <span style="color: #A52A2A; font-style: italic; font-weight: bold;">/* Echo Line */</span>
@@ -390,7 +374,6 @@ echo:
     <span style="font-weight: bold;">puts(buf);</span>
 }</pre>
         </div>
-
     </div>
 </div>
 
@@ -402,7 +385,7 @@ echo:
 - Allocate according to largest element
 - Can only use one field at a time
 
-- 声明和`struct`看起来非常像
+- 声明和 `struct` 看起来非常像
 
 ```C
 #include <stdio.h>

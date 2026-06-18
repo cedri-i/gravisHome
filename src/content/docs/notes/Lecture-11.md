@@ -63,13 +63,13 @@ graph TD
 | -------- | ---------------------------- | ---------------------- | --------------------------- | -------------- | -------- | --------------------------------------- |
 | **SRAM** | 4 或 6                        | 1X                     | 否 (No)                      | 可能 (Maybe)     | 100X     | 高速缓存 (Cache memories)                   |
 | **DRAM** | 1                            | 10X                    | 是 (Yes)                     | 是 (Yes)        | 1X       | 主存 (Main memories), 帧缓冲 (frame buffers) |
-- DRAM需要插着电使用
+- DRAM 需要插着电使用
 	- 若不插电，它会丢失电荷，也就是丢失保存的信息
 	- 插电时不用刷新
 
-- SRAM更加可靠
+- SRAM 更加可靠
 
-- 但它们都是volatile memories (易失的)
+- 但它们都是 volatile memories (易失的)
 
 ## Nonvolatile Memories (非易失性存储器)
 - 即使断电也可以保留信息
@@ -90,8 +90,8 @@ graph TD
 
 ### History
 
-- 以前，很多早期ROM只能~={cyan}在其芯片生产期间被硬编码一次=~
-- 如今，ROM的编程、删除方式都有所改进
+- 以前，很多早期 ROM 只能~={cyan}在其芯片生产期间被硬编码一次=~
+- 如今，ROM 的编程、删除方式都有所改进
 	- So they can be reprogrammed
 
 ## Traditional Bus Structure Connecting CPU and Memory
@@ -134,16 +134,16 @@ graph LR
 - 很多个寄存器集成在一起组成的硬件模块
 
 ### I/O Bridge
-所谓I/O桥：
-- 它的存在就是为了让CPU、内存和各种外部设备（如硬盘、显卡、键盘）能~={purple}**互相通信**=~
+所谓 I/O 桥：
+- 它的存在就是为了让 CPU、内存和各种外部设备（如硬盘、显卡、键盘）能~={purple}**互相通信**=~
 - 而本来这些组件在速度、电压、协议等方面迥然不同
-	- I/O桥即负责~={yellow}**协议转换、速度缓冲、路由转发**=~
-- 早期主板上I/O桥通常由~={yellow}两块大芯片=~组成：
+	- I/O 桥即负责~={yellow}**协议转换、速度缓冲、路由转发**=~
+- 早期主板上 I/O 桥通常由~={yellow}两块大芯片=~组成：
 #### Northbridge
-- 靠近CPU
+- 靠近 CPU
 - 连接高速设备
 #### Southbridge
-- 远离CPU
+- 远离 CPU
 - 连接低速设备
 
 ### Memory Read Transaction
@@ -162,7 +162,7 @@ graph LR
 - Disks consist of ~={yellow}**platters**=~(盘面), each with two~={green} **surfaces**=~(表面)
 - Each ~={green}**surface**=~ consists of concentric rings(同心圆) called~={cyan} **tracks**=~(磁道)
 - Each ~={cyan}**track**=~ consists of ~={blue}**sectors**=~(扇区) separated by gaps
-	- 扇区存储着数据，每个扇区存储==512个字节==
+	- 扇区存储着数据，每个扇区存储==512 个字节==
 
 ### Disk Capacity
 
@@ -185,7 +185,7 @@ graph LR
 ## Locality to the rescue!
 
 #### The key to bridging this CPU-Memory gap is a fundamental property of computer programs known as ~={red}locality=~
-它弥合内存和CPU之间的差距
+它弥合内存和 CPU 之间的差距
 
 ## Locality
 
@@ -270,38 +270,31 @@ for (i = 0; i < M; i++)
 	- 在层级之间来回拷贝
 
 <div style="background-color: #ffffff; padding: 40px; border-radius: 12px; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #1e293b; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);">
-    
     <div style="margin-bottom: 30px; text-align: center;">
         <h2 style="margin: 0; color: #0f172a; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.025em;">存储器缓存分层演示</h2>
         <p style="margin-top: 4px; color: #64748b; font-size: 0.875rem;">Memory Hierarchy & Data Blocks</p>
     </div>
-
     <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
         <div style="width: 100%; max-width: 450px; position: relative; background: #f8fafc; border: 2px solid #3b82f6; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);">
             <div style="position: absolute; left: -90px; top: 50%; transform: translateY(-50%); font-weight: 900; color: #3b82f6; font-size: 1.2rem; transform: rotate(-90deg);">CACHE</div>
-            
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
                 <div style="background: #ffffff; border: 1px solid #3b82f6; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1e3a8a; border-radius: 4px; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">8</div>
                 <div style="background: #ffffff; border: 1px solid #3b82f6; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1e3a8a; border-radius: 4px; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">9</div>
                 <div style="background: #ffffff; border: 1px solid #3b82f6; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1e3a8a; border-radius: 4px; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">14</div>
                 <div style="background: #ffffff; border: 1px solid #3b82f6; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1e3a8a; border-radius: 4px; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">3</div>
             </div>
-            
             <div style="position: absolute; right: -240px; top: 50%; transform: translateY(-50%); width: 210px; font-size: 0.8rem; color: #475569; line-height: 1.4;">
                 <strong style="color: #2563eb;">更小、更快、更贵</strong><br>
                 缓存中存放的是底层数据块的子集。
             </div>
         </div>
     </div>
-
     <div style="text-align: center; margin: 15px 0;">
         <div style="font-size: 2rem; color: #cbd5e1; font-weight: 300; display: inline-block; transform: scaleY(1.5);">↕</div>
     </div>
-
     <div style="display: flex; align-items: center; justify-content: center;">
         <div style="width: 100%; max-width: 600px; position: relative; background: #f1f5f9; border: 2px solid #64748b; border-radius: 8px; padding: 25px;">
             <div style="position: absolute; left: -100px; top: 50%; transform: translateY(-50%); font-weight: 900; color: #64748b; font-size: 1.2rem; transform: rotate(-90deg);">MEMORY</div>
-            
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
                 <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">0</div>
                 <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">1</div>
@@ -320,9 +313,7 @@ for (i = 0; i < M; i++)
                 <div style="background: #dbeafe; border: 2px solid #3b82f6; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 2px;">14</div>
                 <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">15</div>
             </div>
-            
             <div style="text-align: center; margin-top: 12px; letter-spacing: 4px; color: #94a3b8; font-weight: bold;">● ● ●</div>
-
             <div style="position: absolute; right: -240px; top: 50%; transform: translateY(-50%); width: 210px; font-size: 0.8rem; color: #475569; line-height: 1.4;">
                 <strong style="color: #475569;">更大、更慢、更便宜</strong><br>
                 主存被逻辑上划分为固定大小的“块（Blocks）”。
@@ -330,23 +321,23 @@ for (i = 0; i < M; i++)
         </div>
     </div>
 </div>
-（右上角的3也应该标注为蓝色）
+（右上角的 3 也应该标注为蓝色）
 
 - 以这张图为例，数据将以~={yellow}**块**=~大小为传输单位在内存和高速缓存之间传输
 
 ### Hit: 命中
 
-1. 假设CPU需要某个块中的数据（比如14）
+1. 假设 CPU 需要某个块中的数据（比如 14）
 	- 现在缓存内有这个块，因此可以直接返回——我们称之为~={red}**缓存命中**=~（cache hit）
 	- ~={green}THIS IS GOOD!=~
 	- 相比于去主存中找，直接在缓存中找到的速度快很多
 
 2. 相反的情况：~={blue}**缓存不命中**=~（cache miss）
-	- 比如CPU需要12
+	- 比如 CPU 需要 12
 	- 但在缓存中查无此项
-		- 只好去主存中取出第12块
+		- 只好去主存中取出第 12 块
 		- 复制到高速缓存中
-		- 然后返回给CPU
+		- 然后返回给 CPU
 
 ### Types of Cache Misses
 

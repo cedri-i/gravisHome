@@ -11,55 +11,43 @@ title: "Lecture 12"
 # S, E, B
 
 <div style="font-family: sans-serif; background-color: white; padding: 20px; border-radius: 8px; color: #333; zoom: 0.8;">
-    
     <div style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 25px;">
         General Cache Organization (S, E, B)
     </div>
-
     <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
-
         <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">
             E = 2<sup>e</sup> lines per set
         </div>
-
         <div style="display: flex; position: relative;">
-
             <div style="display: flex; align-items: center; margin-right: 15px; border-left: 2px solid #555; padding-left: 10px; font-weight: bold;">
                 S = 2<sup>s</sup> sets
             </div>
-
             <div style="display: flex; flex-direction: column; gap: 8px;">
-
                 <div style="background-color: #E6E6FA; padding: 8px; display: flex; align-items: center; gap: 8px; position: relative;">
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
                     <div style="letter-spacing: 2px; font-weight: bold;">...</div>
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
-
                     <div style="position: absolute; left: 102%; white-space: nowrap; font-size: 13px; color: #6A5ACD;">
                         &larr; set <br>
                         <span style="position: relative; top: 10px;">&larr; line</span>
                     </div>
                 </div>
-
                 <div style="background-color: #E6E6FA; padding: 8px; display: flex; align-items: center; gap: 8px;">
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
                     <div style="letter-spacing: 2px; font-weight: bold;">...</div>
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
                 </div>
-
                 <div style="background-color: #E6E6FA; padding: 8px; display: flex; align-items: center; gap: 8px;">
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
                     <div style="letter-spacing: 2px; font-weight: bold;">...</div>
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
                 </div>
-
                 <div style="text-align: center; line-height: 10px; padding: 5px 0; font-weight: bold; letter-spacing: 4px;">
                     ...........................
                 </div>
-
                 <div style="background-color: #E6E6FA; padding: 8px; display: flex; align-items: center; gap: 8px;">
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
                     <div style="width: 60px; height: 25px; border: 1.5px solid #333; background-color: #B0C4DE;"></div>
@@ -69,7 +57,6 @@ title: "Lecture 12"
             </div>
         </div>
     </div>
-
 </div>
 
 - 图中标得不精准，应为 $S=2^{s}$ sets
@@ -95,29 +82,22 @@ title: "Lecture 12"
 
 <div style="background-color: white; padding: 20px; border-radius: 8px; width: fit-content; font-family: sans-serif; color: black; zoom: 1.2;">
     <div style="font-size: 20px; font-weight: bold; margin-bottom: 15px;">Address of word:</div>
-    
     <svg width="420" height="120" viewBox="0 0 420 120">
         <rect x="10" y="5" width="140" height="40" fill="#F8B1A5" stroke="black" stroke-width="2"/>
         <text x="80" y="32" font-size="16" font-weight="bold" text-anchor="middle">t bits</text>
-        
         <rect x="150" y="5" width="110" height="40" fill="white" stroke="black" stroke-width="2"/>
         <text x="205" y="32" font-size="16" font-weight="bold" text-anchor="middle">s bits</text>
-        
         <rect x="260" y="5" width="90" height="40" fill="white" stroke="black" stroke-width="2"/>
         <text x="305" y="32" font-size="16" font-weight="bold" text-anchor="middle">b bits</text>
-
         <path d="M 15 55 Q 15 65 80 65 Q 145 65 145 55" fill="none" stroke="black" stroke-width="2"/>
         <text x="80" y="90" font-size="18" text-anchor="middle">tag</text>
-
         <path d="M 155 55 Q 155 65 205 65 Q 255 65 255 55" fill="none" stroke="black" stroke-width="2"/>
         <text x="205" y="90" font-size="18" text-anchor="middle">set</text>
         <text x="205" y="110" font-size="18" text-anchor="middle">index</text>
-
         <path d="M 265 55 Q 265 65 305 65 Q 345 65 345 55" fill="none" stroke="black" stroke-width="2"/>
         <text x="305" y="90" font-size="18" text-anchor="middle">block</text>
         <text x="305" y="110" font-size="18" text-anchor="middle">offset</text>
     </svg>
-
 </div>
 
 6. ~={yellow}**b**=~ 个低位地址用于确定块中的偏移量
@@ -149,11 +129,9 @@ E = 2: Two lines per set
 Assume: cache block size 8 bytes
 
 <div style="font-family: 'Cascadia Code', 'Fira Code', 'Courier New', monospace; display: flex; flex-direction: column; gap: 15px; color: #000;">
-
   <div style="display: flex; align-items: center; gap: 15px;">
     <span style="font-size: 0.85em; font-weight: bold; width: 60px; color: #333;">Set 0</span>
     <div style="display: flex; gap: 20px; background-color: #d1d1ff; padding: 12px; border-radius: 4px; border: 1px solid #999;">
-      
       <div style="display: flex; border: 2px solid #000; background: #fff; align-items: stretch;">
         <div style="border-right: 2px solid #000; padding: 4px 10px; background: #f0f0f0; display: flex; align-items: center;">v</div>
         <div style="border-right: 2px solid #000; padding: 4px 15px; font-weight: bold; display: flex; align-items: center;">tag</div>
@@ -168,7 +146,6 @@ Assume: cache block size 8 bytes
           <div style="padding: 4px 8px;">7</div>
         </div>
       </div>
-
       <div style="display: flex; border: 2px solid #000; background: #fff; align-items: stretch;">
         <div style="border-right: 2px solid #000; padding: 4px 10px; background: #f0f0f0; display: flex; align-items: center;">v</div>
         <div style="border-right: 2px solid #000; padding: 4px 15px; font-weight: bold; display: flex; align-items: center;">tag</div>
@@ -183,13 +160,9 @@ Assume: cache block size 8 bytes
           <div style="padding: 4px 8px;">7</div>
         </div>
       </div>
-
     </div>
-
   </div>
-
   <div style="padding-left: 100px; font-size: 24px; letter-spacing: 10px; color: #888;">......</div>
-
   <div style="display: flex; align-items: center; gap: 15px;">
     <span style="font-size: 0.85em; font-weight: bold; width: 60px; color: #333;">Set S-1</span>
     <div style="display: flex; gap: 20px; background-color: #d1d1ff; padding: 12px; border-radius: 4px; border: 1px solid #999;">
@@ -318,7 +291,6 @@ Assume: cache block size 8 bytes
         margin-bottom: 20px;
         color: #000;
     ">Processor package</div>
-
     <div class="cores-container" style="
         display: flex;
         align-items: flex-start;
@@ -333,25 +305,19 @@ Assume: cache block size 8 bytes
             width: 220px;
         ">
             <div class="core-title" style="font-weight: bold; margin-bottom: 15px; color: #000;">Core 0</div>
-            
             <div class="node regs" style="border: 1px solid #333; background: #fff; padding: 5px; width: 100px; margin: 0 auto 10px; font-weight: bold; color: #000;">Regs</div>
             <div class="line" style="border-left: 1px solid #000; height: 15px; width: 0; margin: 0 auto 5px;"></div>
-
             <div class="l1-container" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px;">
                 <div class="node l1-cache" style="border: 1px solid #333; background: #e3f2fd; padding: 5px; width: 90px; color: #000;">L1<br>d-cache</div>
                 <div class="node l1-cache" style="border: 1px solid #333; background: #e3f2fd; padding: 5px; width: 90px; color: #000;">L1<br>i-cache</div>
             </div>
-            
             <div class="l1-to-l2-lines" style="position: relative; height: 15px;">
                 <div style="position: absolute; border-left: 1px solid #000; height: 15px; left: 55px;"></div>
                 <div style="position: absolute; border-left: 1px solid #000; height: 15px; right: 55px;"></div>
             </div>
-
             <div class="node l2-cache" style="border: 1px solid #333; background: #e3f2fd; padding: 8px; width: 190px; margin: 0 auto; color: #000;">L2 unified cache</div>
         </div>
-
         <div class="dots" style="font-size: 2em; font-weight: bold; align-self: center; color: #000;">. . .</div>
-
         <div class="core-box" style="
             background-color: #fff8e1;
             border: 1px solid #333;
@@ -360,29 +326,23 @@ Assume: cache block size 8 bytes
             width: 220px;
         ">
             <div class="core-title" style="font-weight: bold; margin-bottom: 15px; color: #000;">Core 3</div>
-            
             <div class="node regs" style="border: 1px solid #333; background: #fff; padding: 5px; width: 100px; margin: 0 auto 10px; font-weight: bold; color: #000;">Regs</div>
             <div class="line" style="border-left: 1px solid #000; height: 15px; width: 0; margin: 0 auto 5px;"></div>
-
             <div class="l1-container" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px;">
                 <div class="node l1-cache" style="border: 1px solid #333; background: #e3f2fd; padding: 5px; width: 90px; color: #000;">L1<br>d-cache</div>
                 <div class="node l1-cache" style="border: 1px solid #333; background: #e3f2fd; padding: 5px; width: 90px; color: #000;">L1<br>i-cache</div>
             </div>
-            
             <div class="l1-to-l2-lines" style="position: relative; height: 15px;">
                 <div style="position: absolute; border-left: 1px solid #000; height: 15px; left: 55px;"></div>
                 <div style="position: absolute; border-left: 1px solid #000; height: 15px; right: 55px;"></div>
             </div>
-
             <div class="node l2-cache" style="border: 1px solid #333; background: #e3f2fd; padding: 8px; width: 190px; margin: 0 auto; color: #000;">L2 unified cache</div>
         </div>
     </div>
-
     <div class="l2-to-l3-lines" style="position: relative; height: 20px; margin-bottom: 5px; margin-left: auto; margin-right: auto; width: calc(100% - 130px);">
         <div style="position: absolute; border-left: 1px solid #000; height: 20px; left: 110px;"></div>
         <div style="position: absolute; border-left: 1px solid #000; height: 20px; right: 110px;"></div>
     </div>
-
     <div class="node l3-cache" style="
         border: 2px solid #333;
         background: #e3f2fd;
@@ -394,7 +354,6 @@ Assume: cache block size 8 bytes
         color: #000;
         border-radius: 8px;
     ">L3 unified cache<br>(shared by all cores)</div>
-
 </div>
 
 - 本图同样有不准确之处：
@@ -462,12 +421,12 @@ Assume: cache block size 8 bytes
 - 这一切都由硬件自动执行
 ### Make the common case go fast
 - Focus on the inner loops of the core functions
-- 在任何程序中，**90%的执行时间通常只花在10%的代码上**
+- 在任何程序中，**90% 的执行时间通常只花在 10% 的代码上**
 
 ### Minimize the misses in the inner loops
 - Repeated references to variables are good (~={red}temporal locality=~)
 - Stride-1 references patterns are good (~={red}spatial locality=~)
-	- 步长为1的访问模式
+	- 步长为 1 的访问模式
 - 这两点可以总结为：保证程序的局部性
 
 # Performance impact of caches

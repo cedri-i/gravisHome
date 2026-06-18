@@ -20,11 +20,11 @@ title: "Lecture 10"
 	- 第一准则是“对”而非“快”
 
 - 程序员意图被模糊
-	- 定义一个`int`，编译器必须考虑到$2^{31}-1$，但其实它可能不会超过$100$
+	- 定义一个 `int`，编译器必须考虑到 $2^{31}-1$，但其实它可能不会超过 $100$
 
 - 分析范围的限制~={cyan}（过程内分析）=~
-	- 现在的GCC可以在一个文件内做交叉函数分析，但很难跨越不同的源代码文件去理解全局
-	- Whole-program analysis技术上可行，但编译时间会变得极其漫长，内存消耗巨大
+	- 现在的 GCC 可以在一个文件内做交叉函数分析，但很难跨越不同的源代码文件去理解全局
+	- Whole-program analysis 技术上可行，但编译时间会变得极其漫长，内存消耗巨大
 
 - Based on `static` information，难以预测运行时
 
@@ -81,9 +81,9 @@ void lower(char *s)
 			s[i] -= ('A' - 'a');
 }
 ```
-- CPU seconds和String length的~={yellow}**平方**=~成正比
+- CPU seconds 和 String length 的~={yellow}**平方**=~成正比
 - `strlen` executed ~={red}every iteration=~
-- 而在~={green}面向对象编程=~（OOP）中，~={cyan}**字符串对象内部通常会维护一个`length`或者`size`变量**=~，这样使得`str.length()`的复杂度是$O(1)$，在性能上就是安全的了
+- 而在~={green}面向对象编程=~（OOP）中，~={cyan}**字符串对象内部通常会维护一个 `length` 或者 `size` 变量**=~，这样使得 `str.length()` 的复杂度是 $O(1)$，在性能上就是安全的了
 
 - Improving Performance
 ```C
@@ -107,7 +107,7 @@ void lower(char *s)
 	- Depends on other parts of global state
 	- Procedure `lower` could interact with `strlen`
 
-- 编译器~={pink}不能假设`strlen(s)`每次执行的结果都一样=~
+- 编译器~={pink}不能假设 `strlen(s)` 每次执行的结果都一样=~
 #### ~={red}Warning:=~
 - Compiler treats procedure call as a black box
 - Weak optimizations near them
@@ -151,8 +151,8 @@ void sum_rows1(double *a, double *b, long n) {
 	- 回答：因为编译器害怕~={cyan}**内存别名**=~（Memory Aliasing）
 		- 它无从知道是否存在内存别名引用，除非做大量检查工作
 
-	- 它只看到`*a`和`*b`，必须考虑一种极端情况：*~={yellow}万一`b[i]`的地址正好在数组`a`的中间呢？=~*
-	- 所以必须马上把运算结果写回内存`b[i]`
+	- 它只看到 `*a` 和 `*b`，必须考虑一种极端情况：*~={yellow}万一 `b[i]` 的地址正好在数组 `a` 的中间呢？=~*
+	- 所以必须马上把运算结果写回内存 `b[i]`
 	- ~={green}**规避原理：**=~ 假设 `b[i]` 的地址恰好就是后面某个 `a[j+1]` 的地址。因为它每一轮都把最新的结果写回了内存，那么下一轮读取 `a[j+1]` 时，取到的就是已经更新过的值
 
 优化后汇编代码：
@@ -166,7 +166,7 @@ void sum_rows1(double *a, double *b, long n) {
 ```
 
 源代码：
-- 引入了一个~={yellow}**局部变量`val`**=~，编译器就可以大胆放入寄存器
+- 引入了一个~={yellow}**局部变量 `val`**=~，编译器就可以大胆放入寄存器
 - 也就是~={orange}显式=~地告诉寄存器：可以无视内存影响，提升优化程度
 
 ```C
@@ -209,7 +209,7 @@ int get_vec_element(vec *v, size_t idx, data_t *val)
 }
 ```
 
-- 其中的`if`边界检查是降低性能的主要因素
+- 其中的 `if` 边界检查是降低性能的主要因素
 
 ### Cycles Per Element (CPE)
 - Convenient way to express performance of program that operates on vectors or lists
@@ -238,8 +238,8 @@ long mult_eg(long a, long b, long c) {
 | **Stage 3**    |            |            | `a * b`    | `a * c`    |            |            | `p1 * p2`  |
 
 
-- Stage（阶段）是CPU执行单元内部的~={cyan}**物理流水线级**=~
-- 它属于~={cyan}**微架构**=~（Microachitecture）层面，也就是CPU硬件电路设计的层面
+- Stage（阶段）是 CPU 执行单元内部的~={cyan}**物理流水线级**=~
+- 它属于~={cyan}**微架构**=~（Microachitecture）层面，也就是 CPU 硬件电路设计的层面
 
 - 这就是流水线操作的基本思想，它有点像并行性
 - 但这种并行性~={yellow}并非拥有多个资源=~，而是把在单个硬件上的操作划分为紧密联系的顺序的~={yellow}多个步骤=~
@@ -247,7 +247,7 @@ long mult_eg(long a, long b, long c) {
 ## Loop Unrolling ( $2\times1$ )
 循环展开
 
-- 循环展开就是让循环体一次处理多个元素，从而减少循环控制（i++、条件跳转）的开销，让CPU把更多时间花在真正的“计算”上
+- 循环展开就是让循环体一次处理多个元素，从而减少循环控制（i++、条件跳转）的开销，让 CPU 把更多时间花在真正的“计算”上
 
 ```C
 for (i = 0; i < limit; i += 2) {

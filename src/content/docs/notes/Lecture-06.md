@@ -18,13 +18,13 @@ title: "Lecture 06"
 	(`%rip, ...`)
 - Status of recent tests
 	(CF, ZF, SF, OF)
-#### 对于大部分寄存器，~={red}*唯一真正特别*=~的是`%rsp`
+#### 对于大部分寄存器，~={red}*唯一真正特别*=~的是 `%rsp`
 - 它存的是栈指针，告诉我们栈顶在哪里
 - 所以不能像对其他寄存器那样随意地使用或设置它
 #### `%rip`
 - 指令指针（instruction pointer）
 - 它包含现在正在执行的指令的地址
-- 它不是能以正常方式访问的寄存器，需要一些tricks
+- 它不是能以正常方式访问的寄存器，需要一些 tricks
 
 ## 条件码 (Condition Codes)
 这些是~={purple}**单个比特的寄存器**=~，由最近的算术或逻辑操作**隐式设置**（作为副作用）。
@@ -65,7 +65,7 @@ Example: `addq`Src, Dest <-> `t = a + b`
 * ~={red}**ZF set**=~ when `a & b == 0`
 * ~={red}**SF set**=~ when `a & b < 0`
 ## Reading Condition Codes
-| **指令**    | **对应的条件码逻辑**       | **描述 (C语言含义)**                             |
+| **指令**    | **对应的条件码逻辑**       | **描述 (C 语言含义)**                             |
 | --------- | ------------------ | ------------------------------------------ |
 | **sete**  | `ZF`               | **Equal / Zero** (a == b)                  |
 | **setne** | `~ZF`              | **Not Equal / Not Zero** (a != b)          |
@@ -77,10 +77,10 @@ Example: `addq`Src, Dest <-> `t = a + b`
 | **setle** | `(SF ^ OF) \| ZF`  | **Less or Equal (Signed)** (有符号 a <= b)    |
 | **seta**  | `~CF & ~ZF`        | **Above (Unsigned)** (无符号 a > b)           |
 | **setb**  | `CF`               | **Below (Unsigned)** (无符号 a < b)           |
-- `set`指令的作用是将~={yellow}单个寄存器=~的~={yellow}单个字节=~设置为`1`或`0`
+- `set` 指令的作用是将~={yellow}单个寄存器=~的~={yellow}单个字节=~设置为 `1` 或 `0`
 - 基于条件码的值
 - 必须考虑溢出的问题
-- 16个寄存器都可以直接将最低位设置为0或1，~={pink}且不会影响其他7个字节=~
+- 16 个寄存器都可以直接将最低位设置为 0 或 1，~={pink}且不会影响其他 7 个字节=~
 
 # Conditional branches
 ```C
@@ -106,13 +106,13 @@ ret                     # 4. 返回
 | **第三步** | `movzbl` | 格式化    | **彻底清除**寄存器高位的垃圾数据 |
 - `movzbl`:
 	- `z`(Zero-extend): 零扩展
-	- `b`(Byte): 源操作数是1字节
-	- `l`(Long/Double word): 目的操作数是4字节
+	- `b`(Byte): 源操作数是 1 字节
+	- `l`(Long/Double word): 目的操作数是 4 字节
 	
-- x86-64有个奇怪的地方：任何得到~={green}32位结果=~的计算都会把寄存器的~={green}另外32位=~设置为0
-	- 所以我们只用写`movzbl %al, %eax`而不用`movzbl %al, %rax`
+- x86-64 有个奇怪的地方：任何得到~={green}32 位结果=~的计算都会把寄存器的~={green}另外 32 位=~设置为 0
+	- 所以我们只用写 `movzbl %al, %eax` 而不用 `movzbl %al, %rax`
 	- 两者~={yellow}*效果完全一样*=~
-	- 但前者操作32位寄存器，不需要额外的`REX`前缀用于标识64位操作
+	- 但前者操作 32 位寄存器，不需要额外的 `REX` 前缀用于标识 64 位操作
 
 ## Jumping
 ### `jX` instructions
@@ -164,11 +164,11 @@ absdiff:
     subq    %rdi, %rax      # 4b. 计算 %rax = y - x
     ret                     # 5b. 返回
 ```
-- 这里不可以先`subq`再`movq`！
-- 如果这样做，会把`%rdi`覆盖掉，也就是==弄丢了==参数`x`，如果后续还需要`x`，就找不回来了
+- 这里不可以先 `subq` 再 `movq`！
+- 如果这样做，会把 `%rdi` 覆盖掉，也就是==弄丢了==参数 `x`，如果后续还需要 `x`，就找不回来了
 
 ## Using Conditional Moves
-- 基本思想是~={red}**先**=~把`then`代码和`eles`代码都执行得到两个结果
+- 基本思想是~={red}**先**=~把 `then` 代码和 `eles` 代码都执行得到两个结果
 - 然后我才会选择使用哪一个结果
 - 看起来浪费时间，但事实上它被证明==更有效率==
 ### Example
@@ -193,7 +193,7 @@ absdiff:
     cmovle  %rdx, %rax    # 如果 x <= y，则将 %rdx 的值覆盖到 %rax
     ret                   # 返回 %rax 中的最终结果
 ```
-- `cmov`就是conditional `mov`，先检查状态寄存器，如果满足特定条件才把数据从A搬到B
+- `cmov` 就是 conditional `mov`，先检查状态寄存器，如果满足特定条件才把数据从 A 搬到 B
 ### Bad Cases for Conditional Move
 #### Expensive Computations
 `val = Test(x) ? Hard1(x) : Hard2(x);`
@@ -208,12 +208,12 @@ absdiff:
 - Must be ~={cyan}side-effect free=~
 - 若执行任一分支的结果可能会==改变程序其他部分的状态==，那么就不要这样做
 
-所以`cmov`的应用范围没有想象中广
+所以 `cmov` 的应用范围没有想象中广
 
 # Loops
 
 ## `Do-While` Loop Example
-首先尝试把循环改写成`goto`版本：
+首先尝试把循环改写成 `goto` 版本：
 ```C
 long pcount_do(unsigned long x) {
 	long result = 0;
@@ -249,15 +249,14 @@ pcount_goto:
     rep; ret                # return result (rep 为某些处理器的优化补丁，实际执行 ret)
 ```
 
-## `GCC`的两种编译循环的方式
+## `GCC` 的两种编译循环的方式
 ### General "While" Translation \#1
 - ~={cyan}"Jump-to-middle=~" translation
 - Used with `-Og`(`O` means Optimize and `g` means debug)
-	- `-Og`是这门课用到的优化
-	- `-O1`是下一个级别
+	- `-Og` 是这门课用到的优化
+	- `-O1` 是下一个级别
 
 <div style="display: flex; align-items: stretch; gap: 10px; font-family: 'Fira Code', 'Consolas', monospace; color: #1a1a1a;">
-    
     <div style="flex: 1; background-color: #fff9c4; padding: 15px; border-radius: 4px; border: 1px solid #f0e68c;">
         <div style="font-weight: bold; margin-bottom: 20px; font-family: sans-serif; color: #888;">While version</div>
         <div style="line-height: 1.5; color: #000;">
@@ -265,9 +264,7 @@ pcount_goto:
             &nbsp;&nbsp;Body
         </div>
     </div>
-
     <div style="display: flex; align-items: center; justify-content: center; font-size: 24px; color: #448aff;">➡</div>
-
     <div style="flex: 1; background-color: #e8f5e9; padding: 15px; border-radius: 4px; border: 1px solid #c8e6c9;">
         <div style="font-weight: bold; margin-bottom: 20px; font-family: sans-serif; color: #333;">Goto Version</div>
         <div style="line-height: 1.5; color: #000;">
@@ -280,14 +277,12 @@ pcount_goto:
             <span style="font-weight: bold;">done:</span>
         </div>
     </div>
-
 </div>
 
 ### General "While" Translation \#2
 -~={cyan} "Guarded Do-While"=~
 
 <div style="display: flex; flex-direction: column; gap: 20px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: white; padding: 20px; color: #000;">
-    
     <div style="display: flex; align-items: flex-start; gap: 40px;">
         <div style="flex: 0 0 250px;">
             <div style="font-weight: bold; margin-bottom: 5px;">While version</div>
@@ -301,11 +296,8 @@ pcount_goto:
             <p><span style="color: brown;">■</span> Used with <b>-O1</b></p>
         </div>
     </div>
-
     <div style="margin-left: 100px; color: #c00; font-size: 30px; line-height: 1;">⬇</div>
-
     <div style="display: flex; align-items: center; gap: 30px;">
-        
         <div style="flex: 0 0 280px;">
             <div style="font-weight: bold; margin-bottom: 5px;">Do-While Version</div>
             <div style="background-color: #fff9c4; border: 1px solid #999; padding: 15px; font-family: Consolas, monospace; line-height: 1.4;">
@@ -317,9 +309,7 @@ pcount_goto:
                 done:
             </div>
         </div>
-
         <div style="color: #c00; font-size: 40px;">➡</div>
-
         <div style="flex: 0 0 280px;">
             <div style="font-weight: bold; margin-bottom: 5px;">Goto Version</div>
             <div style="background-color: #e8f5e9; border: 1px solid #999; padding: 15px; font-family: Consolas, monospace; line-height: 1.4;">
@@ -332,12 +322,11 @@ pcount_goto:
                 done:
             </div>
         </div>
-
     </div>
 </div>
 
 ## "For" Loop Form
-可以将`for`循环转化为`while`循环
+可以将 `for` 循环转化为 `while` 循环
 
 # Switch Statements
 ## Example
@@ -370,15 +359,13 @@ long switch_eg(long x, long y, long z)
     
 - **Fall through (2)**：case 2 后面没有 `break`，会直接“掉进” case 3 继续执行。
 	在不经过判断的情况下~={yellow}直接执行=~`w += z`
-	>这是编程语言历史上最糟糕的设计之一。——*Bryant教授*
+	>这是编程语言历史上最糟糕的设计之一。——*Bryant 教授*
 - **Missing cases (4)**：代码里没有 case 4。
 ## Jump Table Structure
 
 
 <div style="background-color: white; padding: 30px; font-family: 'Segoe UI', Arial, sans-serif; color: #000; display: flex; gap: 40px;">
-
     <div style="flex: 1; display: flex; flex-direction: column; gap: 40px;">
-        
         <div>
             <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.2em;">Switch Form</div>
             <div style="background-color: #fff9c4; border: 1.5px solid #555; padding: 15px; box-shadow: 3px 3px 0px #888; font-family: Consolas, monospace; line-height: 1.3;">
@@ -393,7 +380,6 @@ long switch_eg(long x, long y, long z)
                 }
             </div>
         </div>
-
         <div>
             <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1em;">Translation (Extended C)</div>
             <div style="background-color: #fff9c4; border: 1.5px solid #555; padding: 15px; box-shadow: 3px 3px 0px #888; font-family: Consolas, monospace;">
@@ -401,7 +387,6 @@ long switch_eg(long x, long y, long z)
             </div>
         </div>
     </div>
-
     <div style="flex: 0.7; text-align: center;">
         <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.2em;">Jump Table</div>
         <div style="display: flex; align-items: flex-start; justify-content: center;">
@@ -415,7 +400,6 @@ long switch_eg(long x, long y, long z)
             </div>
         </div>
     </div>
-
     <div style="flex: 1.2;">
         <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.2em; text-align: left;">Jump Targets</div>
         <div style="display: flex; flex-direction: column; gap: 15px;">
@@ -438,7 +422,6 @@ long switch_eg(long x, long y, long z)
             </div>
         </div>
     </div>
-
 </div>
 
 ## Switch Statement Example

@@ -11,13 +11,13 @@ title: "Lecture 04"
 - ~={yellow}**Representation**=~
 	- Bits to right of "binary point" represent fractional powers of 2
 	- Represents rational numbers: $\sum\limits^{i}_{k=-j}b_{k}\times2^k$
-	- 与十进制完全相同，只是基数换成了2
+	- 与十进制完全相同，只是基数换成了 2
 - ~={yellow}**Observations**=~
 	- Numbers of form $0.111111..._2$ are just below 1.0
 		- $1/2+1/4+1/8+...+1/2^{i}+...$➡$1.0$
 		- Use notation $1.0-\epsilon$
 ## Representable Numbers
-- 我们只能表示形如$x/2^k$的有理数
+- 我们只能表示形如 $x/2^k$ 的有理数
 - 不满足该形式的需要循环才能准确表示
 - 浮点为~={orange}**移动的二进制小数点**=~，兼顾精度，也受到位数有限的制约
 # Floating Point Representation
@@ -25,8 +25,8 @@ title: "Lecture 04"
 $(-1)^{s}\cdot M\cdot2^{E}$
 ==*所有浮点数*==都必须以这种形式表示
 - s：符号位，确定正负
-- M：尾数（mantissa），通常是介于1.0和2.0的小数
-- E：指数，会以2的E次幂形式扩大或缩小尾数值
+- M：尾数（mantissa），通常是介于 1.0 和 2.0 的小数
+- E：指数，会以 2 的 E 次幂形式扩大或缩小尾数值
 ## Encoding
 - MAS `s` is sign bit s
 - exp field encodes E (but is not equal to E)
@@ -40,7 +40,7 @@ $$ \begin{array}{|c|c|c|} \hline \color{#ff6b6b}{\mathtt{s}} & \color{#4ecdc4}{\
 第三种不在讨论范围内
 ## ~={green}Normalized=~ Values
 - **W**hen $exp\neq000...0$ and $exp\neq111...1$
-	- 全0和全1的情形都是特殊类型的数字
+	- 全 0 和全 1 的情形都是特殊类型的数字
 - **E**xponent coded as a biased value: ~={yellow}**E = Exp - Bias**=~
 	- Exp: ~={cyan}**unsigned**=~ value of exp field
 	- Bias = $2^{k-1}-1$, where k is number of exponent bits
@@ -51,7 +51,7 @@ $$ \begin{array}{|c|c|c|} \hline \color{#ff6b6b}{\mathtt{s}} & \color{#4ecdc4}{\
 	- Minimum when frac = ==000...0== (M = 1.0)
 	- Maximum when frac = ==111...1== (M = 2.0 - $\epsilon$)
 	- Get extra leading bit for "free"
-		- 开头的1是~={yellow}**必然存在**=~的，所以可以省掉
+		- 开头的 1 是~={yellow}**必然存在**=~的，所以可以省掉
 ### Examples
 - Value: `float F = 15213.0;`
 	- $15213_{10}=11101101101101_2$
@@ -63,18 +63,18 @@ $$ \begin{array}{|c|c|c|} \hline \color{#ff6b6b}{\mathtt{s}} & \color{#4ecdc4}{\
 	`E     =  13`
 	`Bias  =  127`
 	`Exp   =  140`   =   10001100$_2$
-	- 故在实际的存储中，偏置值为连接E和Exp的桥梁
+	- 故在实际的存储中，偏置值为连接 E 和 Exp 的桥梁
 	$$ \begin{array}{|c|c|c|} \hline \color{#ff6b6b}{\mathtt{s}} & \color{#4ecdc4}{\mathtt{exp}} & \color{#45b7d1}{\mathtt{frac}} \\ \hline \mathtt{0} & \mathtt{10001100} & \mathtt{11011011011010000000000} \\ \hline \end{array} $$
 ### 范围
 $0\leq Exp\leq255$
 $-127\leq E\leq128$
-以上单纯为偏移编码的范围，==不是浮点数中exp的实际情况==
+以上单纯为偏移编码的范围，==不是浮点数中 exp 的实际情况==
 ## ~={red}Denormalized=~ Values
-用来表示**极接近0的小数**，填补规范化数在0附近的精度空白
-极接近0时，隐含的1限制了我们
+用来表示**极接近 0 的小数**，填补规范化数在 0 附近的精度空白
+极接近 0 时，隐含的 1 限制了我们
 ### Condition
 - exp = 000...0
-	- 此时E和exp就*没有关系*了
+	- 此时 E 和 exp 就*没有关系*了
 - Exponent value: ~={pink}**E = 1 - Bias**=~ (instead of E = 0 - Bias)
 - Significand coded with implied leading 0: M = 0.xxx...x$_2$
 	- `xxx...x`: bits of `frac`
@@ -105,7 +105,7 @@ $间隔 = \frac{2^{1-bias}}{2^{23}}$
 	- Both positive and negative
 	- E.g., 1.0/0.0 = -1.0/-0.0 = $+\infty$, 1.0/-0.0 = $-\infty$
 - Case: `exp = 111...1, frac`$\neq$ `000 ...0`
-	- Not-a-Number (NaN) （第一次知道NaN的意思）
+	- Not-a-Number (NaN) （第一次知道 NaN 的意思）
 	- Represents case when no numeric value can be determined
 	- E.g., $sqrt(-1), \infty-\infty,\infty\times0$
 ## 图示
@@ -116,7 +116,7 @@ $$
 \end{array}
 $$
 这张图很清晰
-## 关于Bias
+## 关于 Bias
 - 将带符号的指数（Exponent）映射为无符号的正整数，从而简化计算机对浮点数的比较和排序。
 - 可以保证数据的单调性
 # Rounding
@@ -132,7 +132,7 @@ $$
 \hline
 \end{array}
 $$
-向偶数舍入可以使大批量数据的计算误差趋于0
+向偶数舍入可以使大批量数据的计算误差趋于 0
 ## Rounding Binary Numbers
 - Binary Fractional Numbers
 	- "Even" when least significant bit is 0
@@ -183,9 +183,9 @@ Exact Result: $(-1)^{s}\cdot M\cdot2^{E}$
 - Will round according to rounding mode
 # Quiz
 `int x == (int)(float)x`❌
-`float`会对整数进行舍入，导致**高位/低位**丢失，再转回`int`就和原值不一样了
+`float` 会对整数进行舍入，导致**高位/低位**丢失，再转回 `int` 就和原值不一样了
 `int x == (int)(double)x`👍
-`double`确有足够的位数
+`double` 确有足够的位数
 `float f == (float)(double)f`👍
 `double d == (double)(float)d`❌
 `f == -(-f)`👍

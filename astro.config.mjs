@@ -32,8 +32,13 @@ export default defineConfig({
             customCss: ['./src/styles/custom.css'],
             sidebar: [
                 {
-                    label: 'My Notes',
-                    autogenerate: { directory: 'notes' },
+                    label: '计算机系统',
+                    items: [
+                        {
+                            label: 'CMU: CSAPP',
+                            autogenerate: { directory: 'notes' },
+                        },
+                    ],
                 },
             ],
         }),

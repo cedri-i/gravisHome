@@ -7,7 +7,7 @@ title: "Lecture 08"
 讨论数据的表示
 在机器级代码里是~={yellow}**没有**=~数组这一高级概念的
 - 将其视为字节的集合
-- C编译器的工作就是生成适当的代码来分配该内存
+- C 编译器的工作就是生成适当的代码来分配该内存
 
 # Arrays
 
@@ -20,8 +20,8 @@ title: "Lecture 08"
 `int val[5];`
 这样做对应着两件事：
 - 分配足够的存储字节来保存整个数组
-- 某种程度上，可以~={cyan}像指针一样对待数组A的标识符=~，可以做它的指针运算
-- 若`val`为x，那么`val + 1`时，我们希望它增加足够的字节以指向下一个整数，即`x + 4`
+- 某种程度上，可以~={cyan}像指针一样对待数组 A 的标识符=~，可以做它的指针运算
+- 若 `val` 为 x，那么 `val + 1` 时，我们希望它增加足够的字节以指向下一个整数，即 `x + 4`
 	- 注意~={red}不能使用=~`val++`
 
 - 编译器并不反对使用负值作为数组下标，它会给出一个潜在的未定义值
@@ -29,9 +29,7 @@ title: "Lecture 08"
 
 
 <div style="font-family: 'Source Code Pro', monospace; padding: 20px; background-color: #fff; color: #000; border: 1px solid #ddd; border-radius: 4px;">
-
   <h2 style="margin-top: 0; font-weight: bold; font-size: 24px;">Array Example</h2>
-  
   <div style="background-color: #fffde7; border: 1px solid #ffe082; padding: 10px; margin-bottom: 30px; line-height: 1.4;">
     <span style="color: #008000;">#define ZLEN 5</span><br>
     typedef int zip_dig[ZLEN];<br><br>
@@ -39,7 +37,6 @@ title: "Lecture 08"
     zip_dig mit = { 0, 2, 1, 3, 9 };<br>
     zip_dig ucb = { 9, 4, 7, 2, 0 };
   </div>
-
   <div style="display: flex; align-items: center; margin-bottom: 40px;">
     <div style="width: 150px; font-weight: bold;">zip_dig cmu;</div>
     <div style="display: flex; border: 2px solid black; background-color: #e0e0e0;">
@@ -50,7 +47,6 @@ title: "Lecture 08"
       <div style="width: 60px; display: flex; align-items: center; justify-content: center; position: relative;">3<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">32</span><span style="position: absolute; bottom: -25px; right: -2px; font-size: 13px;">36</span></div>
     </div>
   </div>
-
   <div style="display: flex; align-items: center; margin-bottom: 40px;">
     <div style="width: 150px; font-weight: bold;">zip_dig mit;</div>
     <div style="display: flex; border: 2px solid black; background-color: #e0e0e0;">
@@ -61,10 +57,9 @@ title: "Lecture 08"
       <div style="width: 60px; display: flex; align-items: center; justify-content: center; position: relative;">9<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">52</span><span style="position: absolute; bottom: -25px; right: -2px; font-size: 13px;">56</span></div>
     </div>
   </div>
-
 </div>
 
-- 这时`cmu`、`mit`同样会~={yellow}退化=~为指向其第一个元素的指针
+- 这时 `cmu`、`mit` 同样会~={yellow}退化=~为指向其第一个元素的指针
 
 ### Array Accessing Example
 
@@ -81,13 +76,13 @@ int get_digit
 $ %rsi = digit
 movl (%rdi, %rsi, 4), %eax # z[digit]
 ```
-- 寄存器`%rdi`为数组起始地址
-- 寄存器`%rsi`为数组索引（下标）
-- 根据公式，需要的数据在`4 * %rsi + %rdi`
+- 寄存器 `%rdi` 为数组起始地址
+- 寄存器 `%rsi` 为数组索引（下标）
+- 根据公式，需要的数据在 `4 * %rsi + %rdi`
 	- 在这里进行了缩放
 
-- 把计算出的地址读取的值copy到`%eax`中
-- 因为是`int`，所以占据`%rax`的低四位
+- 把计算出的地址读取的值 copy 到 `%eax` 中
+- 因为是 `int`，所以占据 `%rax` 的低四位
 
 ### Array Loop Example
 
@@ -127,30 +122,30 @@ $$Total\_Size = R \times C \times K$$
 ### Address Calculation 元素地址定位
 
 $$Address(A[i][j]) = Base\_Address + (i \times C + j) \times K$$
-- 先跳过前$j$行
+- 先跳过前 $j$ 行
 - 再在本行内锁定目标元素
 
 ### `a[i]`
 
-对于`int a[R][C]`：
-- `a[i]`代表第$i$行完整的“子数组”
+对于 `int a[R][C]`：
+- `a[i]` 代表第 $i$ 行完整的“子数组”
 
 不同语境下：
 1. ~={cyan}数组名=~
-	- `sizeof(a[i])`的值是`C * sizeof(int)`
+	- `sizeof(a[i])` 的值是 `C * sizeof(int)`
 2. 作为~={cyan}地址=~
-	- `a[i]`退化为指向第$i$行第一个元素`&a[i][0]`的指针
-	- 其类型是`int *`
+	- `a[i]` 退化为指向第 $i$ 行第一个元素 `&a[i][0]` 的指针
+	- 其类型是 `int *`
 3. 在内存地址计算中
 	- $$\text{Address of } a[i] = \text{Base Address} + (i \times \text{一行的总字节数})$$
-	- 这体现了`a[i]`是指向~={purple}**某一行起始位置**=~的标识符
+	- 这体现了 `a[i]` 是指向~={purple}**某一行起始位置**=~的标识符
 
 ### 启发
 
 - 了解“行优先”对编写高性能代码至关重要
 - 按行遍历数组比按列遍历快得多
 	- 前者符合~={cyan}**空间局部性**（Spatial Locality）=~
-	- 能更好地利用CPU缓存
+	- 能更好地利用 CPU 缓存
 
 ### Element Access in Multi-Level Array
 
@@ -277,10 +272,10 @@ int get_univ_digit(size_t index, size_t digit) {
   </div>
 </div>
 
-- 在`C`语言中，`[]`的优先级比`*`高
-- 若没有括号：`int *A2[3]`，`A2`先和`[3]`结合，它是数组，里面存的是`int*`
-- 有括号： `int (*A3)[3]`，`A3`先和`*`结合，这强制说明`A3`本质上是一个指针
-	- 跳出括号看，剩下的部分是`int [3]`，故它是一个指向“**拥有3个整数的数组**”的指针
+- 在 `C` 语言中，`[]` 的优先级比 `*` 高
+- 若没有括号：`int *A2[3]`，`A2` 先和 `[3]` 结合，它是数组，里面存的是 `int*`
+- 有括号： `int (*A3)[3]`，`A3` 先和 `*` 结合，这强制说明 `A3` 本质上是一个指针
+	- 跳出括号看，剩下的部分是 `int [3]`，故它是一个指向“**拥有 3 个整数的数组**”的指针
 
 # Structures
 
@@ -295,27 +290,20 @@ struct rec {
 ```
 
 <div style="font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Courier, monospace; background-color: #ffffff; padding: 40px; border-radius: 8px; width: fit-content; margin: auto;">
-    
     <div style="margin-left: 0px; color: #000000; font-weight: 900; font-size: 22px; line-height: 1.1; margin-bottom: 4px;">
         r<br>↓
     </div>
-
     <div style="display: flex; height: 70px; border: 4px solid #000000; background: #ffffff; box-sizing: border-box; min-width: 600px;">
-        
         <div style="flex: 16; background: #dbeafe; border-right: 4px solid #000000; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #000000;">
             a
         </div>
-
         <div style="flex: 8; background: #ffe4e6; border-right: 4px solid #000000; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #000000;">
             i
         </div>
-
         <div style="flex: 8; background: #dcfce7; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #000000;">
             next
         </div>
-
     </div>
-
     <div style="display: flex; margin-top: 12px; font-weight: 900; font-size: 20px; color: #000000; letter-spacing: -0.5px;">
         <div style="flex: 16; display: flex; justify-content: space-between;">
             <span>0</span>
@@ -328,7 +316,6 @@ struct rec {
             32
         </div>
     </div>
-
 </div>
 
 - Structure represented as block memory
@@ -351,7 +338,7 @@ void set_val(struct rec *r, int val) {
     }
 }
 ```
-x86-64汇编实现
+x86-64 汇编实现
 ```Assembly
 .L11:
     movslq 16(%rdi), %rax         # 从 r+16 处读取 i (并符号扩展为 64 位)
@@ -363,27 +350,20 @@ x86-64汇编实现
 
 
 <div style="font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; background-color: #ffffff; padding: 40px; width: fit-content; margin: auto;">
-    
     <div style="margin-left: 0px; color: #000000; font-weight: 900; font-size: 22px; line-height: 1.1; margin-bottom: 4px;">
         r<br>↓
     </div>
-
     <div style="display: flex; height: 70px; border: 4px solid #000000; background: #ffffff; box-sizing: border-box; min-width: 640px;">
-        
         <div style="flex: 16; background: #dbeafe; border-right: 4px solid #000000; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 26px; color: #000000;">
             a[0-3]
         </div>
-
         <div style="flex: 8; background: #ffe4e6; border-right: 4px solid #000000; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 26px; color: #000000;">
             i
         </div>
-
         <div style="flex: 8; background: #dcfce7; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 26px; color: #000000;">
             next
         </div>
-
     </div>
-
     <div style="display: flex; margin-top: 12px; font-weight: 900; font-size: 20px; color: #000000;">
         <div style="flex: 16; display: flex; justify-content: space-between;">
             <span>0</span>
@@ -396,7 +376,6 @@ x86-64汇编实现
             32
         </div>
     </div>
-
 </div>
 
 
@@ -412,7 +391,7 @@ x86-64汇编实现
 ## Alignment
 
 对齐本质上是~={yellow}**后一个数据**=~对起始地址的挑剔
-- 如果你把成员按~={cyan}从大到小=~的顺序排列（先写 `double`，再写 `int`，最后写 `char`），通常能压榨出最少的Padding空间。
+- 如果你把成员按~={cyan}从大到小=~的顺序排列（先写 `double`，再写 `int`，最后写 `char`），通常能压榨出最少的 Padding 空间。
 - 这就是为什么老练的程序员写结构体都很在意顺序。
 
 ```C
@@ -425,11 +404,9 @@ struct S1 {
 
 <div style="background-color: #ffffff; padding: 20px; color: #000000; font-family: 'JetBrains Mono', 'Courier New', monospace; width: fit-content; border: 1px solid #000000;">
     <div style="font-weight: bold; margin-bottom: 10px;">[ Unaligned Data ]</div>
-    
     <div style="display: block; border: 4px solid #000000; height: 50px; white-space: nowrap; overflow: hidden;">
         <div style="display: inline-block; width: 30px;  height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; font-weight: bold;">c</div><div style="display: inline-block; width: 120px; height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; font-weight: bold;">i[0]</div><div style="display: inline-block; width: 120px; height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; font-weight: bold;">i[1]</div><div style="display: inline-block; width: 240px; height: 50px; line-height: 50px; text-align: center; font-weight: bold;">v</div>
     </div>
-
     <div style="position: relative; height: 20px; margin-top: 5px; font-weight: bold; font-size: 14px;">
         <div style="position: absolute; left: 0px;">p</div>
         <div style="position: absolute; left: 30px;">p+1</div>
@@ -441,11 +418,9 @@ struct S1 {
 
 <div style="background-color: #ffffff; padding: 20px; color: #000000; font-family: 'JetBrains Mono', 'Courier New', monospace; width: fit-content; border: 1px solid #000000;">
     <div style="font-weight: bold; margin-bottom: 10px;">[ Aligned Data ]</div>
-    
     <div style="display: block; border: 4px solid #000000; height: 50px; white-space: nowrap; overflow: hidden;">
         <div style="display: inline-block; width: 20px;  height: 50px; line-height: 50px; text-align: center; border-right: 1px solid #000000; box-sizing: border-box; font-weight: bold;">c</div><div style="display: inline-block; width: 60px;  height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; background: #eeeeee; font-size: 12px;">pad</div><div style="display: inline-block; width: 80px;  height: 50px; line-height: 50px; text-align: center; border-right: 1px solid #000000; box-sizing: border-box; font-weight: bold;">i[0]</div><div style="display: inline-block; width: 80px;  height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; font-weight: bold;">i[1]</div><div style="display: inline-block; width: 80px;  height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; background: #eeeeee; font-size: 12px;">pad</div><div style="display: inline-block; width: 160px; height: 50px; line-height: 50px; text-align: center; font-weight: bold;">v</div>
     </div>
-
     <div style="position: relative; height: 20px; margin-top: 5px; font-weight: bold; font-size: 14px;">
         <div style="position: absolute; left: 0px;">p+0</div>
         <div style="position: absolute; left: 80px;">p+4</div>
@@ -471,11 +446,9 @@ struct S1 {
 - Inserts gaps in structure to ensure correct alignment of fields
 <div style="background-color: #ffffff; padding: 20px; color: #000000; font-family: 'JetBrains Mono', monospace; width: fit-content; border: 2px solid #000000;">
     <div style="font-weight: bold; margin-bottom: 10px;">[ 编译器插入 Gap 的过程 ]</div>
-    
     <div style="display: block; border: 4px solid #000000; height: 50px; white-space: nowrap;">
         <div style="display: inline-block; width: 40px; height: 50px; line-height: 50px; text-align: center; border-right: 1px solid #000000; box-sizing: border-box; font-weight: bold;">c</div><div style="display: inline-block; width: 120px; height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; background: #eeeeee; font-size: 12px; color: #666;">gap (3 bytes)</div><div style="display: inline-block; width: 160px; height: 50px; line-height: 50px; text-align: center; font-weight: bold;">int i</div>
     </div>
-
     <div style="position: relative; height: 20px; margin-top: 5px; font-weight: bold; font-size: 14px;">
         <div style="position: absolute; left: 0px;">0</div>
         <div style="position: absolute; left: 40px; color: #999;">1</div>
