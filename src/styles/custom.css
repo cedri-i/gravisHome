@@ -64,3 +64,142 @@ mark {
     color: inherit;
     padding: 0 0.14em;
 }
+
+:root {
+    --note-html-surface: #f8fafc;
+    --note-html-surface-soft: #eef2ff;
+    --note-html-panel: #ffffff;
+    --note-html-ink: #111827;
+    --note-html-muted: #475569;
+    --note-html-border: #334155;
+    --note-html-accent: #2563eb;
+    --note-html-warm: #fff7ed;
+    --note-html-cool: #e0f2fe;
+    --note-html-green: #dcfce7;
+    --note-html-purple: #ede9fe;
+}
+
+:root[data-theme='dark'] {
+    --note-html-surface: #f8fafc;
+    --note-html-surface-soft: #eef2ff;
+    --note-html-panel: #ffffff;
+    --note-html-ink: #111827;
+    --note-html-muted: #475569;
+    --note-html-border: #334155;
+    --note-html-accent: #1d4ed8;
+    --note-html-warm: #fff7ed;
+    --note-html-cool: #e0f2fe;
+    --note-html-green: #dcfce7;
+    --note-html-purple: #ede9fe;
+}
+
+.sl-markdown-content > div[style],
+.sl-markdown-content > table[style] {
+    box-sizing: border-box;
+    max-width: 100%;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+    border: 1px solid color-mix(in srgb, var(--note-html-border) 22%, transparent) !important;
+    border-radius: 8px !important;
+    background: var(--note-html-surface) !important;
+    color: var(--note-html-ink) !important;
+    box-shadow: none !important;
+    font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
+}
+
+.sl-markdown-content > div[style] :not(pre):not(code),
+.sl-markdown-content > table[style] :not(pre):not(code) {
+    color: var(--note-html-ink) !important;
+    font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
+}
+
+.sl-markdown-content > div[style] pre,
+.sl-markdown-content > div[style] code,
+.sl-markdown-content > div[style] [style*='monospace'],
+.sl-markdown-content > div[style] [style*='Consolas'],
+.sl-markdown-content > div[style] [style*='Courier'],
+.sl-markdown-content > table[style] [style*='monospace'],
+.sl-markdown-content > table[style] [style*='Consolas'],
+.sl-markdown-content > table[style] [style*='Courier'] {
+    font-family:
+        "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, ui-monospace,
+        monospace !important;
+}
+
+.sl-markdown-content > div[style] h2,
+.sl-markdown-content > div[style] h3 {
+    margin: 0 0 0.75rem;
+    border-color: color-mix(in srgb, var(--note-html-border) 28%, transparent) !important;
+    color: var(--note-html-ink) !important;
+    font-weight: 750;
+    letter-spacing: 0;
+}
+
+.sl-markdown-content > div[style] table,
+.sl-markdown-content > table[style] {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    background: var(--note-html-panel) !important;
+    border: 1px solid color-mix(in srgb, var(--note-html-border) 26%, transparent) !important;
+    box-shadow: none !important;
+}
+
+.sl-markdown-content > div[style] th,
+.sl-markdown-content > table[style] th {
+    background: var(--note-html-border) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--note-html-border) !important;
+    font-weight: 750 !important;
+}
+
+.sl-markdown-content > div[style] td,
+.sl-markdown-content > table[style] td {
+    background: var(--note-html-panel) !important;
+    color: var(--note-html-ink) !important;
+    border: 0 !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--note-html-border) 20%, transparent) !important;
+}
+
+.sl-markdown-content > div[style] tr:nth-child(even) td,
+.sl-markdown-content > table[style] tr:nth-child(even) td {
+    background: #f1f5f9 !important;
+}
+
+.sl-markdown-content > div[style] [style*='background-color: #fff9c4'],
+.sl-markdown-content > div[style] [style*='background: #fff9c4'],
+.sl-markdown-content > div[style] [style*='background-color: #FFF9D6'] {
+    background: var(--note-html-warm) !important;
+    border-color: #c2410c !important;
+}
+
+.sl-markdown-content > div[style] [style*='background-color: #e8f5e9'],
+.sl-markdown-content > div[style] [style*='background: #e8f5e9'] {
+    background: var(--note-html-green) !important;
+    border-color: #15803d !important;
+}
+
+.sl-markdown-content > div[style] [style*='background-color: #E6E6FA'],
+.sl-markdown-content > div[style] [style*='background-color: #d1d1ff'],
+.sl-markdown-content > div[style] [style*='background-color: #e8eaf6'] {
+    background: var(--note-html-purple) !important;
+    border-color: #6d28d9 !important;
+}
+
+.sl-markdown-content > div[style] [style*='background-color: #B0C4DE'],
+.sl-markdown-content > div[style] [style*='background-color: #e3f2fd'] {
+    background: var(--note-html-cool) !important;
+    border-color: #0369a1 !important;
+}
+
+.sl-markdown-content > div[style] svg text {
+    fill: var(--note-html-ink) !important;
+    font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
+}

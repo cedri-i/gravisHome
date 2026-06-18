@@ -11,9 +11,6 @@ title: "Lecture 12"
 # S, E, B
 
 <div style="font-family: sans-serif; background-color: white; padding: 20px; border-radius: 8px; color: #333; zoom: 0.8;">
-    <div style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 25px;">
-        General Cache Organization (S, E, B)
-    </div>
     <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
         <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">
             E = 2<sup>e</sup> lines per set
@@ -545,4 +542,3 @@ for (j = 0; j < n; j++) {
 blocking：分块
 
 > 这里有些笔记未记录……
-

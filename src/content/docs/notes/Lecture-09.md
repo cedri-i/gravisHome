@@ -333,7 +333,6 @@ echo:
 #### Setting Up Canary
 
 <div style="background-color: white; padding: 30px; font-family: 'Segoe UI', Arial, sans-serif; color: black; line-height: 1.2;">
-    <div style="font-size: 32px; font-weight: bold; margin-bottom: 5px;">Setting Up Canary</div>
     <div style="color: #A52A2A; font-style: italic; font-weight: bold; font-size: 18px; margin-bottom: 20px;">Before call to gets</div>
     <div style="display: flex; align-items: flex-start; gap: 40px;">
         <div style="display: flex; flex-direction: column; align-items: flex-start;">
@@ -421,4 +420,3 @@ int main() {
 |**主要用途**|节省空间，或实现“伪多态”（不同方式解释同一段二进制数据）。|将相关的不同类型数据打包在一起。|
 
 ### 联合体是一种切换类型并得到~={yellow}不同的位表示形式=~的技术
-
