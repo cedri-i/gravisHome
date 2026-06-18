@@ -225,9 +225,8 @@ main:has(.baiyun-meta) .content-panel > .sl-container {
 main:has(.baiyun-meta) h1 {
     color: color-mix(in srgb, var(--sl-color-white) 94%, #d5eadf 6%);
     font-family:
-        "FZQiTi-S14S", "FZQiTi", "Qi Gong", "Qigong", "启功体", "方正启功体",
-        "LXGW WenKai", "STKaiti", "KaiTi", "Kaiti SC", "Noto Serif SC",
-        "Source Han Serif SC", serif;
+        "STZhongsong", "华文中宋", "FZZhongSong-Z07", "FZYaSongS-R-GB",
+        "Songti SC", SimSun, "Noto Serif SC", "Source Han Serif SC", serif;
     font-size: clamp(2.6rem, 4vw, 4rem);
     font-weight: 800;
     letter-spacing: 0.04em;
