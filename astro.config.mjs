@@ -111,7 +111,7 @@ export default defineConfig({
                             ],
                         },
                         {
-                            label: '白鱼 n',
+                            label: '白鱼n',
                             items: [
                                 {
                                     label: 'Overview',
