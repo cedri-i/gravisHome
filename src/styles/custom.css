@@ -204,6 +204,54 @@ mark {
         "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
 }
 
+.main-frame:has(.baiyun-meta) .right-sidebar-container {
+    display: none;
+}
+
+.main-frame:has(.baiyun-meta) .main-pane {
+    width: 100%;
+}
+
+main:has(.baiyun-meta) {
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, #1f2937 40%, transparent),
+            color-mix(in srgb, #0f172a 18%, transparent)
+        );
+}
+
+main:has(.baiyun-meta) .content-panel {
+    border-bottom: 0;
+}
+
+main:has(.baiyun-meta) .content-panel > .sl-container {
+    max-width: 50rem;
+    margin-inline: auto;
+}
+
+main:has(.baiyun-meta) h1 {
+    color: color-mix(in srgb, var(--sl-color-white) 94%, #d5eadf 6%);
+    font-family:
+        "LXGW WenKai", "STKaiti", "KaiTi", "Kaiti SC", "Noto Serif SC",
+        "Source Han Serif SC", "Microsoft YaHei", sans-serif;
+    font-size: clamp(2.6rem, 4vw, 4rem);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-shadow: 0 10px 36px color-mix(in srgb, #000000 32%, transparent);
+}
+
+main:has(.baiyun-meta) .content-panel:has(.baiyun-meta) > .sl-container {
+    max-width: 54rem;
+    margin: 0 auto 4rem;
+    padding: clamp(1.5rem, 3vw, 3rem);
+    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 32%, transparent);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--sl-color-bg) 78%, transparent);
+    box-shadow: 0 22px 70px color-mix(in srgb, #000000 18%, transparent);
+    backdrop-filter: blur(10px);
+}
+
 .baiyun-meta {
     display: flex;
     flex-wrap: wrap;
