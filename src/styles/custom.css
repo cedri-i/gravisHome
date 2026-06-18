@@ -271,22 +271,22 @@ mark {
         ),
         url('/cards/computer-systems.svg') right center / contain no-repeat;
     content: "";
-    opacity: 0.18;
+    opacity: 0.22;
 }
 
 .notes-link-card-baiyun::before {
     position: absolute;
-    inset: 0 auto 0 0;
+    inset: 0 0 0 auto;
     width: min(48%, 13rem);
     background:
         linear-gradient(
-            90deg,
+            270deg,
             color-mix(in srgb, var(--sl-color-bg-nav) 12%, transparent),
             var(--sl-color-bg-nav)
         ),
-        url('/baiyun/fish-mark.jpg') left center / contain no-repeat;
+        url('/baiyun/fish-mark.jpg') right center / contain no-repeat;
     content: "";
-    opacity: 0.16;
+    opacity: 0.2;
 }
 
 .guestbook {
