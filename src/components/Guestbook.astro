@@ -1,0 +1,127 @@
+<section class="guestbook" aria-labelledby="guestbook-title">
+  <div class="guestbook-header">
+    <h2 id="guestbook-title">留言区</h2>
+    <p>随手写点什么。当前版本会把留言保存在这台设备的浏览器里。</p>
+  </div>
+
+  <form class="guestbook-form" id="guestbook-form">
+    <label>
+      <span>昵称</span>
+      <input id="guestbook-name" name="name" type="text" maxlength="24" placeholder="怎么称呼你" autocomplete="name" />
+    </label>
+
+    <label>
+      <span>留言</span>
+      <textarea id="guestbook-message" name="message" rows="4" maxlength="320" placeholder="在这里写下留言" required></textarea>
+    </label>
+
+    <div class="guestbook-actions">
+      <span id="guestbook-count">0 / 320</span>
+      <button type="submit">留下留言</button>
+    </div>
+  </form>
+
+  <div class="guestbook-board" aria-live="polite">
+    <p class="guestbook-empty" id="guestbook-empty">还没有留言。</p>
+    <ol class="guestbook-list" id="guestbook-list"></ol>
+  </div>
+</section>
+
+<script>
+  const storageKey = 'gravis-home-guestbook';
+
+  const readMessages = () => {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || '[]');
+    } catch {
+      return [];
+    }
+  };
+
+  const writeMessages = (messages) => {
+    localStorage.setItem(storageKey, JSON.stringify(messages.slice(0, 20)));
+  };
+
+  const formatDate = (value) => {
+    return new Intl.DateTimeFormat('zh-CN', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(new Date(value));
+  };
+
+  const renderMessages = () => {
+    const list = document.querySelector('#guestbook-list');
+    const empty = document.querySelector('#guestbook-empty');
+    if (!list || !empty) return;
+
+    const messages = readMessages();
+    list.textContent = '';
+    empty.hidden = messages.length > 0;
+
+    for (const item of messages) {
+      const entry = document.createElement('li');
+      entry.className = 'guestbook-entry';
+
+      const meta = document.createElement('div');
+      meta.className = 'guestbook-entry-meta';
+
+      const name = document.createElement('strong');
+      name.textContent = item.name || '匿名';
+
+      const time = document.createElement('time');
+      time.dateTime = item.createdAt;
+      time.textContent = formatDate(item.createdAt);
+
+      const message = document.createElement('p');
+      message.textContent = item.message;
+
+      meta.append(name, time);
+      entry.append(meta, message);
+      list.append(entry);
+    }
+  };
+
+  const setupGuestbook = () => {
+    const form = document.querySelector('#guestbook-form');
+    const nameInput = document.querySelector('#guestbook-name');
+    const messageInput = document.querySelector('#guestbook-message');
+    const count = document.querySelector('#guestbook-count');
+    if (!form || !nameInput || !messageInput || !count) return;
+
+    const updateCount = () => {
+      count.textContent = `${messageInput.value.length} / ${messageInput.maxLength}`;
+    };
+
+    messageInput.addEventListener('input', updateCount);
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const message = messageInput.value.trim();
+      if (!message) return;
+
+      const nextMessages = [
+        {
+          name: nameInput.value.trim(),
+          message,
+          createdAt: new Date().toISOString(),
+        },
+        ...readMessages(),
+      ];
+
+      writeMessages(nextMessages);
+      form.reset();
+      updateCount();
+      renderMessages();
+    });
+
+    updateCount();
+    renderMessages();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupGuestbook, { once: true });
+  } else {
+    setupGuestbook();
+  }
+</script>
