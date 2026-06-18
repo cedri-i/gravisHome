@@ -24,11 +24,15 @@
   <div class="guestbook-board" aria-live="polite">
     <p class="guestbook-empty" id="guestbook-empty">还没有留言。</p>
     <ol class="guestbook-list" id="guestbook-list"></ol>
+    <p class="guestbook-status" id="guestbook-status"></p>
   </div>
 </section>
 
 <script>
   const storageKey = 'gravis-home-guestbook';
+  const endpoint = '/api/guestbook';
+  let activeMessages = [];
+  let backendEnabled = false;
 
   const readMessages = () => {
     try {
@@ -42,6 +46,17 @@
     localStorage.setItem(storageKey, JSON.stringify(messages.slice(0, 20)));
   };
 
+  const markSynced = (messagesToMark) => {
+    const syncedKeys = new Set(
+      messagesToMark.map((item) => `${item.createdAt}:${item.name || ''}:${item.message}`)
+    );
+    const messages = readMessages().map((item) => {
+      const key = `${item.createdAt}:${item.name || ''}:${item.message}`;
+      return syncedKeys.has(key) ? { ...item, syncedAt: new Date().toISOString() } : item;
+    });
+    writeMessages(messages);
+  };
+
   const formatDate = (value) => {
     return new Intl.DateTimeFormat('zh-CN', {
       month: 'short',
@@ -52,12 +67,18 @@
     }).format(new Date(value));
   };
 
-  const renderMessages = () => {
+  const setStatus = (message) => {
+    const status = document.querySelector('#guestbook-status');
+    if (!status) return;
+    status.textContent = message;
+  };
+
+  const renderMessages = (messages = activeMessages) => {
     const list = document.querySelector('#guestbook-list');
     const empty = document.querySelector('#guestbook-empty');
     if (!list || !empty) return;
 
-    const messages = readMessages();
+    activeMessages = messages;
     list.textContent = '';
     empty.hidden = messages.length > 0;
 
@@ -84,6 +105,49 @@
     }
   };
 
+  const fetchRemoteMessages = async () => {
+    const response = await fetch(endpoint);
+    if (!response.ok) throw new Error('Guestbook backend unavailable.');
+    const data = await response.json();
+    backendEnabled = true;
+    return data.messages || [];
+  };
+
+  const postRemoteMessage = async (item) => {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(item),
+    });
+
+    if (!response.ok) throw new Error('Guestbook backend unavailable.');
+    backendEnabled = true;
+    return response.json();
+  };
+
+  const syncLocalMessages = async () => {
+    const unsynced = readMessages().filter((item) => !item.syncedAt);
+    if (!backendEnabled || unsynced.length === 0) return;
+
+    const synced = [];
+    for (const item of unsynced) {
+      try {
+        await postRemoteMessage(item);
+        synced.push(item);
+      } catch {
+        break;
+      }
+    }
+
+    if (synced.length > 0) {
+      markSynced(synced);
+      renderMessages(await fetchRemoteMessages());
+      setStatus(`已同步 ${synced.length} 条本地留言。`);
+    }
+  };
+
   const setupGuestbook = () => {
     const form = document.querySelector('#guestbook-form');
     const nameInput = document.querySelector('#guestbook-name');
@@ -96,28 +160,42 @@
     };
 
     messageInput.addEventListener('input', updateCount);
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const message = messageInput.value.trim();
       if (!message) return;
 
-      const nextMessages = [
-        {
-          name: nameInput.value.trim(),
-          message,
-          createdAt: new Date().toISOString(),
-        },
-        ...readMessages(),
-      ];
+      const item = {
+        name: nameInput.value.trim(),
+        message,
+        createdAt: new Date().toISOString(),
+      };
 
-      writeMessages(nextMessages);
+      try {
+        await postRemoteMessage(item);
+        renderMessages(await fetchRemoteMessages());
+        setStatus('留言已公开保存。');
+      } catch {
+        writeMessages([item, ...readMessages()]);
+        renderMessages(readMessages());
+        setStatus('公共留言区暂不可用，已先保存在本地。');
+      }
+
       form.reset();
       updateCount();
-      renderMessages();
     });
 
     updateCount();
-    renderMessages();
+    renderMessages(readMessages());
+    fetchRemoteMessages()
+      .then((messages) => {
+        renderMessages(messages);
+        setStatus('公共留言区已连接。');
+        return syncLocalMessages();
+      })
+      .catch(() => {
+        setStatus('公共留言区尚未配置，当前留言只保存在本地。');
+      });
   };
 
   if (document.readyState === 'loading') {

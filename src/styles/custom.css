@@ -424,6 +424,13 @@ mark {
     white-space: pre-wrap;
 }
 
+.guestbook-status {
+    margin: 0.75rem 0 0;
+    color: var(--sl-color-gray-3);
+    font-size: 0.86rem;
+    line-height: 1.6;
+}
+
 main:has(.baiyun-meta) {
     background:
         linear-gradient(
