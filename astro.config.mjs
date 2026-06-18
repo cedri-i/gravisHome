@@ -121,6 +121,10 @@ export default defineConfig({
                                     label: '游苍山记',
                                     link: '/baiyun/you-cangshan-ji/',
                                 },
+                                {
+                                    label: '触山',
+                                    link: '/baiyun/chu-shan/',
+                                },
                             ],
                         },
                     ],

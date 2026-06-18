@@ -3,11 +3,17 @@ title: "My Notes"
 description: 笔记导航
 ---
 
-import { LinkCard, CardGrid } from '@astrojs/starlight/components';
-
 # My Notes
 
-<CardGrid>
-  <LinkCard title="计算机系统" href="/computer-systems/" description="机器级表示、汇编、内存、缓存和链接等系统主题。" />
-  <LinkCard title="白鱼n" href="/baiyun/" description="公众号文章归档区。" />
-</CardGrid>
+<div class="notes-card-grid">
+  <a class="notes-link-card" href="/computer-systems/">
+    <span class="notes-link-card-title">计算机系统</span>
+    <span class="notes-link-card-description">机器级表示、汇编、内存、缓存和链接等系统主题。</span>
+    <span class="notes-link-card-arrow">→</span>
+  </a>
+  <a class="notes-link-card notes-link-card-baiyun" href="/baiyun/">
+    <span class="notes-link-card-title">白鱼n</span>
+    <span class="notes-link-card-description">公众号文章归档区。</span>
+    <span class="notes-link-card-arrow">→</span>
+  </a>
+</div>
