@@ -112,7 +112,16 @@ export default defineConfig({
                         },
                         {
                             label: '白鱼 n',
-                            link: '/baiyun/',
+                            items: [
+                                {
+                                    label: 'Overview',
+                                    link: '/baiyun/',
+                                },
+                                {
+                                    label: '游苍山记',
+                                    link: '/baiyun/you-cangshan-ji/',
+                                },
+                            ],
                         },
                     ],
                 },
