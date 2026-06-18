@@ -314,6 +314,16 @@ main:has(.baiyun-meta) .content-panel:has(.baiyun-meta) > .sl-container {
     backdrop-filter: blur(10px);
 }
 
+main:has(.baiyun-meta) .sl-markdown-content h2 {
+    margin-top: 2.5rem;
+    color: color-mix(in srgb, var(--sl-color-text) 90%, var(--sl-color-gray-2) 10%);
+    font-family:
+        "STZhongsong", "华文中宋", "FZZhongSong-Z07", "FZYaSongS-R-GB",
+        "Songti SC", SimSun, "Noto Serif SC", "Source Han Serif SC", serif;
+    font-size: 1.55rem;
+    letter-spacing: 0.02em;
+}
+
 .baiyun-meta {
     display: flex;
     flex-wrap: wrap;
@@ -350,6 +360,12 @@ main:has(.baiyun-meta) .content-panel:has(.baiyun-meta) > .sl-container {
     letter-spacing: 0.01em;
     text-align: justify;
     text-indent: 2em;
+}
+
+.baiyun-preface {
+    color: var(--sl-color-gray-2) !important;
+    font-style: italic;
+    text-indent: 0 !important;
 }
 
 .baiyun-meta ~ p:first-of-type {
