@@ -265,7 +265,8 @@ mark {
 .baiyun-caption {
     margin-top: 0.75rem;
     color: var(--sl-color-gray-3);
-    font-size: 0.8rem;
+    font-family: "Songti SC", SimSun, "Noto Serif SC", serif;
+    font-size: 0.78rem;
     line-height: 1.8;
     text-indent: 0 !important;
 }
