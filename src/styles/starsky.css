@@ -1,7 +1,7 @@
 /* =========================
-   StarSky Scene Background
-   Dark: fantasy star sky
-   Light: blue sky, clouds, grass, windmill
+   StarSky Scene
+   Dark: magical night sky
+   Light: blue sky + clouds + grass
 ========================= */
 
 .starsky {
@@ -11,107 +11,106 @@
     isolation: isolate;
 }
 
-/* 保证首页内容在背景上面 */
 .starsky > * {
     position: relative;
     z-index: 2;
 }
 
-/* ===== Dark Mode: magical star sky ===== */
+/* ===== Dark: sky + nebula ===== */
 
 .starsky::before {
     content: "";
-    position: fixed;
+    position: absolute;
     inset: 0;
     z-index: -3;
     pointer-events: none;
 
     background:
-        radial-gradient(circle at 18% 18%, rgba(147, 51, 234, .28), transparent 28%),
-        radial-gradient(circle at 82% 24%, rgba(59, 130, 246, .22), transparent 34%),
-        radial-gradient(circle at 45% 78%, rgba(236, 72, 153, .14), transparent 38%),
-        linear-gradient(180deg, #050816 0%, #090b22 55%, #030712 100%);
+        radial-gradient(circle at 18% 24%, rgba(126, 87, 255, .26), transparent 28%),
+        radial-gradient(circle at 70% 18%, rgba(56, 189, 248, .18), transparent 34%),
+        radial-gradient(circle at 48% 78%, rgba(236, 72, 153, .12), transparent 38%),
+        linear-gradient(180deg, #070716 0%, #0b1028 48%, #050816 100%);
 }
 
+/* 不规则星星层 */
 .starsky::after {
     content: "";
-    position: fixed;
+    position: absolute;
     inset: 0;
     z-index: -2;
     pointer-events: none;
 
     background-image:
-        radial-gradient(rgba(255,255,255,.9) 1px, transparent 1px),
-        radial-gradient(rgba(255,255,255,.55) 1px, transparent 1px),
-        radial-gradient(rgba(180,200,255,.7) 1.4px, transparent 1.4px);
+        radial-gradient(circle at 7% 18%, rgba(255,255,255,.9) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 16% 72%, rgba(255,255,255,.45) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 24% 34%, rgba(255,255,255,.7) 0 1.2px, transparent 1.9px),
+        radial-gradient(circle at 38% 12%, rgba(190,210,255,.6) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 47% 58%, rgba(255,255,255,.8) 0 1px, transparent 1.8px),
+        radial-gradient(circle at 63% 28%, rgba(255,255,255,.55) 0 1.1px, transparent 1.8px),
+        radial-gradient(circle at 72% 76%, rgba(180,200,255,.8) 0 1.2px, transparent 1.9px),
+        radial-gradient(circle at 86% 42%, rgba(255,255,255,.65) 0 1px, transparent 1.8px),
+        radial-gradient(circle at 94% 14%, rgba(255,255,255,.9) 0 1.2px, transparent 2px);
 
     background-size:
-        90px 90px,
-        150px 150px,
-        260px 260px;
+        420px 360px,
+        520px 460px,
+        680px 520px,
+        740px 620px,
+        560px 430px,
+        810px 700px,
+        640px 540px,
+        900px 760px,
+        720px 680px;
 
-    background-position:
-        0 0,
-        35px 55px,
-        90px 120px;
-
-    opacity: .42;
+    opacity: .58;
 }
 
-/* 额外光雾层 */
-.starsky .starsky-glow {
-    position: fixed;
+/* 柔光雾 */
+.starsky-glow {
+    position: absolute;
     inset: 0;
     z-index: -1;
     pointer-events: none;
 
     background:
-        radial-gradient(circle at 50% 15%, rgba(255,255,255,.08), transparent 22%),
-        radial-gradient(circle at 70% 65%, rgba(120,140,255,.12), transparent 30%);
+        radial-gradient(circle at 50% 12%, rgba(255,255,255,.08), transparent 24%),
+        radial-gradient(circle at 20% 70%, rgba(147,51,234,.12), transparent 34%),
+        radial-gradient(circle at 78% 66%, rgba(56,189,248,.10), transparent 32%);
 
-    filter: blur(12px);
+    filter: blur(18px);
 }
 
-/* ===== Light Mode: blue sky, clouds, grass, windmill ===== */
+/* ===== Light: sky + clouds + grass ===== */
 
 :root[data-theme="light"] .starsky::before {
     background:
-        radial-gradient(circle at 18% 18%, rgba(255,255,255,.95) 0 6%, transparent 7%),
-        radial-gradient(circle at 24% 16%, rgba(255,255,255,.9) 0 8%, transparent 9%),
-        radial-gradient(circle at 31% 19%, rgba(255,255,255,.85) 0 6%, transparent 7%),
+        radial-gradient(ellipse at 18% 18%, rgba(255,255,255,.88) 0 8%, transparent 9%),
+        radial-gradient(ellipse at 25% 16%, rgba(255,255,255,.78) 0 10%, transparent 11%),
+        radial-gradient(ellipse at 34% 20%, rgba(255,255,255,.65) 0 8%, transparent 9%),
 
-        radial-gradient(circle at 72% 23%, rgba(255,255,255,.9) 0 7%, transparent 8%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,.8) 0 9%, transparent 10%),
+        radial-gradient(ellipse at 76% 22%, rgba(255,255,255,.72) 0 9%, transparent 10%),
+        radial-gradient(ellipse at 84% 20%, rgba(255,255,255,.58) 0 12%, transparent 13%),
 
-        linear-gradient(180deg, #8ed8ff 0%, #c7efff 55%, #e8f9ff 72%, #9bd66f 73%, #5fb85a 100%);
+        linear-gradient(
+            180deg,
+            #8fdcff 0%,
+            #c8f1ff 58%,
+            #eafcff 72%,
+            #b8e986 73%,
+            #69bd61 100%
+        );
 }
 
+/* 浅色模式不显示星星，改成轻微云雾 */
 :root[data-theme="light"] .starsky::after {
-    opacity: .28;
+    background:
+        radial-gradient(ellipse at 12% 34%, rgba(255,255,255,.35), transparent 18%),
+        radial-gradient(ellipse at 68% 38%, rgba(255,255,255,.28), transparent 22%),
+        linear-gradient(180deg, transparent 0%, transparent 70%, rgba(65,150,72,.18) 100%);
 
-    background-image:
-        linear-gradient(115deg, transparent 48%, rgba(255,255,255,.75) 49%, transparent 50%),
-        linear-gradient(65deg, transparent 48%, rgba(255,255,255,.55) 49%, transparent 50%),
-        radial-gradient(circle at 83% 67%, #8b5e34 0 10px, transparent 11px),
-        linear-gradient(90deg, transparent 81%, #8b5e34 82% 84%, transparent 85%),
-        linear-gradient(0deg, transparent 63%, #8b5e34 64% 66%, transparent 67%);
-
-    background-size:
-        120px 120px,
-        140px 140px,
-        100% 100%,
-        100% 100%,
-        100% 100%;
-
-    background-position:
-        0 0,
-        40px 20px,
-        0 0,
-        0 0,
-        0 0;
+    opacity: 1;
 }
 
-/* 浅色模式隐藏星空光雾 */
-:root[data-theme="light"] .starsky .starsky-glow {
+:root[data-theme="light"] .starsky-glow {
     display: none;
 }
