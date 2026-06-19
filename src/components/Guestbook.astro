@@ -1,15 +1,15 @@
 <section class="guestbook" aria-labelledby="guestbook-title">
   <div class="guestbook-header">
     <h2 id="guestbook-title">留言区</h2>
-    <button class="guestbook-moderate-button" id="guestbook-moderate" type="button">Moderate</button>
+    <div class="guestbook-header-actions">
+      <span class="guestbook-user" id="guestbook-user"></span>
+      <a class="guestbook-login" id="guestbook-login" href="/api/github-auth?action=login">GitHub Login</a>
+      <a class="guestbook-logout" id="guestbook-logout" href="/api/github-auth?action=logout" hidden>Logout</a>
+      <button class="guestbook-moderate-button" id="guestbook-moderate" type="button">Moderate</button>
+    </div>
   </div>
 
   <form class="guestbook-form" id="guestbook-form">
-    <label>
-      <span>昵称</span>
-      <input id="guestbook-name" name="name" type="text" maxlength="24" placeholder="怎么称呼你" autocomplete="name" />
-    </label>
-
     <label>
       <span>留言</span>
       <textarea id="guestbook-message" name="message" rows="4" maxlength="320" placeholder="在这里写下留言" required></textarea>
@@ -35,6 +35,7 @@
   let activeMessages = [];
   let backendEnabled = false;
   let moderationEnabled = false;
+  let currentUser = null;
 
   const createLocalId = () => {
     return `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -76,6 +77,19 @@
     writeMessages(messages);
   };
 
+  const markClaimed = (messagesToMark) => {
+    const claimedKeys = new Set(
+      messagesToMark.map(
+        (item) => `${item.createdAt}:${item.name || ''}:${item.message}:${item.parentId || ''}`
+      )
+    );
+    const messages = readMessages().map((item) => {
+      const key = `${item.createdAt}:${item.name || ''}:${item.message}:${item.parentId || ''}`;
+      return claimedKeys.has(key) ? { ...item, claimedAt: new Date().toISOString() } : item;
+    });
+    writeMessages(messages);
+  };
+
   const formatDate = (value) => {
     return new Intl.DateTimeFormat('zh-CN', {
       month: 'short',
@@ -90,6 +104,41 @@
     const status = document.querySelector('#guestbook-status');
     if (!status) return;
     status.textContent = message;
+  };
+
+  const updateAuthUi = () => {
+    const user = document.querySelector('#guestbook-user');
+    const login = document.querySelector('#guestbook-login');
+    const logout = document.querySelector('#guestbook-logout');
+    const submit = document.querySelector('#guestbook-form button[type="submit"]');
+    if (!user || !login || !logout || !submit) return;
+
+    if (currentUser) {
+      user.textContent = `@${currentUser.login}`;
+      login.hidden = true;
+      logout.hidden = false;
+      submit.disabled = false;
+      submit.textContent = '留下留言';
+      return;
+    }
+
+    user.textContent = '';
+    login.hidden = false;
+    logout.hidden = true;
+    submit.disabled = true;
+    submit.textContent = '请先登录';
+  };
+
+  const fetchSession = async () => {
+    try {
+      const response = await fetch('/api/github-auth?action=session');
+      if (!response.ok) throw new Error('Session unavailable.');
+      const data = await response.json();
+      currentUser = data.user || null;
+    } catch {
+      currentUser = null;
+    }
+    updateAuthUi();
   };
 
   const getAdminToken = () => {
@@ -149,13 +198,6 @@
     const labelText = document.createElement('span');
     labelText.textContent = `回复 ${parent.name || '匿名'}`;
 
-    const input = document.createElement('input');
-    input.name = 'name';
-    input.type = 'text';
-    input.maxLength = 24;
-    input.placeholder = '昵称';
-    input.autocomplete = 'name';
-
     const textarea = document.createElement('textarea');
     textarea.name = 'message';
     textarea.rows = 3;
@@ -176,7 +218,7 @@
     submit.textContent = 'Reply';
 
     actions.append(cancel, submit);
-    label.append(labelText, input, textarea);
+    label.append(labelText, textarea);
     form.append(label, actions);
     return form;
   };
@@ -189,8 +231,17 @@
     const meta = document.createElement('div');
     meta.className = 'guestbook-entry-meta';
 
+    if (item.avatarUrl) {
+      const avatar = document.createElement('img');
+      avatar.className = 'guestbook-avatar';
+      avatar.src = item.avatarUrl;
+      avatar.alt = '';
+      avatar.loading = 'lazy';
+      meta.append(avatar);
+    }
+
     const name = document.createElement('strong');
-    name.textContent = item.name || '匿名';
+    name.textContent = item.githubLogin ? `@${item.githubLogin}` : item.name || '匿名';
 
     const time = document.createElement('time');
     time.dateTime = item.createdAt;
@@ -205,7 +256,8 @@
     replyButton.dataset.replyTo = item.id;
     replyButton.textContent = 'Reply';
 
-    meta.append(name, time, replyButton);
+    meta.append(name, time);
+    if (currentUser) meta.append(replyButton);
 
     if (moderationEnabled && item.id?.startsWith('github-')) {
       const hideButton = document.createElement('button');
@@ -263,6 +315,7 @@
       body: JSON.stringify(item),
     });
 
+    if (response.status === 401) throw new Error('GitHub login required.');
     if (!response.ok) throw new Error('Guestbook backend unavailable.');
     backendEnabled = true;
     return response.json();
@@ -282,6 +335,60 @@
     return response.json();
   };
 
+  const claimRemoteMessage = async (remoteItem, localItem) => {
+    const response = await fetch(endpoint, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'claim',
+        id: remoteItem.id,
+        message: localItem.message,
+        createdAt: localItem.createdAt,
+        parentId: localItem.parentId || '',
+      }),
+    });
+
+    if (!response.ok) throw new Error('Claim request failed.');
+    return response.json();
+  };
+
+  const migrateLocalAuthors = async (remoteMessages) => {
+    if (!currentUser) return remoteMessages;
+
+    const localMessages = readMessages().filter((item) => !item.claimedAt);
+    if (localMessages.length === 0) return remoteMessages;
+
+    const claimed = [];
+    for (const remoteItem of remoteMessages) {
+      if (remoteItem.githubLogin) continue;
+
+      const localItem = localMessages.find((item) => {
+        return (
+          item.message === remoteItem.message &&
+          item.createdAt === remoteItem.createdAt &&
+          (item.parentId || '') === (remoteItem.parentId || '')
+        );
+      });
+
+      if (!localItem) continue;
+
+      try {
+        await claimRemoteMessage(remoteItem, localItem);
+        claimed.push(localItem);
+      } catch {
+        // Keep going: one old message may fail if it was made on another device.
+      }
+    }
+
+    if (claimed.length === 0) return remoteMessages;
+
+    markClaimed(claimed);
+    setStatus(`已为 ${claimed.length} 条旧留言补上 GitHub 身份。`);
+    return fetchRemoteMessages();
+  };
+
   const saveMessage = async (item, successStatus) => {
     try {
       const result = await postRemoteMessage(item);
@@ -289,6 +396,10 @@
       setStatus(successStatus);
       return result.message;
     } catch {
+      if (!currentUser) {
+        setStatus('Please sign in with GitHub first.');
+        return item;
+      }
       writeMessages([item, ...readMessages()]);
       renderMessages(mergeMessages(readMessages(), activeMessages));
       setStatus('公共留言区暂不可用，已先保存在本地。');
@@ -324,11 +435,10 @@
 
   const setupGuestbook = () => {
     const form = document.querySelector('#guestbook-form');
-    const nameInput = document.querySelector('#guestbook-name');
     const messageInput = document.querySelector('#guestbook-message');
     const count = document.querySelector('#guestbook-count');
     const moderateButton = document.querySelector('#guestbook-moderate');
-    if (!form || !nameInput || !messageInput || !count || !moderateButton) return;
+    if (!form || !messageInput || !count || !moderateButton) return;
 
     const updateCount = () => {
       count.textContent = `${messageInput.value.length} / ${messageInput.maxLength}`;
@@ -354,12 +464,19 @@
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      if (!currentUser) {
+        setStatus('Please sign in with GitHub first.');
+        return;
+      }
       const message = messageInput.value.trim();
       if (!message) return;
 
       const item = {
         id: createLocalId(),
-        name: nameInput.value.trim(),
+        name: currentUser.name || currentUser.login,
+        githubLogin: currentUser.login,
+        avatarUrl: currentUser.avatarUrl,
+        profileUrl: currentUser.profileUrl,
         message,
         createdAt: new Date().toISOString(),
         parentId: '',
@@ -412,12 +529,20 @@
 
       event.preventDefault();
       const formData = new FormData(replyForm);
+      if (!currentUser) {
+        setStatus('Please sign in with GitHub first.');
+        replyForm.remove();
+        return;
+      }
       const message = String(formData.get('message') || '').trim();
       if (!message) return;
 
       const item = {
         id: createLocalId(),
-        name: String(formData.get('name') || '').trim(),
+        name: currentUser.name || currentUser.login,
+        githubLogin: currentUser.login,
+        avatarUrl: currentUser.avatarUrl,
+        profileUrl: currentUser.profileUrl,
         message,
         createdAt: new Date().toISOString(),
         parentId: replyForm.dataset.parentId || '',
@@ -428,10 +553,14 @@
     });
 
     updateCount();
+    updateAuthUi();
+    fetchSession().then(() => renderMessages(activeMessages));
     renderMessages(readMessages());
     fetchRemoteMessages()
-      .then((messages) => {
-        renderMessages(messages);
+      .then(async (messages) => {
+        await fetchSession();
+        const nextMessages = await migrateLocalAuthors(messages);
+        renderMessages(nextMessages);
         setStatus('Public guestbook connected.');
         return syncLocalMessages();
       })

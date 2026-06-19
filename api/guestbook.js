@@ -1,3 +1,5 @@
+import { getGitHubSession } from './_session.js';
+
 const markerStart = '<!-- gravis-guestbook:v1 -->';
 const markerEnd = '<!-- /gravis-guestbook -->';
 
@@ -71,6 +73,10 @@ const normalizeName = (name) => {
   return String(name || '').trim().slice(0, 24);
 };
 
+const normalizeLogin = (login) => {
+  return String(login || '').trim().slice(0, 39);
+};
+
 const normalizeParentId = (parentId) => {
   return String(parentId || '').trim().slice(0, 80);
 };
@@ -102,6 +108,9 @@ const parseComment = (comment) => {
   return {
     id: `github-${comment.id}`,
     name: normalizeName(parsed.payload.name) || '匿名',
+    githubLogin: normalizeLogin(parsed.payload.githubLogin),
+    avatarUrl: String(parsed.payload.avatarUrl || ''),
+    profileUrl: String(parsed.payload.profileUrl || ''),
     message,
     createdAt: parsed.payload.createdAt || comment.created_at,
     parentId: normalizeParentId(parsed.payload.parentId),
@@ -109,11 +118,14 @@ const parseComment = (comment) => {
   };
 };
 
-const toCommentBody = ({ name, message, createdAt, parentId }) => {
-  const displayName = normalizeName(name) || '匿名';
+const toCommentBody = ({ author, message, createdAt, parentId }) => {
+  const displayName = normalizeName(author.name || author.login) || 'GitHub user';
   const normalizedParentId = normalizeParentId(parentId);
   const payload = {
     name: displayName,
+    githubLogin: normalizeLogin(author.login),
+    avatarUrl: author.avatarUrl,
+    profileUrl: author.profileUrl,
     message: normalizeMessage(message),
     createdAt,
     parentId: normalizedParentId,
@@ -152,9 +164,13 @@ export default async function handler(request, response) {
     }
 
     if (request.method === 'POST') {
+      const session = getGitHubSession(request);
+      if (!session) {
+        return jsonResponse(response, 401, { error: 'GitHub login is required.' });
+      }
+
       const body = await readRequestBody(request);
       const message = normalizeMessage(body.message);
-      const name = normalizeName(body.name);
       const parentId = normalizeParentId(body.parentId);
       const createdAt = body.createdAt || new Date().toISOString();
 
@@ -168,7 +184,7 @@ export default async function handler(request, response) {
         {
           method: 'POST',
           body: JSON.stringify({
-            body: toCommentBody({ name, message, createdAt, parentId }),
+            body: toCommentBody({ author: session.user, message, createdAt, parentId }),
           }),
         }
       );
@@ -179,13 +195,8 @@ export default async function handler(request, response) {
     }
 
     if (request.method === 'PATCH') {
-      if (!isAuthorizedAdmin(request)) {
-        return jsonResponse(response, 401, { error: 'Unauthorized.' });
-      }
-
       const body = await readRequestBody(request);
       const commentId = String(body.id || '').replace(/^github-/, '').trim();
-      const hidden = Boolean(body.hidden);
 
       if (!/^\d+$/.test(commentId)) {
         return jsonResponse(response, 400, { error: 'Valid comment id is required.' });
@@ -199,6 +210,54 @@ export default async function handler(request, response) {
       if (!parsed) {
         return jsonResponse(response, 400, { error: 'Comment is not a guestbook message.' });
       }
+
+      if (body.action === 'claim') {
+        const session = getGitHubSession(request);
+        if (!session) {
+          return jsonResponse(response, 401, { error: 'GitHub login is required.' });
+        }
+
+        const proofMatches =
+          !parsed.payload.githubLogin &&
+          normalizeMessage(body.message) === normalizeMessage(parsed.payload.message) &&
+          normalizeParentId(body.parentId) === normalizeParentId(parsed.payload.parentId) &&
+          String(body.createdAt || '') === String(parsed.payload.createdAt || comment.created_at);
+
+        if (!proofMatches) {
+          return jsonResponse(response, 403, { error: 'Comment ownership proof did not match.' });
+        }
+
+        const nextPayload = {
+          ...parsed.payload,
+          name: normalizeName(session.user.name || session.user.login) || 'GitHub user',
+          githubLogin: normalizeLogin(session.user.login),
+          avatarUrl: session.user.avatarUrl,
+          profileUrl: session.user.profileUrl,
+          claimedAt: new Date().toISOString(),
+        };
+        const nextBody = `${comment.body.slice(0, parsed.markerStartIndex + markerStart.length)}
+${JSON.stringify(nextPayload)}
+${comment.body.slice(parsed.markerEndIndex)}`;
+
+        const updatedComment = await githubRequest(
+          config,
+          `/repos/${config.repository}/issues/comments/${commentId}`,
+          {
+            method: 'PATCH',
+            body: JSON.stringify({ body: nextBody }),
+          }
+        );
+
+        return jsonResponse(response, 200, {
+          message: parseComment(updatedComment),
+        });
+      }
+
+      if (!isAuthorizedAdmin(request)) {
+        return jsonResponse(response, 401, { error: 'Unauthorized.' });
+      }
+
+      const hidden = Boolean(body.hidden);
 
       const nextPayload = {
         ...parsed.payload,
