@@ -431,6 +431,59 @@ mark {
     line-height: 1.6;
 }
 
+.update-history {
+    display: grid;
+    gap: 1.4rem;
+}
+
+.update-history-day {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 88%, transparent);
+    padding: 1rem;
+}
+
+.update-history-day h2 {
+    margin: 0 0 0.75rem;
+    color: var(--sl-color-text);
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.update-history-day ol {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.update-history-day li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.55rem 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 72%, transparent);
+    color: var(--sl-color-text);
+    padding-top: 0.55rem;
+    line-height: 1.6;
+}
+
+.update-history-day li:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.update-history-day code {
+    color: var(--sl-color-gray-2);
+    font-size: 0.82rem;
+}
+
+.update-history-empty {
+    color: var(--sl-color-gray-2);
+}
+
 main:has(.baiyun-meta) {
     background:
         linear-gradient(

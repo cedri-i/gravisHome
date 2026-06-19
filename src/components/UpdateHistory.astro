@@ -1,0 +1,80 @@
+---
+import { execFileSync } from 'node:child_process';
+
+type Commit = {
+  hash: string;
+  date: string;
+  subject: string;
+};
+
+const maxCommits = 80;
+
+const readCommits = (): Commit[] => {
+  try {
+    const output = execFileSync(
+      'git',
+      ['log', `--max-count=${maxCommits}`, '--date=short', '--pretty=format:%h%x09%ad%x09%s'],
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+      }
+    );
+
+    return output
+      .split('\n')
+      .filter(Boolean)
+      .map((line) => {
+        const [hash, date, ...subjectParts] = line.split('\t');
+        return {
+          hash,
+          date,
+          subject: subjectParts.join('\t'),
+        };
+      })
+      .filter((commit) => commit.hash && commit.date && commit.subject);
+  } catch {
+    const fallbackHash = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7);
+    const fallbackSubject = process.env.VERCEL_GIT_COMMIT_MESSAGE;
+
+    if (!fallbackHash || !fallbackSubject) return [];
+
+    return [
+      {
+        hash: fallbackHash,
+        date: new Date().toISOString().slice(0, 10),
+        subject: fallbackSubject,
+      },
+    ];
+  }
+};
+
+const groupedCommits = readCommits().reduce<Record<string, Commit[]>>((groups, commit) => {
+  groups[commit.date] = groups[commit.date] || [];
+  groups[commit.date].push(commit);
+  return groups;
+}, {});
+
+const entries = Object.entries(groupedCommits);
+---
+
+{
+  entries.length > 0 ? (
+    <div class="update-history">
+      {entries.map(([date, commits]) => (
+        <section class="update-history-day" aria-labelledby={`update-${date}`}>
+          <h2 id={`update-${date}`}>{date}</h2>
+          <ol>
+            {commits.map((commit) => (
+              <li>
+                <span>{commit.subject}</span>
+                <code>{commit.hash}</code>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+  ) : (
+    <p class="update-history-empty">暂时没有读取到 Git 更新记录。</p>
+  )
+}
