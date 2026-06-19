@@ -1,55 +1,30 @@
-/* =========================
-   StarSky Scene
-   Dark: magical night sky
-   Light: blue sky + clouds + grass
-========================= */
+/* ===== Whole homepage starsky background ===== */
 
-.starsky {
-    position: relative;
-    min-height: 100vh;
-    overflow: hidden;
-    isolation: isolate;
-}
-
-.starsky > * {
-    position: relative;
-    z-index: 2;
-}
-
-/* ===== Dark: sky + nebula ===== */
-
-.starsky::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -3;
-    pointer-events: none;
-
+body:has(.home-starsky) {
     background:
-        radial-gradient(circle at 18% 24%, rgba(126, 87, 255, .26), transparent 28%),
-        radial-gradient(circle at 70% 18%, rgba(56, 189, 248, .18), transparent 34%),
-        radial-gradient(circle at 48% 78%, rgba(236, 72, 153, .12), transparent 38%),
+        radial-gradient(circle at 18% 20%, rgba(126, 87, 255, .22), transparent 28%),
+        radial-gradient(circle at 72% 18%, rgba(56, 189, 248, .16), transparent 34%),
+        radial-gradient(circle at 45% 78%, rgba(236, 72, 153, .10), transparent 38%),
         linear-gradient(180deg, #070716 0%, #0b1028 48%, #050816 100%);
 }
 
-/* 不规则星星层 */
-.starsky::after {
+/* 星星层，铺满整个窗口 */
+body:has(.home-starsky)::before {
     content: "";
-    position: absolute;
+    position: fixed;
     inset: 0;
-    z-index: -2;
+    z-index: -1;
     pointer-events: none;
 
     background-image:
-        radial-gradient(circle at 7% 18%, rgba(255,255,255,.9) 0 1px, transparent 1.6px),
-        radial-gradient(circle at 16% 72%, rgba(255,255,255,.45) 0 1px, transparent 1.7px),
-        radial-gradient(circle at 24% 34%, rgba(255,255,255,.7) 0 1.2px, transparent 1.9px),
-        radial-gradient(circle at 38% 12%, rgba(190,210,255,.6) 0 1px, transparent 1.7px),
-        radial-gradient(circle at 47% 58%, rgba(255,255,255,.8) 0 1px, transparent 1.8px),
-        radial-gradient(circle at 63% 28%, rgba(255,255,255,.55) 0 1.1px, transparent 1.8px),
-        radial-gradient(circle at 72% 76%, rgba(180,200,255,.8) 0 1.2px, transparent 1.9px),
-        radial-gradient(circle at 86% 42%, rgba(255,255,255,.65) 0 1px, transparent 1.8px),
-        radial-gradient(circle at 94% 14%, rgba(255,255,255,.9) 0 1.2px, transparent 2px);
+        radial-gradient(circle at 8% 16%, rgba(255,255,255,.9) 0 1px, transparent 1.8px),
+        radial-gradient(circle at 18% 72%, rgba(255,255,255,.45) 0 1px, transparent 1.8px),
+        radial-gradient(circle at 27% 38%, rgba(255,255,255,.65) 0 1.2px, transparent 2px),
+        radial-gradient(circle at 41% 12%, rgba(190,210,255,.55) 0 1px, transparent 1.8px),
+        radial-gradient(circle at 53% 61%, rgba(255,255,255,.7) 0 1px, transparent 1.8px),
+        radial-gradient(circle at 66% 28%, rgba(255,255,255,.5) 0 1.1px, transparent 1.9px),
+        radial-gradient(circle at 79% 77%, rgba(180,200,255,.75) 0 1.2px, transparent 2px),
+        radial-gradient(circle at 91% 43%, rgba(255,255,255,.6) 0 1px, transparent 1.8px);
 
     background-size:
         420px 360px,
@@ -59,58 +34,31 @@
         560px 430px,
         810px 700px,
         640px 540px,
-        900px 760px,
-        720px 680px;
+        900px 760px;
 
-    opacity: .58;
+    opacity: .55;
 }
 
-/* 柔光雾 */
-.starsky-glow {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
+/* 让 Starlight 主内容不要再有纯黑底 */
+body:has(.home-starsky) .main-frame,
+body:has(.home-starsky) main,
+body:has(.home-starsky) .content-panel {
+    background: transparent;
+}
 
+/* 浅色模式先用干净蓝天，不画丑风车 */
+:root[data-theme="light"] body:has(.home-starsky) {
     background:
-        radial-gradient(circle at 50% 12%, rgba(255,255,255,.08), transparent 24%),
-        radial-gradient(circle at 20% 70%, rgba(147,51,234,.12), transparent 34%),
-        radial-gradient(circle at 78% 66%, rgba(56,189,248,.10), transparent 32%);
-
-    filter: blur(18px);
+        radial-gradient(ellipse at 20% 18%, rgba(255,255,255,.85) 0 8%, transparent 9%),
+        radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.6) 0 10%, transparent 11%),
+        radial-gradient(ellipse at 78% 22%, rgba(255,255,255,.7) 0 12%, transparent 13%),
+        linear-gradient(180deg, #8fdcff 0%, #c8f1ff 62%, #eafcff 76%, #b8e986 77%, #69bd61 100%);
 }
 
-/* ===== Light: sky + clouds + grass ===== */
-
-:root[data-theme="light"] .starsky::before {
-    background:
-        radial-gradient(ellipse at 18% 18%, rgba(255,255,255,.88) 0 8%, transparent 9%),
-        radial-gradient(ellipse at 25% 16%, rgba(255,255,255,.78) 0 10%, transparent 11%),
-        radial-gradient(ellipse at 34% 20%, rgba(255,255,255,.65) 0 8%, transparent 9%),
-
-        radial-gradient(ellipse at 76% 22%, rgba(255,255,255,.72) 0 9%, transparent 10%),
-        radial-gradient(ellipse at 84% 20%, rgba(255,255,255,.58) 0 12%, transparent 13%),
-
-        linear-gradient(
-            180deg,
-            #8fdcff 0%,
-            #c8f1ff 58%,
-            #eafcff 72%,
-            #b8e986 73%,
-            #69bd61 100%
-        );
-}
-
-/* 浅色模式不显示星星，改成轻微云雾 */
-:root[data-theme="light"] .starsky::after {
-    background:
-        radial-gradient(ellipse at 12% 34%, rgba(255,255,255,.35), transparent 18%),
-        radial-gradient(ellipse at 68% 38%, rgba(255,255,255,.28), transparent 22%),
-        linear-gradient(180deg, transparent 0%, transparent 70%, rgba(65,150,72,.18) 100%);
-
-    opacity: 1;
-}
-
-:root[data-theme="light"] .starsky-glow {
+:root[data-theme="light"] body:has(.home-starsky)::before {
     display: none;
+}
+
+body:has(.home-starsky) .page {
+    background: transparent;
 }
