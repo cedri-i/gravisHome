@@ -417,11 +417,96 @@ mark {
     font-size: 0.98rem;
 }
 
+.guestbook-reply-button {
+    border: 0;
+    background: transparent;
+    color: var(--sl-color-text-accent);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.84rem;
+    padding: 0;
+}
+
+.guestbook-reply-button:hover {
+    text-decoration: underline;
+}
+
 .guestbook-entry p {
     margin: 0.45rem 0 0;
     color: var(--sl-color-text);
     line-height: 1.75;
     white-space: pre-wrap;
+}
+
+.guestbook-replies {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0.85rem 0 0;
+    border-left: 2px solid color-mix(in srgb, var(--sl-color-gray-5) 72%, transparent);
+    padding: 0 0 0 0.85rem;
+    list-style: none;
+}
+
+.guestbook-entry.guestbook-reply {
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 82%, transparent);
+    padding: 0.8rem 0.9rem;
+}
+
+.guestbook-reply-form {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: 0.85rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    background: var(--sl-color-bg);
+    padding: 0.85rem;
+}
+
+.guestbook-reply-form label {
+    display: grid;
+    gap: 0.45rem;
+    color: var(--sl-color-gray-2);
+    font-size: 0.88rem;
+}
+
+.guestbook-reply-form input,
+.guestbook-reply-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    background: var(--sl-color-bg-nav);
+    color: var(--sl-color-text);
+    font: inherit;
+    line-height: 1.55;
+    padding: 0.58rem 0.7rem;
+}
+
+.guestbook-reply-form textarea {
+    resize: vertical;
+}
+
+.guestbook-reply-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+.guestbook-reply-actions button {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    background: var(--sl-color-bg-nav);
+    color: var(--sl-color-text);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 650;
+    padding: 0.42rem 0.72rem;
+}
+
+.guestbook-reply-actions button[type='submit'] {
+    border-color: var(--sl-color-accent);
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black);
 }
 
 .guestbook-status {

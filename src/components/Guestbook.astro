@@ -33,9 +33,24 @@
   let activeMessages = [];
   let backendEnabled = false;
 
+  const createLocalId = () => {
+    return `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  };
+
   const readMessages = () => {
     try {
-      return JSON.parse(localStorage.getItem(storageKey) || '[]');
+      let changed = false;
+      const messages = JSON.parse(localStorage.getItem(storageKey) || '[]').map((item) => {
+        const nextItem = {
+          ...item,
+          id: item.id || createLocalId(),
+          parentId: item.parentId || '',
+        };
+        if (!item.id || item.parentId === undefined) changed = true;
+        return nextItem;
+      });
+      if (changed) writeMessages(messages);
+      return messages;
     } catch {
       return [];
     }
@@ -47,10 +62,12 @@
 
   const markSynced = (messagesToMark) => {
     const syncedKeys = new Set(
-      messagesToMark.map((item) => `${item.createdAt}:${item.name || ''}:${item.message}`)
+      messagesToMark.map(
+        (item) => `${item.createdAt}:${item.name || ''}:${item.message}:${item.parentId || ''}`
+      )
     );
     const messages = readMessages().map((item) => {
-      const key = `${item.createdAt}:${item.name || ''}:${item.message}`;
+      const key = `${item.createdAt}:${item.name || ''}:${item.message}:${item.parentId || ''}`;
       return syncedKeys.has(key) ? { ...item, syncedAt: new Date().toISOString() } : item;
     });
     writeMessages(messages);
@@ -72,6 +89,122 @@
     status.textContent = message;
   };
 
+  const splitThreads = (messages) => {
+    const repliesByParent = new Map();
+    const topLevel = [];
+
+    for (const item of messages) {
+      if (item.parentId) {
+        const replies = repliesByParent.get(item.parentId) || [];
+        replies.push(item);
+        repliesByParent.set(item.parentId, replies);
+      } else {
+        topLevel.push(item);
+      }
+    }
+
+    for (const replies of repliesByParent.values()) {
+      replies.sort((left, right) => new Date(left.createdAt) - new Date(right.createdAt));
+    }
+
+    return { topLevel, repliesByParent };
+  };
+
+  const messageKey = (item) => {
+    return item.id || `${item.createdAt}:${item.name || ''}:${item.message}:${item.parentId || ''}`;
+  };
+
+  const mergeMessages = (...messageGroups) => {
+    const merged = new Map();
+    for (const messages of messageGroups) {
+      for (const item of messages) {
+        merged.set(messageKey(item), item);
+      }
+    }
+    return [...merged.values()].sort((left, right) => new Date(right.createdAt) - new Date(left.createdAt));
+  };
+
+  const createReplyForm = (parent) => {
+    const form = document.createElement('form');
+    form.className = 'guestbook-reply-form';
+    form.dataset.parentId = parent.id;
+
+    const label = document.createElement('label');
+    const labelText = document.createElement('span');
+    labelText.textContent = `回复 ${parent.name || '匿名'}`;
+
+    const input = document.createElement('input');
+    input.name = 'name';
+    input.type = 'text';
+    input.maxLength = 24;
+    input.placeholder = '昵称';
+    input.autocomplete = 'name';
+
+    const textarea = document.createElement('textarea');
+    textarea.name = 'message';
+    textarea.rows = 3;
+    textarea.maxLength = 320;
+    textarea.placeholder = '写下回复';
+    textarea.required = true;
+
+    const actions = document.createElement('div');
+    actions.className = 'guestbook-reply-actions';
+
+    const cancel = document.createElement('button');
+    cancel.type = 'button';
+    cancel.className = 'guestbook-reply-cancel';
+    cancel.textContent = 'Cancel';
+
+    const submit = document.createElement('button');
+    submit.type = 'submit';
+    submit.textContent = 'Reply';
+
+    actions.append(cancel, submit);
+    label.append(labelText, input, textarea);
+    form.append(label, actions);
+    return form;
+  };
+
+  const createEntry = (item, repliesByParent, isReply = false) => {
+    const entry = document.createElement('li');
+    entry.className = isReply ? 'guestbook-entry guestbook-reply' : 'guestbook-entry';
+    entry.dataset.messageId = item.id;
+
+    const meta = document.createElement('div');
+    meta.className = 'guestbook-entry-meta';
+
+    const name = document.createElement('strong');
+    name.textContent = item.name || '匿名';
+
+    const time = document.createElement('time');
+    time.dateTime = item.createdAt;
+    time.textContent = formatDate(item.createdAt);
+
+    const message = document.createElement('p');
+    message.textContent = item.message;
+
+    const replyButton = document.createElement('button');
+    replyButton.type = 'button';
+    replyButton.className = 'guestbook-reply-button';
+    replyButton.dataset.replyTo = item.id;
+    replyButton.textContent = 'Reply';
+
+    meta.append(name, time, replyButton);
+    entry.append(meta, message);
+
+    const replies = repliesByParent.get(item.id) || [];
+    if (replies.length > 0) {
+      const replyList = document.createElement('ol');
+      replyList.className = 'guestbook-replies';
+      for (const reply of replies) {
+        replyList.append(createEntry(reply, repliesByParent, true));
+      }
+      entry.append(replyList);
+    }
+
+    return entry;
+  };
+
   const renderMessages = (messages = activeMessages) => {
     const list = document.querySelector('#guestbook-list');
     const empty = document.querySelector('#guestbook-empty');
@@ -80,27 +213,10 @@
     activeMessages = messages;
     list.textContent = '';
     empty.hidden = messages.length > 0;
+    const { topLevel, repliesByParent } = splitThreads(messages);
 
-    for (const item of messages) {
-      const entry = document.createElement('li');
-      entry.className = 'guestbook-entry';
-
-      const meta = document.createElement('div');
-      meta.className = 'guestbook-entry-meta';
-
-      const name = document.createElement('strong');
-      name.textContent = item.name || '匿名';
-
-      const time = document.createElement('time');
-      time.dateTime = item.createdAt;
-      time.textContent = formatDate(item.createdAt);
-
-      const message = document.createElement('p');
-      message.textContent = item.message;
-
-      meta.append(name, time);
-      entry.append(meta, message);
-      list.append(entry);
+    for (const item of topLevel) {
+      list.append(createEntry(item, repliesByParent));
     }
   };
 
@@ -126,14 +242,33 @@
     return response.json();
   };
 
+  const saveMessage = async (item, successStatus) => {
+    try {
+      const result = await postRemoteMessage(item);
+      renderMessages(await fetchRemoteMessages());
+      setStatus(successStatus);
+      return result.message;
+    } catch {
+      writeMessages([item, ...readMessages()]);
+      renderMessages(mergeMessages(readMessages(), activeMessages));
+      setStatus('公共留言区暂不可用，已先保存在本地。');
+      return item;
+    }
+  };
+
   const syncLocalMessages = async () => {
-    const unsynced = readMessages().filter((item) => !item.syncedAt);
+    const unsynced = readMessages()
+      .filter((item) => !item.syncedAt)
+      .sort((left, right) => new Date(left.createdAt) - new Date(right.createdAt));
     if (!backendEnabled || unsynced.length === 0) return;
 
     const synced = [];
+    const idMap = new Map();
     for (const item of unsynced) {
       try {
-        await postRemoteMessage(item);
+        const parentId = idMap.get(item.parentId) || item.parentId || '';
+        const result = await postRemoteMessage({ ...item, parentId });
+        if (item.id && result.message?.id) idMap.set(item.id, result.message.id);
         synced.push(item);
       } catch {
         break;
@@ -165,23 +300,54 @@
       if (!message) return;
 
       const item = {
+        id: createLocalId(),
         name: nameInput.value.trim(),
         message,
         createdAt: new Date().toISOString(),
+        parentId: '',
       };
 
-      try {
-        await postRemoteMessage(item);
-        renderMessages(await fetchRemoteMessages());
-        setStatus('留言已公开保存。');
-      } catch {
-        writeMessages([item, ...readMessages()]);
-        renderMessages(readMessages());
-        setStatus('公共留言区暂不可用，已先保存在本地。');
-      }
-
+      await saveMessage(item, '留言已公开保存。');
       form.reset();
       updateCount();
+    });
+
+    document.addEventListener('click', (event) => {
+      const replyButton = event.target.closest?.('.guestbook-reply-button');
+      if (!replyButton) return;
+
+      const parent = activeMessages.find((item) => item.id === replyButton.dataset.replyTo);
+      const entry = replyButton.closest('.guestbook-entry');
+      if (!parent || !entry) return;
+
+      document.querySelectorAll('.guestbook-reply-form').forEach((replyForm) => replyForm.remove());
+      entry.append(createReplyForm(parent));
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest?.('.guestbook-reply-cancel')) return;
+      event.target.closest('.guestbook-reply-form')?.remove();
+    });
+
+    document.addEventListener('submit', async (event) => {
+      const replyForm = event.target.closest?.('.guestbook-reply-form');
+      if (!replyForm) return;
+
+      event.preventDefault();
+      const formData = new FormData(replyForm);
+      const message = String(formData.get('message') || '').trim();
+      if (!message) return;
+
+      const item = {
+        id: createLocalId(),
+        name: String(formData.get('name') || '').trim(),
+        message,
+        createdAt: new Date().toISOString(),
+        parentId: replyForm.dataset.parentId || '',
+      };
+
+      await saveMessage(item, '回复已公开保存。');
+      replyForm.remove();
     });
 
     updateCount();

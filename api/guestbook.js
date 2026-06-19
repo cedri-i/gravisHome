@@ -61,6 +61,10 @@ const normalizeName = (name) => {
   return String(name || '').trim().slice(0, 24);
 };
 
+const normalizeParentId = (parentId) => {
+  return String(parentId || '').trim().slice(0, 80);
+};
+
 const parseComment = (comment) => {
   const start = comment.body.indexOf(markerStart);
   const end = comment.body.indexOf(markerEnd);
@@ -77,25 +81,28 @@ const parseComment = (comment) => {
       name: normalizeName(payload.name) || '匿名',
       message,
       createdAt: payload.createdAt || comment.created_at,
+      parentId: normalizeParentId(payload.parentId),
     };
   } catch {
     return null;
   }
 };
 
-const toCommentBody = ({ name, message, createdAt }) => {
+const toCommentBody = ({ name, message, createdAt, parentId }) => {
   const displayName = normalizeName(name) || '匿名';
+  const normalizedParentId = normalizeParentId(parentId);
   const payload = {
     name: displayName,
     message: normalizeMessage(message),
     createdAt,
+    parentId: normalizedParentId,
   };
 
   return `${markerStart}
 ${JSON.stringify(payload)}
 ${markerEnd}
 
-**${displayName}** · ${createdAt}
+**${displayName}** · ${createdAt}${normalizedParentId ? ` · reply to ${normalizedParentId}` : ''}
 
 ${payload.message}`;
 };
@@ -126,6 +133,7 @@ export default async function handler(request, response) {
       const body = await readRequestBody(request);
       const message = normalizeMessage(body.message);
       const name = normalizeName(body.name);
+      const parentId = normalizeParentId(body.parentId);
       const createdAt = body.createdAt || new Date().toISOString();
 
       if (!message) {
@@ -138,7 +146,7 @@ export default async function handler(request, response) {
         {
           method: 'POST',
           body: JSON.stringify({
-            body: toCommentBody({ name, message, createdAt }),
+            body: toCommentBody({ name, message, createdAt, parentId }),
           }),
         }
       );
