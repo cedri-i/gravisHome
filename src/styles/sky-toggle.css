@@ -1,0 +1,55 @@
+#sky-toggle {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+
+  width: 54px;
+  height: 120px;
+
+  background: transparent;
+  border: none;
+
+  cursor: pointer;
+  z-index: 9999;
+}
+
+/* 绳子 */
+#sky-toggle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+
+  width: 2px;
+  height: 70px;
+
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.35);
+  border-radius: 2px;
+}
+
+/* 月亮/太阳 */
+#sky-toggle span {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+
+  transform: translateX(-50%);
+  font-size: 1.6rem;
+
+  transition: 0.35s ease;
+}
+
+/* 默认：深色模式（月亮） */
+.sun {
+  opacity: 0;
+}
+
+/* 浅色模式 */
+:root[data-theme="light"] .moon {
+  opacity: 0;
+}
+
+:root[data-theme="light"] .sun {
+  opacity: 1;
+}
