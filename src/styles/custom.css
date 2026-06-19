@@ -894,3 +894,7 @@ main:has(.baiyun-meta) .sl-markdown-content h2 {
         grid-template-columns: 1fr;
     }
 }
+
+[hidden] {
+    display: none !important;
+}
