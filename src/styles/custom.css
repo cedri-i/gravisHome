@@ -323,25 +323,82 @@ mark {
     font-size: 0.9rem;
 }
 
+/* Login：白底黑字 */
+
+/* ===== Guestbook Header Buttons ===== */
+
+.icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+}
+
 .guestbook-login,
 .guestbook-logout,
 .guestbook-moderate-button {
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--sl-color-gray-2);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+
     cursor: pointer;
     font: inherit;
     font-size: 0.84rem;
-    padding: 0.38rem 0.62rem;
+
+    padding: 0.38rem 0.75rem;
+
+    border-radius: 8px;
+
     text-decoration: none;
+
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        opacity 0.15s ease;
 }
 
-.guestbook-login:hover,
-.guestbook-logout:hover,
-.guestbook-moderate-button:hover {
+
+/* ===== Login ===== */
+
+.guestbook-login {
+    border: 1px solid white;
+
+    background: white;
+    color: black;
+}
+
+.guestbook-login:hover {
+    opacity: 0.9;
+}
+
+
+/* ===== Logout ===== */
+
+.guestbook-logout {
+    border: 1px solid var(--sl-color-gray-4);
+
+    background: transparent;
+    color: white;
+}
+
+.guestbook-logout:hover {
     border-color: var(--sl-color-text-accent);
     color: var(--sl-color-text-accent);
+}
+
+
+/* ===== Moderate ===== */
+
+.guestbook-moderate-button {
+    border: 1px solid rgba(255,255,255,.08);
+
+    background: transparent;
+    color: rgba(255,255,255,.45);
+}
+
+.guestbook-moderate-button:hover {
+    color: rgba(255,255,255,.75);
+    border-color: rgba(255,255,255,.2);
 }
 
 .guestbook-header p {
