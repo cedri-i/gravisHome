@@ -1,6 +1,7 @@
 <section class="guestbook" aria-labelledby="guestbook-title">
   <div class="guestbook-header">
     <h2 id="guestbook-title">留言区</h2>
+    <button class="guestbook-moderate-button" id="guestbook-moderate" type="button">Moderate</button>
   </div>
 
   <form class="guestbook-form" id="guestbook-form">
@@ -29,9 +30,11 @@
 
 <script>
   const storageKey = 'gravis-home-guestbook';
+  const adminTokenKey = 'gravis-home-guestbook-admin-token';
   const endpoint = '/api/guestbook';
   let activeMessages = [];
   let backendEnabled = false;
+  let moderationEnabled = false;
 
   const createLocalId = () => {
     return `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -87,6 +90,19 @@
     const status = document.querySelector('#guestbook-status');
     if (!status) return;
     status.textContent = message;
+  };
+
+  const getAdminToken = () => {
+    return sessionStorage.getItem(adminTokenKey) || '';
+  };
+
+  const setAdminToken = (token) => {
+    if (token) {
+      sessionStorage.setItem(adminTokenKey, token);
+    } else {
+      sessionStorage.removeItem(adminTokenKey);
+    }
+    moderationEnabled = Boolean(token);
   };
 
   const splitThreads = (messages) => {
@@ -190,6 +206,16 @@
     replyButton.textContent = 'Reply';
 
     meta.append(name, time, replyButton);
+
+    if (moderationEnabled && item.id?.startsWith('github-')) {
+      const hideButton = document.createElement('button');
+      hideButton.type = 'button';
+      hideButton.className = 'guestbook-hide-button';
+      hideButton.dataset.hideId = item.id;
+      hideButton.textContent = 'Hide';
+      meta.append(hideButton);
+    }
+
     entry.append(meta, message);
 
     const replies = repliesByParent.get(item.id) || [];
@@ -242,6 +268,20 @@
     return response.json();
   };
 
+  const hideRemoteMessage = async (id) => {
+    const response = await fetch(endpoint, {
+      method: 'PATCH',
+      headers: {
+        authorization: `Bearer ${getAdminToken()}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ id, hidden: true }),
+    });
+
+    if (!response.ok) throw new Error('Hide request failed.');
+    return response.json();
+  };
+
   const saveMessage = async (item, successStatus) => {
     try {
       const result = await postRemoteMessage(item);
@@ -287,13 +327,31 @@
     const nameInput = document.querySelector('#guestbook-name');
     const messageInput = document.querySelector('#guestbook-message');
     const count = document.querySelector('#guestbook-count');
-    if (!form || !nameInput || !messageInput || !count) return;
+    const moderateButton = document.querySelector('#guestbook-moderate');
+    if (!form || !nameInput || !messageInput || !count || !moderateButton) return;
 
     const updateCount = () => {
       count.textContent = `${messageInput.value.length} / ${messageInput.maxLength}`;
     };
 
     messageInput.addEventListener('input', updateCount);
+    setAdminToken(getAdminToken());
+
+    moderateButton.addEventListener('click', () => {
+      if (moderationEnabled) {
+        setAdminToken('');
+        renderMessages(activeMessages);
+        setStatus('Moderation disabled.');
+        return;
+      }
+
+      const token = window.prompt('Admin token');
+      if (!token) return;
+      setAdminToken(token.trim());
+      renderMessages(activeMessages);
+      setStatus('Moderation enabled.');
+    });
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const message = messageInput.value.trim();
@@ -310,6 +368,25 @@
       await saveMessage(item, '留言已公开保存。');
       form.reset();
       updateCount();
+    });
+
+    document.addEventListener('click', (event) => {
+      const hideButton = event.target.closest?.('.guestbook-hide-button');
+      if (!hideButton) return;
+
+      const id = hideButton.dataset.hideId;
+      if (!id || !window.confirm('Hide this comment?')) return;
+
+      hideButton.disabled = true;
+      hideRemoteMessage(id)
+        .then(async () => {
+          renderMessages(await fetchRemoteMessages());
+          setStatus('Comment hidden.');
+        })
+        .catch(() => {
+          hideButton.disabled = false;
+          setStatus('Hide failed. Check the admin token.');
+        });
     });
 
     document.addEventListener('click', (event) => {

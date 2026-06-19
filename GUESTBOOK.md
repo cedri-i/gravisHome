@@ -17,8 +17,13 @@ Previously local-only messages cannot be collected from a visitor's device unles
 GUESTBOOK_GITHUB_TOKEN=your GitHub token
 GUESTBOOK_REPO=cedri-i/gravisHome
 GUESTBOOK_ISSUE_NUMBER=the issue number
+GUESTBOOK_ADMIN_TOKEN=your private moderation password
 ```
 
 4. Redeploy the site.
 
 After deployment, the homepage status line should change from local-only mode to public guestbook mode.
+
+## Hide comments
+
+Click `Moderate` in the guestbook and enter `GUESTBOOK_ADMIN_TOKEN`. The browser keeps it in `sessionStorage` for the current tab session. After moderation is enabled, each public comment has a `Hide` button. Hiding a comment marks the GitHub Issue comment as hidden; public guestbook reads filter it out.

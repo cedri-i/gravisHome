@@ -32,6 +32,16 @@ const getConfig = () => {
   return { token, repository, issueNumber };
 };
 
+const getAdminToken = (request) => {
+  const authorization = request.headers.authorization || request.headers.Authorization || '';
+  return authorization.startsWith('Bearer ') ? authorization.slice('Bearer '.length).trim() : '';
+};
+
+const isAuthorizedAdmin = (request) => {
+  const adminToken = process.env.GUESTBOOK_ADMIN_TOKEN;
+  return Boolean(adminToken && getAdminToken(request) === adminToken);
+};
+
 const githubRequest = async (config, path, options = {}) => {
   const response = await fetch(`https://api.github.com${path}`, {
     ...options,
@@ -65,27 +75,38 @@ const normalizeParentId = (parentId) => {
   return String(parentId || '').trim().slice(0, 80);
 };
 
-const parseComment = (comment) => {
-  const start = comment.body.indexOf(markerStart);
-  const end = comment.body.indexOf(markerEnd);
+const readPayload = (body) => {
+  const start = body.indexOf(markerStart);
+  const end = body.indexOf(markerEnd);
   if (start === -1 || end === -1 || end <= start) return null;
 
-  const raw = comment.body.slice(start + markerStart.length, end).trim();
+  const raw = body.slice(start + markerStart.length, end).trim();
   try {
-    const payload = JSON.parse(raw);
-    const message = normalizeMessage(payload.message);
-    if (!message) return null;
-
     return {
-      id: `github-${comment.id}`,
-      name: normalizeName(payload.name) || '匿名',
-      message,
-      createdAt: payload.createdAt || comment.created_at,
-      parentId: normalizeParentId(payload.parentId),
+      markerStartIndex: start,
+      markerEndIndex: end,
+      payload: JSON.parse(raw),
     };
   } catch {
     return null;
   }
+};
+
+const parseComment = (comment) => {
+  const parsed = readPayload(comment.body);
+  if (!parsed) return null;
+
+  const message = normalizeMessage(parsed.payload.message);
+  if (!message) return null;
+
+  return {
+    id: `github-${comment.id}`,
+    name: normalizeName(parsed.payload.name) || '匿名',
+    message,
+    createdAt: parsed.payload.createdAt || comment.created_at,
+    parentId: normalizeParentId(parsed.payload.parentId),
+    hidden: Boolean(parsed.payload.hidden),
+  };
 };
 
 const toCommentBody = ({ name, message, createdAt, parentId }) => {
@@ -96,6 +117,7 @@ const toCommentBody = ({ name, message, createdAt, parentId }) => {
     message: normalizeMessage(message),
     createdAt,
     parentId: normalizedParentId,
+    hidden: false,
   };
 
   return `${markerStart}
@@ -123,7 +145,7 @@ export default async function handler(request, response) {
       );
       const messages = comments
         .map(parseComment)
-        .filter(Boolean)
+        .filter((message) => message && !message.hidden)
         .sort((left, right) => new Date(right.createdAt) - new Date(left.createdAt));
 
       return jsonResponse(response, 200, { messages });
@@ -156,7 +178,52 @@ export default async function handler(request, response) {
       });
     }
 
-    response.setHeader('allow', 'GET, POST');
+    if (request.method === 'PATCH') {
+      if (!isAuthorizedAdmin(request)) {
+        return jsonResponse(response, 401, { error: 'Unauthorized.' });
+      }
+
+      const body = await readRequestBody(request);
+      const commentId = String(body.id || '').replace(/^github-/, '').trim();
+      const hidden = Boolean(body.hidden);
+
+      if (!/^\d+$/.test(commentId)) {
+        return jsonResponse(response, 400, { error: 'Valid comment id is required.' });
+      }
+
+      const comment = await githubRequest(
+        config,
+        `/repos/${config.repository}/issues/comments/${commentId}`
+      );
+      const parsed = readPayload(comment.body);
+      if (!parsed) {
+        return jsonResponse(response, 400, { error: 'Comment is not a guestbook message.' });
+      }
+
+      const nextPayload = {
+        ...parsed.payload,
+        hidden,
+        hiddenAt: hidden ? new Date().toISOString() : undefined,
+      };
+      const nextBody = `${comment.body.slice(0, parsed.markerStartIndex + markerStart.length)}
+${JSON.stringify(nextPayload)}
+${comment.body.slice(parsed.markerEndIndex)}`;
+
+      const updatedComment = await githubRequest(
+        config,
+        `/repos/${config.repository}/issues/comments/${commentId}`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ body: nextBody }),
+        }
+      );
+
+      return jsonResponse(response, 200, {
+        message: parseComment(updatedComment),
+      });
+    }
+
+    response.setHeader('allow', 'GET, POST, PATCH');
     return jsonResponse(response, 405, { error: 'Method not allowed.' });
   } catch (error) {
     return jsonResponse(response, 500, {
