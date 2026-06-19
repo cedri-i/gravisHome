@@ -136,7 +136,7 @@
     max-width: 25rem;
     color: color-mix(in srgb, var(--sl-color-text) 78%, var(--sl-color-gray-2) 22%);
     font-size: 0.96rem;
-    font-weight: 560;
+    font-weight: 400;
     line-height: 1.75;
 }
 

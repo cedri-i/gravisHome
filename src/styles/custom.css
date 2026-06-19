@@ -282,6 +282,7 @@ mark {
     margin-top: 0.55rem;
     color: var(--sl-color-gray-2);
     font-size: 1rem;
+    font-weight: 400;
     line-height: 1.6;
 }
 
@@ -393,38 +394,6 @@ mark {
         opacity 0.15s ease;
 }
 
-.guestbook-login::before,
-.guestbook-logout::before,
-.guestbook-moderate-button::before,
-.guestbook-actions button::before,
-.guestbook-reply-actions button::before {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        105deg,
-        transparent,
-        color-mix(in srgb, #ffffff 26%, transparent),
-        transparent
-    );
-    content: "";
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-125%) skewX(-16deg);
-    transition:
-        opacity 180ms ease,
-        transform 640ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.guestbook-login:hover::before,
-.guestbook-logout:hover::before,
-.guestbook-moderate-button:hover::before,
-.guestbook-actions button:hover::before,
-.guestbook-reply-actions button:hover::before {
-    opacity: 1;
-    transform: translateX(155%) skewX(-16deg);
-}
-
-
 /* ===== Login ===== */
 
 .guestbook-login {
@@ -443,8 +412,8 @@ mark {
 .guestbook-login:hover {
     background: transparent;
     color: var(--sl-color-text);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--sl-color-accent) 16%, transparent);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+    transform: translateY(-1px);
 }
 
 
@@ -466,8 +435,8 @@ mark {
     border-color: var(--sl-color-text-accent);
     color: var(--sl-color-text-accent);
     background: var(--sl-color-gray-6);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--sl-color-accent) 9%, transparent);
+    transform: translateY(-1px);
 }
 
 
@@ -489,8 +458,8 @@ mark {
     color: var(--sl-color-gray-2);
     border-color: var(--sl-color-gray-5);
     background: var(--sl-color-gray-6);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--sl-color-gray-3) 12%, transparent);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--sl-color-gray-3) 8%, transparent);
+    transform: translateY(-1px);
 }
 
 .guestbook-header p {
@@ -571,8 +540,8 @@ mark {
 
 .guestbook-actions button:hover {
     background: color-mix(in srgb, var(--sl-color-accent) 84%, white);
-    box-shadow: 0 12px 30px color-mix(in srgb, var(--sl-color-accent) 20%, transparent);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+    transform: translateY(-1px);
 }
 
 .guestbook-actions button:disabled {
@@ -613,9 +582,11 @@ mark {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.55rem;
+    column-gap: 0.55rem;
+    row-gap: 0.35rem;
     color: var(--sl-color-gray-3);
     font-size: 0.86rem;
+    line-height: 1.35;
 }
 
 .guestbook-avatar {
@@ -637,16 +608,19 @@ mark {
     cursor: pointer;
     font: inherit;
     font-size: 0.84rem;
-    line-height: 1.2;
+    line-height: 1;
     padding: 0;
 }
 
 .guestbook-like-button {
     display: inline-flex;
     align-items: center;
-    gap: 0.28rem;
-    color: var(--sl-color-gray-3);
-    transform: translateY(0.02rem);
+    align-self: center;
+    gap: 0.36rem;
+    height: 1.35rem;
+    color: color-mix(in srgb, var(--sl-color-text) 64%, transparent);
+    vertical-align: middle;
+    transform: none;
 }
 
 .guestbook-like-button.is-liked {
@@ -655,13 +629,16 @@ mark {
 }
 
 .guestbook-like-button svg {
-    width: 0.98rem;
-    height: 0.98rem;
+    display: block;
+    width: 1.05rem;
+    height: 1.05rem;
+    flex: 0 0 auto;
     fill: none;
     stroke: currentColor;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1.9;
+    transform: translateY(0.055em);
 }
 
 .guestbook-like-button.is-liked svg {
@@ -670,7 +647,9 @@ mark {
 }
 
 .guestbook-like-button span {
+    display: inline-block;
     min-width: 0.5rem;
+    line-height: 1;
 }
 
 .guestbook-like-button:disabled {
@@ -797,8 +776,8 @@ mark {
 
 .guestbook-reply-actions button:hover {
     border-color: color-mix(in srgb, var(--sl-color-accent) 58%, var(--sl-color-gray-5));
-    box-shadow: 0 10px 24px color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+    transform: translateY(-1px);
 }
 
 .guestbook-status {
@@ -808,61 +787,8 @@ mark {
     line-height: 1.6;
 }
 
-:where(
-    button,
-    a[role='button'],
-    .sl-link-button,
-    .action,
-    .card,
-    .notes-link-card,
-    .home-entry-card
-):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next']) {
-    transition:
-        transform 260ms ease,
-        border-color 260ms ease,
-        box-shadow 260ms ease,
-        filter 260ms ease;
-}
-
-:where(
-    button,
-    a[role='button'],
-    .sl-link-button,
-    .action,
-    .card,
-    .notes-link-card,
-    .home-entry-card
-):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next']):hover {
-    transform: translateY(-3px);
-}
-
-:where(.sl-link-button, .action, .card):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next']) {
-    position: relative;
-    overflow: hidden;
-}
-
-:where(.sl-link-button, .action, .card):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next'])::after {
-    position: absolute;
-    inset: 0;
-    width: 38%;
-    background: linear-gradient(
-        105deg,
-        transparent,
-        color-mix(in srgb, #ffffff 22%, transparent),
-        transparent
-    );
-    content: "";
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-130%) skewX(-16deg);
-    transition:
-        opacity 180ms ease,
-        transform 640ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-:where(.sl-link-button, .action, .card):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next']):hover::after {
-    opacity: 1;
-    transform: translateX(270%) skewX(-16deg);
+.sl-markdown-content .card .description {
+    font-weight: 400;
 }
 
 .update-history {
