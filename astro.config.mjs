@@ -30,6 +30,12 @@ export default defineConfig({
         starlight({
             title: 'My Docs',
             customCss: ['./src/styles/custom.css', './src/styles/home-entry.css'],
+            locales: {
+                root: {
+                    label: '简体中文',
+                    lang: 'zh-CN',
+                },
+            },
             sidebar: [
                 {
                     label: 'My Notes',

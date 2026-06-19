@@ -1048,6 +1048,15 @@ main:has(.baiyun-meta) .sl-markdown-content h2 {
     text-indent: 0 !important;
 }
 
+.pagefind-keywords {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
 .baiyun-meta ~ p:first-of-type {
     margin-top: 2rem;
 }
