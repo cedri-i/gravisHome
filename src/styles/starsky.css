@@ -83,19 +83,19 @@ body:has(.home-starsky) .page {
     pointer-events: auto;
     cursor: crosshair;
     background:
-        radial-gradient(circle at 0% 50%, rgba(255,255,255,.98) 0 3px, rgba(186,220,255,.82) 4px, transparent 7px),
-        linear-gradient(90deg, rgba(255,255,255,.96) 0%, rgba(205,230,255,.82) 18%, rgba(125,211,252,.34) 54%, rgba(255,255,255,0) 100%);
+        radial-gradient(circle at 100% 50%, rgba(255,255,255,.98) 0 3px, rgba(186,220,255,.82) 4px, transparent 7px),
+        linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(125,211,252,.34) 46%, rgba(205,230,255,.82) 82%, rgba(255,255,255,.96) 100%);
     box-shadow: 0 0 18px rgba(190,225,255,.82), 0 0 34px rgba(125,211,252,.26);
     transform: rotate(var(--meteor-angle, 152deg));
     transform-origin: left center;
-    animation: meteorFall var(--meteor-speed, 4.8s) cubic-bezier(.18,.04,.22,1) forwards;
+    animation: meteorFall var(--meteor-speed, 4.8s) linear forwards;
 }
 
 .sky-meteor::before,
 .sky-meteor::after {
     content: "";
     position: absolute;
-    left: .15rem;
+    right: .15rem;
     top: 50%;
     pointer-events: none;
     transform: translateY(-50%);
@@ -105,7 +105,7 @@ body:has(.home-starsky) .page {
     width: 74%;
     height: 8px;
     border-radius: 999px;
-    background: linear-gradient(90deg, rgba(255,255,255,.34), rgba(125,211,252,.16) 44%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(125,211,252,.16) 56%, rgba(255,255,255,.34) 100%);
     filter: blur(3px);
     animation: meteorTail var(--meteor-speed, 4.8s) ease-in-out forwards;
 }
@@ -122,14 +122,14 @@ body:has(.home-starsky) .page {
     width: var(--meteor-length, 24rem);
     height: 7px;
     background:
-        radial-gradient(circle at 0% 50%, #fff7ed 0 8px, #fb923c 10px, transparent 18px),
-        linear-gradient(90deg, rgba(255,247,237,.98) 0%, rgba(251,146,60,.82) 22%, rgba(248,113,113,.36) 62%, transparent 100%);
+        radial-gradient(circle at 100% 50%, #fff7ed 0 8px, #fb923c 10px, transparent 18px),
+        linear-gradient(90deg, transparent 0%, rgba(248,113,113,.36) 38%, rgba(251,146,60,.82) 78%, rgba(255,247,237,.98) 100%);
     box-shadow: 0 0 30px rgba(255,173,82,.95), 0 0 64px rgba(255,110,64,.45);
 }
 
 .sky-meteor.is-meteorite::before {
     height: 18px;
-    background: linear-gradient(90deg, rgba(255,237,213,.54), rgba(251,146,60,.22) 42%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(251,146,60,.22) 58%, rgba(255,237,213,.54) 100%);
     filter: blur(6px);
 }
 
