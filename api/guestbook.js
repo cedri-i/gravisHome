@@ -3,6 +3,27 @@ import { getGitHubSession } from './_session.js';
 const markerStart = '<!-- gravis-guestbook:v1 -->';
 const markerEnd = '<!-- /gravis-guestbook -->';
 
+const legacyAuthors = {
+  'WeiBing Wang': {
+    name: 'BillLin-123',
+    githubLogin: 'BillLin-123',
+    avatarUrl: 'https://avatars.githubusercontent.com/u/255810934?v=4',
+    profileUrl: 'https://github.com/BillLin-123',
+  },
+  'XiaoJun Guo': {
+    name: 'BillLin-123',
+    githubLogin: 'BillLin-123',
+    avatarUrl: 'https://avatars.githubusercontent.com/u/255810934?v=4',
+    profileUrl: 'https://github.com/BillLin-123',
+  },
+  '🐟️': {
+    name: 'cedri-i',
+    githubLogin: 'cedri-i',
+    avatarUrl: 'https://avatars.githubusercontent.com/u/240863923?v=4',
+    profileUrl: 'https://github.com/cedri-i',
+  },
+};
+
 const jsonResponse = (response, status, payload) => {
   response.statusCode = status;
   response.setHeader('content-type', 'application/json; charset=utf-8');
@@ -81,6 +102,11 @@ const normalizeParentId = (parentId) => {
   return String(parentId || '').trim().slice(0, 80);
 };
 
+const normalizeLikedBy = (likedBy) => {
+  if (!Array.isArray(likedBy)) return [];
+  return [...new Set(likedBy.map(normalizeLogin).filter(Boolean))].slice(0, 500);
+};
+
 const readPayload = (body) => {
   const start = body.indexOf(markerStart);
   const end = body.indexOf(markerEnd);
@@ -104,16 +130,22 @@ const parseComment = (comment) => {
 
   const message = normalizeMessage(parsed.payload.message);
   if (!message) return null;
+  const legacyAuthor = !parsed.payload.githubLogin
+    ? legacyAuthors[normalizeName(parsed.payload.name)]
+    : null;
+  const likedBy = normalizeLikedBy(parsed.payload.likedBy);
 
   return {
     id: `github-${comment.id}`,
-    name: normalizeName(parsed.payload.name) || '匿名',
-    githubLogin: normalizeLogin(parsed.payload.githubLogin),
-    avatarUrl: String(parsed.payload.avatarUrl || ''),
-    profileUrl: String(parsed.payload.profileUrl || ''),
+    name: normalizeName(legacyAuthor?.name || parsed.payload.name) || '匿名',
+    githubLogin: normalizeLogin(legacyAuthor?.githubLogin || parsed.payload.githubLogin),
+    avatarUrl: String(legacyAuthor?.avatarUrl || parsed.payload.avatarUrl || ''),
+    profileUrl: String(legacyAuthor?.profileUrl || parsed.payload.profileUrl || ''),
     message,
     createdAt: parsed.payload.createdAt || comment.created_at,
     parentId: normalizeParentId(parsed.payload.parentId),
+    likedBy,
+    likeCount: likedBy.length,
     hidden: Boolean(parsed.payload.hidden),
   };
 };
@@ -129,6 +161,7 @@ const toCommentBody = ({ author, message, createdAt, parentId }) => {
     message: normalizeMessage(message),
     createdAt,
     parentId: normalizedParentId,
+    likedBy: [],
     hidden: false,
   };
 
@@ -234,6 +267,40 @@ export default async function handler(request, response) {
           avatarUrl: session.user.avatarUrl,
           profileUrl: session.user.profileUrl,
           claimedAt: new Date().toISOString(),
+        };
+        const nextBody = `${comment.body.slice(0, parsed.markerStartIndex + markerStart.length)}
+${JSON.stringify(nextPayload)}
+${comment.body.slice(parsed.markerEndIndex)}`;
+
+        const updatedComment = await githubRequest(
+          config,
+          `/repos/${config.repository}/issues/comments/${commentId}`,
+          {
+            method: 'PATCH',
+            body: JSON.stringify({ body: nextBody }),
+          }
+        );
+
+        return jsonResponse(response, 200, {
+          message: parseComment(updatedComment),
+        });
+      }
+
+      if (body.action === 'like') {
+        const session = getGitHubSession(request);
+        if (!session) {
+          return jsonResponse(response, 401, { error: 'GitHub login is required.' });
+        }
+
+        const login = normalizeLogin(session.user.login);
+        const likedBy = normalizeLikedBy(parsed.payload.likedBy);
+        const nextLikedBy = likedBy.includes(login)
+          ? likedBy.filter((item) => item !== login)
+          : [...likedBy, login];
+
+        const nextPayload = {
+          ...parsed.payload,
+          likedBy: nextLikedBy,
         };
         const nextBody = `${comment.body.slice(0, parsed.markerStartIndex + markerStart.length)}
 ${JSON.stringify(nextPayload)}

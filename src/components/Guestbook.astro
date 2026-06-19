@@ -154,25 +154,48 @@
     moderationEnabled = Boolean(token);
   };
 
-  const splitThreads = (messages) => {
-    const repliesByParent = new Map();
+  const getDisplayName = (item) => {
+    if (!item) return '匿名';
+    return item.githubLogin ? `@${item.githubLogin}` : item.name || '匿名';
+  };
+
+  const buildThreads = (messages) => {
+    const byId = new Map(messages.map((item) => [item.id, item]));
+    const chronological = [...messages].sort((left, right) => {
+      return new Date(left.createdAt) - new Date(right.createdAt);
+    });
+    const floorById = new Map(chronological.map((item, index) => [item.id, index + 1]));
     const topLevel = [];
+    const repliesByRoot = new Map();
+
+    const findRootId = (item) => {
+      let current = item;
+      const seen = new Set();
+      while (current?.parentId && byId.has(current.parentId) && !seen.has(current.id)) {
+        seen.add(current.id);
+        current = byId.get(current.parentId);
+      }
+      return current?.id || item.parentId || item.id;
+    };
 
     for (const item of messages) {
-      if (item.parentId) {
-        const replies = repliesByParent.get(item.parentId) || [];
-        replies.push(item);
-        repliesByParent.set(item.parentId, replies);
-      } else {
+      if (!item.parentId) {
         topLevel.push(item);
+        continue;
       }
+
+      const rootId = findRootId(item);
+      const replies = repliesByRoot.get(rootId) || [];
+      replies.push(item);
+      repliesByRoot.set(rootId, replies);
     }
 
-    for (const replies of repliesByParent.values()) {
+    topLevel.sort((left, right) => new Date(right.createdAt) - new Date(left.createdAt));
+    for (const replies of repliesByRoot.values()) {
       replies.sort((left, right) => new Date(left.createdAt) - new Date(right.createdAt));
     }
 
-    return { topLevel, repliesByParent };
+    return { byId, floorById, topLevel, repliesByRoot };
   };
 
   const messageKey = (item) => {
@@ -196,7 +219,7 @@
 
     const label = document.createElement('label');
     const labelText = document.createElement('span');
-    labelText.textContent = `回复 ${parent.name || '匿名'}`;
+    labelText.textContent = `回复 ${getDisplayName(parent)}`;
 
     const textarea = document.createElement('textarea');
     textarea.name = 'message';
@@ -223,7 +246,8 @@
     return form;
   };
 
-  const createEntry = (item, repliesByParent, isReply = false) => {
+  const createEntry = (item, context = {}) => {
+    const { byId = new Map(), floorById = new Map(), rootId = '', isReply = false } = context;
     const entry = document.createElement('li');
     entry.className = isReply ? 'guestbook-entry guestbook-reply' : 'guestbook-entry';
     entry.dataset.messageId = item.id;
@@ -241,11 +265,26 @@
     }
 
     const name = document.createElement('strong');
-    name.textContent = item.githubLogin ? `@${item.githubLogin}` : item.name || '匿名';
+    name.textContent = getDisplayName(item);
 
     const time = document.createElement('time');
     time.dateTime = item.createdAt;
     time.textContent = formatDate(item.createdAt);
+
+    if (isReply) {
+      const floor = document.createElement('span');
+      floor.className = 'guestbook-floor';
+      floor.textContent = `${floorById.get(item.id) || ''}楼`;
+      meta.append(floor);
+
+      const parent = byId.get(item.parentId);
+      if (parent && parent.id !== rootId) {
+        const replyingTo = document.createElement('span');
+        replyingTo.className = 'guestbook-reply-target';
+        replyingTo.textContent = `回复 ${getDisplayName(parent)}`;
+        meta.append(replyingTo);
+      }
+    }
 
     const message = document.createElement('p');
     message.textContent = item.message;
@@ -256,8 +295,18 @@
     replyButton.dataset.replyTo = item.id;
     replyButton.textContent = 'Reply';
 
+    const likeButton = document.createElement('button');
+    const likedBy = Array.isArray(item.likedBy) ? item.likedBy : [];
+    const isLiked = Boolean(currentUser && likedBy.includes(currentUser.login));
+    likeButton.type = 'button';
+    likeButton.className = isLiked ? 'guestbook-like-button is-liked' : 'guestbook-like-button';
+    likeButton.dataset.likeId = item.id;
+    likeButton.textContent = `赞 ${item.likeCount || likedBy.length || 0}`;
+    likeButton.disabled = !currentUser || !item.id?.startsWith('github-');
+
     meta.append(name, time);
     if (currentUser) meta.append(replyButton);
+    meta.append(likeButton);
 
     if (moderationEnabled && item.id?.startsWith('github-')) {
       const hideButton = document.createElement('button');
@@ -270,16 +319,6 @@
 
     entry.append(meta, message);
 
-    const replies = repliesByParent.get(item.id) || [];
-    if (replies.length > 0) {
-      const replyList = document.createElement('ol');
-      replyList.className = 'guestbook-replies';
-      for (const reply of replies) {
-        replyList.append(createEntry(reply, repliesByParent, true));
-      }
-      entry.append(replyList);
-    }
-
     return entry;
   };
 
@@ -291,10 +330,21 @@
     activeMessages = messages;
     list.textContent = '';
     empty.hidden = messages.length > 0;
-    const { topLevel, repliesByParent } = splitThreads(messages);
+    const threadContext = buildThreads(messages);
+    const { topLevel, repliesByRoot } = threadContext;
 
     for (const item of topLevel) {
-      list.append(createEntry(item, repliesByParent));
+      const entry = createEntry(item, threadContext);
+      const replies = repliesByRoot.get(item.id) || [];
+      if (replies.length > 0) {
+        const replyList = document.createElement('ol');
+        replyList.className = 'guestbook-replies';
+        for (const reply of replies) {
+          replyList.append(createEntry(reply, { ...threadContext, rootId: item.id, isReply: true }));
+        }
+        entry.append(replyList);
+      }
+      list.append(entry);
     }
   };
 
@@ -332,6 +382,20 @@
     });
 
     if (!response.ok) throw new Error('Hide request failed.');
+    return response.json();
+  };
+
+  const likeRemoteMessage = async (id) => {
+    const response = await fetch(endpoint, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'like', id }),
+    });
+
+    if (response.status === 401) throw new Error('GitHub login required.');
+    if (!response.ok) throw new Error('Like request failed.');
     return response.json();
   };
 
@@ -503,6 +567,29 @@
         .catch(() => {
           hideButton.disabled = false;
           setStatus('Hide failed. Check the admin token.');
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+      const likeButton = event.target.closest?.('.guestbook-like-button');
+      if (!likeButton) return;
+
+      const id = likeButton.dataset.likeId;
+      if (!id) return;
+      if (!currentUser) {
+        setStatus('Please sign in with GitHub first.');
+        return;
+      }
+
+      likeButton.disabled = true;
+      likeRemoteMessage(id)
+        .then(async () => {
+          renderMessages(await fetchRemoteMessages());
+          setStatus('点赞已更新。');
+        })
+        .catch(() => {
+          likeButton.disabled = false;
+          setStatus('点赞失败，请稍后再试。');
         });
     });
 
