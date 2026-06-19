@@ -1,5 +1,15 @@
 @import "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css";
 
+@font-face {
+  font-family: "LiuGongQuan";
+  src: url("/fonts/liugongquanti.ttf") format("truetype");
+  font-display: swap;
+}
+
+.hero h1 {
+  font-family: "LiuGongQuan", serif;
+}
+
 :root {
     --obsidian-red: #d64545;
     --obsidian-orange: #c76f1d;
