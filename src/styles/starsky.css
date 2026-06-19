@@ -149,6 +149,36 @@ body:has(.home-starsky) .page {
     box-shadow: 0 0 28px #fed7aa, 0 0 64px #fb923c;
 }
 
+.sky-meteor.is-super-meteorite {
+    width: var(--meteor-length, 40rem);
+    height: 15px;
+    background:
+        radial-gradient(circle at 100% 50%, #fffaf0 0 10px, #fed7aa 11px 15px, #fb923c 16px 22px, #6b2f12 23px 32px, transparent 34px),
+        radial-gradient(circle at 92% 35%, rgba(43, 20, 10, .72) 0 2px, transparent 3px),
+        radial-gradient(circle at 86% 64%, rgba(255, 237, 213, .54) 0 2px, transparent 3px),
+        radial-gradient(circle at 78% 44%, rgba(84, 35, 14, .6) 0 2.5px, transparent 3.5px),
+        repeating-linear-gradient(90deg, rgba(255, 237, 213, .48) 0 5px, rgba(120, 53, 15, .22) 6px 10px, rgba(251, 146, 60, .16) 11px 16px),
+        linear-gradient(90deg, transparent 0%, rgba(248, 113, 113, .18) 25%, rgba(251, 146, 60, .58) 74%, rgba(255, 247, 237, .98) 100%);
+    box-shadow: 0 0 42px rgba(255, 180, 98, .92), 0 0 90px rgba(255, 109, 64, .38), 0 0 150px rgba(252, 165, 165, .16);
+}
+
+.sky-meteor.is-super-meteorite::before {
+    width: 82%;
+    height: 30px;
+    background: linear-gradient(90deg, transparent 0%, rgba(248, 113, 113, .14) 44%, rgba(251, 146, 60, .32) 70%, rgba(255, 237, 213, .58) 100%);
+    filter: blur(9px);
+}
+
+.sky-meteor.is-super-meteorite::after {
+    width: 2.35rem;
+    height: 2.35rem;
+    background:
+        radial-gradient(circle at 35% 32%, rgba(255, 255, 255, .72) 0 10%, transparent 11%),
+        radial-gradient(circle at 63% 60%, rgba(70, 28, 12, .78) 0 13%, transparent 14%),
+        radial-gradient(circle at 45% 68%, rgba(124, 45, 18, .62) 0 8%, transparent 9%),
+        radial-gradient(circle, #fff7ed 0 20%, #fdba74 38%, #ea580c 58%, #431407 100%);
+    box-shadow: 0 0 36px #fed7aa, 0 0 86px #fb923c, inset -7px -8px 12px rgba(67, 20, 7, .5);
+}
 .sky-burst {
     position: fixed;
     z-index: 2;

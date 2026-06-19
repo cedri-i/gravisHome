@@ -24,25 +24,28 @@
       }
 
       const meteor = document.createElement('button');
-      const huge = Math.random() < 0.02;
+      const roll = Math.random() * 1.25;
+      const isSuper = roll < 0.05;
+      const huge = !isSuper && roll < 0.25;
       const startTop = -18 + Math.random() * 46;
       const startLeft = 82 + Math.random() * 32;
       const driftX = -(116 + Math.random() * 34);
       const driftY = 60 + Math.random() * 34;
       const angle = 147 + Math.random() * 14;
-      const speed = huge ? 5.8 + Math.random() * 2.4 : 3.4 + Math.random() * 3.2;
+      const speed = isSuper ? 9.5 + Math.random() * 3.5 : huge ? 5.8 + Math.random() * 2.4 : 3.4 + Math.random() * 3.2;
+      const length = isSuper ? 34 + Math.random() * 14 : huge ? 20 + Math.random() * 10 : 11 + Math.random() * 11;
 
       meteor.type = 'button';
-      meteor.className = huge ? 'sky-meteor is-meteorite' : 'sky-meteor';
+      meteor.className = isSuper ? 'sky-meteor is-super-meteorite' : huge ? 'sky-meteor is-meteorite' : 'sky-meteor';
       meteor.style.setProperty('--meteor-top', startTop + 'vh');
       meteor.style.setProperty('--meteor-left', startLeft + 'vw');
       meteor.style.setProperty('--meteor-x', driftX + 'vw');
       meteor.style.setProperty('--meteor-y', driftY + 'vh');
       meteor.style.setProperty('--meteor-angle', angle + 'deg');
       meteor.style.setProperty('--meteor-speed', speed + 's');
-      meteor.style.setProperty('--meteor-length', (huge ? 20 + Math.random() * 10 : 11 + Math.random() * 11) + 'rem');
+      meteor.style.setProperty('--meteor-length', length + 'rem');
       meteor.style.setProperty('--meteor-wobble', (Math.random() * 2 - 1).toFixed(2) + 'rem');
-      meteor.setAttribute('aria-label', huge ? 'Meteorite' : 'Meteor');
+      meteor.setAttribute('aria-label', isSuper ? 'Super meteorite' : huge ? 'Meteorite' : 'Meteor');
       meteor.addEventListener('click', explode, { once: true });
       meteor.addEventListener('animationend', () => meteor.remove(), { once: true });
       document.body.append(meteor);
