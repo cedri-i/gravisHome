@@ -190,7 +190,7 @@
     fetchRemoteMessages()
       .then((messages) => {
         renderMessages(messages);
-        setStatus('公共留言区已连接。');
+        setStatus('Public guestbook connected.');
         return syncLocalMessages();
       })
       .catch(() => {
