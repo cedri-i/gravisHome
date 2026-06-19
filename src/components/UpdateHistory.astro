@@ -26,7 +26,29 @@ type YearGroup = {
   hasToday: boolean;
 };
 
-const readCommits = (): Commit[] => {
+const fetchRemoteCommits = async (fallback: Commit[]): Promise<Commit[]> => {
+  try {
+    const response = await fetch('https://api.github.com/repos/cedri-i/gravisHome/commits?per_page=100', {
+      headers: { accept: 'application/vnd.github+json', 'user-agent': 'gravis-home-update-history' },
+    });
+    if (!response.ok) return fallback;
+    const data = (await response.json()) as Array<any>;
+    const commits = data.map((item) => {
+      const date = item.commit?.author?.date || item.commit?.committer?.date || '';
+      return {
+        hash: String(item.sha || '').slice(0, 7),
+        date: date.slice(0, 10),
+        subject: String(item.commit?.message || '').split('\n')[0],
+      };
+    }).filter((commit) => commit.hash && commit.date && commit.subject);
+
+    return commits.length > fallback.length ? commits : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const readCommits = async (): Promise<Commit[]> => {
   try {
     const output = execFileSync(
       'git',
@@ -37,7 +59,7 @@ const readCommits = (): Commit[] => {
       }
     );
 
-    return output
+    const commits = output
       .split('\n')
       .filter(Boolean)
       .map((line) => {
@@ -49,25 +71,27 @@ const readCommits = (): Commit[] => {
         };
       })
       .filter((commit) => commit.hash && commit.date && commit.subject);
+
+    return commits.length > 10 ? commits : fetchRemoteCommits(commits);
   } catch {
     const fallbackHash = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7);
     const fallbackSubject = process.env.VERCEL_GIT_COMMIT_MESSAGE;
 
-    if (!fallbackHash || !fallbackSubject) return [];
+    if (!fallbackHash || !fallbackSubject) return fetchRemoteCommits([]);
 
-    return [
+    return fetchRemoteCommits([
       {
         hash: fallbackHash,
         date: new Date().toISOString().slice(0, 10),
         subject: fallbackSubject,
       },
-    ];
+    ]);
   }
 };
 
 const today = new Date().toISOString().slice(0, 10);
 
-const groupedByDay = readCommits().reduce<Map<string, Commit[]>>((groups, commit) => {
+const groupedByDay = (await readCommits()).reduce<Map<string, Commit[]>>((groups, commit) => {
   groups.set(commit.date, [...(groups.get(commit.date) ?? []), commit]);
   return groups;
 }, new Map());

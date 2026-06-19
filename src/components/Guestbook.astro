@@ -384,13 +384,22 @@
       const replies = repliesByRoot.get(item.id) || [];
       if (replies.length > 0) {
         const replyList = document.createElement('ol');
+        const replyListId = 'guestbook-replies-' + item.id;
+        const replyToggle = document.createElement('button');
         replyList.className = 'guestbook-replies';
+        replyList.id = replyListId;
+        replyToggle.type = 'button';
+        replyToggle.className = 'guestbook-reply-toggle';
+        replyToggle.dataset.replyCount = String(replies.length);
+        replyToggle.setAttribute('aria-expanded', 'true');
+        replyToggle.setAttribute('aria-controls', replyListId);
+        replyToggle.textContent = '收起 ' + replies.length + ' 条回复';
         for (const [index, reply] of replies.entries()) {
           replyList.append(
             createEntry(reply, { ...threadContext, rootId: item.id, isReply: true, floor: index + 1 })
           );
         }
-        entry.append(replyList);
+        entry.append(replyToggle, replyList);
       }
       list.append(entry);
     }
@@ -639,6 +648,19 @@
           likeButton.disabled = false;
           setStatus('点赞失败，请稍后再试。');
         });
+    });
+
+    document.addEventListener('click', (event) => {
+      const toggle = event.target.closest?.('.guestbook-reply-toggle');
+      if (!toggle) return;
+
+      const replyList = document.getElementById(toggle.getAttribute('aria-controls') || '');
+      if (!replyList) return;
+
+      const shouldShow = replyList.hidden;
+      replyList.hidden = !shouldShow;
+      toggle.setAttribute('aria-expanded', String(shouldShow));
+      toggle.textContent = (shouldShow ? '收起 ' : '展开 ') + (toggle.dataset.replyCount || '0') + ' 条回复';
     });
 
     document.addEventListener('click', (event) => {

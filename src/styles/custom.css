@@ -1208,3 +1208,110 @@ main:has(.baiyun-meta) .sl-markdown-content h2 {
 [hidden] {
     display: none !important;
 }
+
+
+/* Guestbook airy override */
+starlight-theme-select,
+starlight-theme-select select,
+starlight-theme-select label,
+starlight-theme-select svg,
+.header starlight-theme-select,
+.mobile-menu-footer starlight-theme-select {
+    display: none !important;
+}
+
+.light-mode-warning {
+    display: none;
+    max-width: 48rem;
+    margin: -0.4rem 0 2rem;
+    color: #9a3412;
+    font-size: 0.92rem;
+    font-weight: 650;
+    line-height: 1.6;
+}
+
+:root[data-theme=light] .light-mode-warning {
+    display: block;
+}
+
+.guestbook {
+    background: color-mix(in srgb, var(--sl-color-bg) 22%, transparent);
+    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 60%, transparent);
+    border-radius: 12px;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    overflow: visible;
+}
+
+.guestbook::before,
+.guestbook::after,
+.guestbook-entry::before {
+    display: none;
+}
+
+.guestbook-list {
+    gap: 0;
+}
+
+.guestbook-entry {
+    overflow: visible;
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 44%, transparent);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0.85rem 0;
+    transition: none;
+}
+
+.guestbook-entry:first-child {
+    border-top: 0;
+}
+
+.guestbook-entry:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.guestbook-replies {
+    margin: 0.55rem 0 0;
+    border-left: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 48%, transparent);
+    background: transparent;
+    padding: 0.25rem 0 0.1rem 1rem;
+}
+
+.guestbook-replies[hidden] {
+    display: none;
+}
+
+.guestbook-entry.guestbook-reply {
+    border-top: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 35%, transparent);
+    padding: 0.62rem 0;
+}
+
+.guestbook-entry.guestbook-reply:first-child {
+    border-top: 0;
+}
+
+.guestbook-reply-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.45rem;
+    border: 0;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+    padding: 0;
+}
+
+.guestbook-reply-toggle:hover {
+    color: var(--sl-color-text-accent);
+    text-decoration: underline;
+}

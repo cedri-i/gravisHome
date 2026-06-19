@@ -1,0 +1,43 @@
+<script is:inline>
+  (() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const root = document.querySelector('.home-starsky');
+    if (!root || reduce.matches) return;
+
+    const explode = (event) => {
+      const target = event.currentTarget;
+      const burst = document.createElement('span');
+      burst.className = 'sky-burst';
+      burst.style.left = event.clientX + 'px';
+      burst.style.top = event.clientY + 'px';
+      document.body.append(burst);
+      target.remove();
+      burst.addEventListener('animationend', () => burst.remove(), { once: true });
+    };
+
+    const schedule = () => window.setTimeout(spawnSkyMeteor, 2400 + Math.random() * 4800);
+
+    function spawnSkyMeteor() {
+      if (document.documentElement.dataset.theme === 'light') {
+        schedule();
+        return;
+      }
+
+      const meteor = document.createElement('button');
+      const huge = Math.random() < 0.025;
+      meteor.type = 'button';
+      meteor.className = huge ? 'sky-meteor is-meteorite' : 'sky-meteor';
+      meteor.style.setProperty('--meteor-top', (2 + Math.random() * 42) + 'vh');
+      meteor.style.setProperty('--meteor-left', (-18 + Math.random() * 18) + 'vw');
+      meteor.style.setProperty('--meteor-speed', (huge ? 2.4 : 1.4 + Math.random() * 0.9) + 's');
+      meteor.style.setProperty('--meteor-length', (huge ? 14 + Math.random() * 8 : 6 + Math.random() * 5) + 'rem');
+      meteor.setAttribute('aria-label', huge ? 'Meteorite' : 'Meteor');
+      meteor.addEventListener('click', explode, { once: true });
+      meteor.addEventListener('animationend', () => meteor.remove(), { once: true });
+      document.body.append(meteor);
+      schedule();
+    }
+
+    schedule();
+  })();
+</script>

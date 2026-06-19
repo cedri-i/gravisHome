@@ -37,6 +37,7 @@ body:has(.home-starsky)::before {
         900px 760px;
 
     opacity: .55;
+    animation: starTwinkle 7s ease-in-out infinite alternate;
 }
 
 /* 让 Starlight 主内容不要再有纯黑底 */
@@ -61,4 +62,91 @@ body:has(.home-starsky) .content-panel {
 
 body:has(.home-starsky) .page {
     background: transparent;
+}
+
+@keyframes starTwinkle {
+    0% { opacity: .42; filter: brightness(.8); }
+    38% { opacity: .68; filter: brightness(1.08); }
+    67% { opacity: .5; filter: brightness(.9); }
+    100% { opacity: .74; filter: brightness(1.18); }
+}
+
+.sky-meteor {
+    position: fixed;
+    z-index: 1;
+    top: var(--meteor-top, 10vh);
+    left: var(--meteor-left, -12vw);
+    width: var(--meteor-length, 8rem);
+    height: 2px;
+    border-radius: 999px;
+    pointer-events: auto;
+    cursor: crosshair;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(205,230,255,.96) 54%, rgba(255,255,255,0));
+    box-shadow: 0 0 12px rgba(170,210,255,.72);
+    transform: rotate(34deg);
+    animation: meteorFall var(--meteor-speed, 1.7s) linear forwards;
+}
+
+.sky-meteor::after {
+    content: "";
+    position: absolute;
+    right: -3px;
+    top: 50%;
+    width: .4rem;
+    height: .4rem;
+    border-radius: 999px;
+    background: #ffffff;
+    box-shadow: 0 0 16px #dbeafe;
+    transform: translateY(-50%);
+}
+
+.sky-meteor.is-meteorite {
+    width: var(--meteor-length, 15rem);
+    height: 5px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,188,95,.9) 46%, rgba(255,255,255,.96));
+    box-shadow: 0 0 24px rgba(255,173,82,.9), 0 0 44px rgba(255,110,64,.42);
+}
+
+.sky-meteor.is-meteorite::after {
+    width: 1.35rem;
+    height: 1.35rem;
+    background: radial-gradient(circle, #fff7ed 0 30%, #fb923c 52%, #7c2d12 100%);
+    box-shadow: 0 0 26px #fed7aa, 0 0 58px #fb923c;
+}
+
+.sky-burst {
+    position: fixed;
+    z-index: 2;
+    width: 1rem;
+    height: 1rem;
+    margin: -.5rem 0 0 -.5rem;
+    border-radius: 999px;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,.95), rgba(125,211,252,.45) 42%, transparent 72%);
+    animation: skyBurst .55s ease-out forwards;
+}
+
+@keyframes meteorFall {
+    from { opacity: 0; transform: translate3d(0,0,0) rotate(34deg); }
+    8% { opacity: 1; }
+    92% { opacity: 1; }
+    to { opacity: 0; transform: translate3d(55vw, 34vh, 0) rotate(34deg); }
+}
+
+@keyframes skyBurst {
+    from { opacity: .95; transform: scale(.4); }
+    to { opacity: 0; transform: scale(8); }
+}
+
+:root[data-theme=light] .sky-meteor,
+:root[data-theme=light] .sky-burst {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body:has(.home-starsky)::before,
+    .sky-meteor,
+    .sky-burst {
+        animation: none;
+    }
 }

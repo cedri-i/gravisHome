@@ -1,18 +1,18 @@
-<button id="sky-toggle" aria-label="切换主题">
-  <span class="moon">🌙</span>
-  <span class="sun">☀️</span>
+<button id=sky-toggle aria-label=Toggle-theme>
+  <span class=moon>&#127769;</span>
+  <span class=sun>&#9728;&#65039;</span>
 </button>
 
 <script is:inline>
-  const btn = document.getElementById("sky-toggle");
+  const btn = document.getElementById('sky-toggle');
 
-  btn?.addEventListener("click", () => {
+  btn?.addEventListener('click', () => {
     const root = document.documentElement;
-    const current = root.getAttribute("data-theme");
+    const current = root.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
 
-    root.setAttribute(
-      "data-theme",
-      current === "dark" ? "light" : "dark"
-    );
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('starlight-theme', next);
+    window.StarlightThemeProvider?.updatePickers?.(next);
   });
 </script>
