@@ -17,19 +17,25 @@ import Guestbook from '../../components/Guestbook.astro';
 ## 入口
 
 <CardGrid>
-  <LinkCard
-    class="entry-card entry-notes"
-    title="My Notes"
-    href="/my-notes/"
-    description="从这里进入所有文档导航"
-  />
 
-  <LinkCard
-    class="entry-card entry-updates"
-    title="更新历史"
-    href="/updates/"
-    description="记录站点结构、内容导入和功能调整"
-  />
+  <a class="entry-card notes" href="/my-notes/">
+    <div class="icon">📚</div>
+
+    <div class="content">
+      <div class="title">My Notes →</div>
+      <div class="desc">从这里进入所有文档导航</div>
+    </div>
+  </a>
+
+  <a class="entry-card updates" href="/updates/">
+    <div class="icon">🕓</div>
+
+    <div class="content">
+      <div class="title">更新历史 →</div>
+      <div class="desc">记录站点结构、内容导入和功能调整</div>
+    </div>
+  </a>
+
 </CardGrid>
 
 <Guestbook />
