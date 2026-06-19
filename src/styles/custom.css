@@ -13,6 +13,13 @@
   font-weight: 400;
 }
 
+button[aria-label*="theme"],
+button[aria-label*="Theme"],
+button[data-theme-toggle],
+.sl-theme-toggle {
+  display: none !important;
+}
+
 :root {
     --obsidian-red: #d64545;
     --obsidian-orange: #c76f1d;
