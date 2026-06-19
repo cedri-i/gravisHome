@@ -7,6 +7,25 @@ type Commit = {
   subject: string;
 };
 
+type DayGroup = {
+  date: string;
+  commits: Commit[];
+};
+
+type MonthGroup = {
+  month: string;
+  days: DayGroup[];
+  count: number;
+  hasToday: boolean;
+};
+
+type YearGroup = {
+  year: string;
+  months: MonthGroup[];
+  count: number;
+  hasToday: boolean;
+};
+
 const readCommits = (): Commit[] => {
   try {
     const output = execFileSync(
@@ -46,33 +65,87 @@ const readCommits = (): Commit[] => {
   }
 };
 
-const groupedCommits = readCommits().reduce<Record<string, Commit[]>>((groups, commit) => {
-  groups[commit.date] = groups[commit.date] || [];
-  groups[commit.date].push(commit);
-  return groups;
-}, {});
-
-const entries = Object.entries(groupedCommits);
 const today = new Date().toISOString().slice(0, 10);
+
+const groupedByDay = readCommits().reduce<Map<string, Commit[]>>((groups, commit) => {
+  groups.set(commit.date, [...(groups.get(commit.date) ?? []), commit]);
+  return groups;
+}, new Map());
+
+const years = Array.from(groupedByDay, ([date, commits]) => ({
+  date,
+  commits,
+})).reduce<YearGroup[]>((groups, day) => {
+  const [year, month] = day.date.split('-');
+  const yearGroup =
+    groups.find((group) => group.year === year) ??
+    groups[
+      groups.push({
+        year,
+        months: [],
+        count: 0,
+        hasToday: false,
+      }) - 1
+    ];
+  const monthGroup =
+    yearGroup.months.find((group) => group.month === month) ??
+    yearGroup.months[
+      yearGroup.months.push({
+        month,
+        days: [],
+        count: 0,
+        hasToday: false,
+      }) - 1
+    ];
+
+  const isToday = day.date === today;
+  monthGroup.days.push(day);
+  monthGroup.count += day.commits.length;
+  monthGroup.hasToday ||= isToday;
+  yearGroup.count += day.commits.length;
+  yearGroup.hasToday ||= isToday;
+
+  return groups;
+}, []);
 ---
 
 {
-  entries.length > 0 ? (
+  years.length > 0 ? (
     <div class="update-history">
-      {entries.map(([date, commits]) => (
-        <details class="update-history-day" open={date === today}>
-          <summary id={`update-${date}`}>
-            <span>{date}</span>
-            <small>{commits.length} updates</small>
+      {years.map((year) => (
+        <details class="update-history-year" open={year.hasToday}>
+          <summary id={`update-${year.year}`}>
+            <span>{year.year}</span>
+            <small>{year.count} updates</small>
           </summary>
-          <ol>
-            {commits.map((commit) => (
-              <li>
-                <span>{commit.subject}</span>
-                <code>{commit.hash}</code>
-              </li>
+          <div class="update-history-months">
+            {year.months.map((month) => (
+              <details class="update-history-month" open={month.hasToday}>
+                <summary id={`update-${year.year}-${month.month}`}>
+                  <span>{month.month}月</span>
+                  <small>{month.count} updates</small>
+                </summary>
+                <div class="update-history-days">
+                  {month.days.map(({ date, commits }) => (
+                    <details class="update-history-day" open={date === today}>
+                      <summary id={`update-${date}`}>
+                        <span>{date}</span>
+                        <small>{commits.length} updates</small>
+                      </summary>
+                      <ol>
+                        {commits.map((commit) => (
+                          <li>
+                            <span>{commit.subject}</span>
+                            <code>{commit.hash}</code>
+                          </li>
+                        ))}
+                      </ol>
+                    </details>
+                  ))}
+                </div>
+              </details>
             ))}
-          </ol>
+          </div>
         </details>
       ))}
     </div>

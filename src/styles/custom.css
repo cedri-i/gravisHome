@@ -804,10 +804,15 @@ mark {
     gap: 0.95rem;
 }
 
+.update-history-year,
+.update-history-month,
 .update-history-day {
     overflow: hidden;
     border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 78%, transparent);
     border-radius: 8px;
+}
+
+.update-history-year {
     background:
         radial-gradient(
             circle at 12% 0%,
@@ -818,6 +823,16 @@ mark {
     box-shadow: 0 16px 42px color-mix(in srgb, #000000 12%, transparent);
 }
 
+.update-history-month {
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 72%, transparent);
+}
+
+.update-history-day {
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 58%, transparent);
+}
+
+.update-history-year summary,
+.update-history-month summary,
 .update-history-day summary {
     display: flex;
     align-items: center;
@@ -832,10 +847,27 @@ mark {
     list-style: none;
 }
 
+.update-history-year > summary {
+    font-size: 1.08rem;
+}
+
+.update-history-month > summary {
+    padding-inline: 0.9rem;
+}
+
+.update-history-day > summary {
+    padding-block: 0.78rem;
+    font-size: 0.94rem;
+}
+
+.update-history-year summary::-webkit-details-marker,
+.update-history-month summary::-webkit-details-marker,
 .update-history-day summary::-webkit-details-marker {
     display: none;
 }
 
+.update-history-year summary::after,
+.update-history-month summary::after,
 .update-history-day summary::after {
     color: var(--sl-color-gray-3);
     content: "+";
@@ -843,15 +875,31 @@ mark {
     transition: transform 0.2s ease;
 }
 
-.update-history-day[open] summary::after {
+.update-history-year[open] > summary::after,
+.update-history-month[open] > summary::after,
+.update-history-day[open] > summary::after {
     transform: rotate(45deg);
 }
 
+.update-history-year summary small,
+.update-history-month summary small,
 .update-history-day summary small {
     margin-left: auto;
     color: var(--sl-color-gray-3);
     font-size: 0.78rem;
     font-weight: 560;
+}
+
+.update-history-months,
+.update-history-days {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0 1rem 1rem;
+}
+
+.update-history-days {
+    padding-inline: 0.8rem;
 }
 
 .update-history-day ol {
