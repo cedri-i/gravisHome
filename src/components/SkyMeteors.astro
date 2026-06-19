@@ -15,7 +15,7 @@
       burst.addEventListener('animationend', () => burst.remove(), { once: true });
     };
 
-    const schedule = () => window.setTimeout(spawnSkyMeteor, 2400 + Math.random() * 4800);
+    const schedule = () => window.setTimeout(spawnSkyMeteor, 3600 + Math.random() * 7200);
 
     function spawnSkyMeteor() {
       if (document.documentElement.dataset.theme === 'light') {
@@ -24,13 +24,24 @@
       }
 
       const meteor = document.createElement('button');
-      const huge = Math.random() < 0.025;
+      const huge = Math.random() < 0.02;
+      const startTop = -18 + Math.random() * 46;
+      const startLeft = 82 + Math.random() * 32;
+      const driftX = -(116 + Math.random() * 34);
+      const driftY = 60 + Math.random() * 34;
+      const angle = 147 + Math.random() * 14;
+      const speed = huge ? 5.8 + Math.random() * 2.4 : 3.4 + Math.random() * 3.2;
+
       meteor.type = 'button';
       meteor.className = huge ? 'sky-meteor is-meteorite' : 'sky-meteor';
-      meteor.style.setProperty('--meteor-top', (2 + Math.random() * 42) + 'vh');
-      meteor.style.setProperty('--meteor-left', (-18 + Math.random() * 18) + 'vw');
-      meteor.style.setProperty('--meteor-speed', (huge ? 2.4 : 1.4 + Math.random() * 0.9) + 's');
-      meteor.style.setProperty('--meteor-length', (huge ? 14 + Math.random() * 8 : 6 + Math.random() * 5) + 'rem');
+      meteor.style.setProperty('--meteor-top', startTop + 'vh');
+      meteor.style.setProperty('--meteor-left', startLeft + 'vw');
+      meteor.style.setProperty('--meteor-x', driftX + 'vw');
+      meteor.style.setProperty('--meteor-y', driftY + 'vh');
+      meteor.style.setProperty('--meteor-angle', angle + 'deg');
+      meteor.style.setProperty('--meteor-speed', speed + 's');
+      meteor.style.setProperty('--meteor-length', (huge ? 20 + Math.random() * 10 : 11 + Math.random() * 11) + 'rem');
+      meteor.style.setProperty('--meteor-wobble', (Math.random() * 2 - 1).toFixed(2) + 'rem');
       meteor.setAttribute('aria-label', huge ? 'Meteorite' : 'Meteor');
       meteor.addEventListener('click', explode, { once: true });
       meteor.addEventListener('animationend', () => meteor.remove(), { once: true });

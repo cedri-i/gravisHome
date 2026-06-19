@@ -74,44 +74,70 @@ body:has(.home-starsky) .page {
 .sky-meteor {
     position: fixed;
     z-index: 1;
-    top: var(--meteor-top, 10vh);
-    left: var(--meteor-left, -12vw);
-    width: var(--meteor-length, 8rem);
-    height: 2px;
+    top: var(--meteor-top, -8vh);
+    left: var(--meteor-left, 106vw);
+    width: var(--meteor-length, 14rem);
+    height: 3px;
+    border: 0;
     border-radius: 999px;
     pointer-events: auto;
     cursor: crosshair;
-    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(205,230,255,.96) 54%, rgba(255,255,255,0));
-    box-shadow: 0 0 12px rgba(170,210,255,.72);
-    transform: rotate(34deg);
-    animation: meteorFall var(--meteor-speed, 1.7s) linear forwards;
+    background:
+        radial-gradient(circle at 0% 50%, rgba(255,255,255,.98) 0 3px, rgba(186,220,255,.82) 4px, transparent 7px),
+        linear-gradient(90deg, rgba(255,255,255,.96) 0%, rgba(205,230,255,.82) 18%, rgba(125,211,252,.34) 54%, rgba(255,255,255,0) 100%);
+    box-shadow: 0 0 18px rgba(190,225,255,.82), 0 0 34px rgba(125,211,252,.26);
+    transform: rotate(var(--meteor-angle, 152deg));
+    transform-origin: left center;
+    animation: meteorFall var(--meteor-speed, 4.8s) cubic-bezier(.18,.04,.22,1) forwards;
 }
 
+.sky-meteor::before,
 .sky-meteor::after {
     content: "";
     position: absolute;
-    right: -3px;
+    left: .15rem;
     top: 50%;
-    width: .4rem;
-    height: .4rem;
-    border-radius: 999px;
-    background: #ffffff;
-    box-shadow: 0 0 16px #dbeafe;
+    pointer-events: none;
     transform: translateY(-50%);
 }
 
+.sky-meteor::before {
+    width: 74%;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255,255,255,.34), rgba(125,211,252,.16) 44%, transparent 100%);
+    filter: blur(3px);
+    animation: meteorTail var(--meteor-speed, 4.8s) ease-in-out forwards;
+}
+
+.sky-meteor::after {
+    width: .5rem;
+    height: .5rem;
+    border-radius: 999px;
+    background: #ffffff;
+    box-shadow: 0 0 18px #dbeafe, 0 0 36px rgba(147,197,253,.72);
+}
+
 .sky-meteor.is-meteorite {
-    width: var(--meteor-length, 15rem);
-    height: 5px;
-    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,188,95,.9) 46%, rgba(255,255,255,.96));
-    box-shadow: 0 0 24px rgba(255,173,82,.9), 0 0 44px rgba(255,110,64,.42);
+    width: var(--meteor-length, 24rem);
+    height: 7px;
+    background:
+        radial-gradient(circle at 0% 50%, #fff7ed 0 8px, #fb923c 10px, transparent 18px),
+        linear-gradient(90deg, rgba(255,247,237,.98) 0%, rgba(251,146,60,.82) 22%, rgba(248,113,113,.36) 62%, transparent 100%);
+    box-shadow: 0 0 30px rgba(255,173,82,.95), 0 0 64px rgba(255,110,64,.45);
+}
+
+.sky-meteor.is-meteorite::before {
+    height: 18px;
+    background: linear-gradient(90deg, rgba(255,237,213,.54), rgba(251,146,60,.22) 42%, transparent 100%);
+    filter: blur(6px);
 }
 
 .sky-meteor.is-meteorite::after {
-    width: 1.35rem;
-    height: 1.35rem;
+    width: 1.45rem;
+    height: 1.45rem;
     background: radial-gradient(circle, #fff7ed 0 30%, #fb923c 52%, #7c2d12 100%);
-    box-shadow: 0 0 26px #fed7aa, 0 0 58px #fb923c;
+    box-shadow: 0 0 28px #fed7aa, 0 0 64px #fb923c;
 }
 
 .sky-burst {
@@ -127,17 +153,23 @@ body:has(.home-starsky) .page {
 }
 
 @keyframes meteorFall {
-    from { opacity: 0; transform: translate3d(0,0,0) rotate(34deg); }
-    8% { opacity: 1; }
-    92% { opacity: 1; }
-    to { opacity: 0; transform: translate3d(55vw, 34vh, 0) rotate(34deg); }
+    0% { opacity: 0; transform: translate3d(0,0,0) rotate(var(--meteor-angle, 152deg)) scaleX(.72); }
+    7% { opacity: 1; transform: translate3d(-7vw, 4vh, 0) rotate(calc(var(--meteor-angle, 152deg) - 1.5deg)) scaleX(1); }
+    52% { opacity: .95; transform: translate3d(calc(var(--meteor-x, -130vw) * .52), calc(var(--meteor-y, 76vh) * .52 + var(--meteor-wobble, .4rem)), 0) rotate(calc(var(--meteor-angle, 152deg) + 1.2deg)) scaleX(1.06); }
+    90% { opacity: .86; }
+    100% { opacity: 0; transform: translate3d(var(--meteor-x, -130vw), var(--meteor-y, 76vh), 0) rotate(var(--meteor-angle, 152deg)) scaleX(.9); }
+}
+
+@keyframes meteorTail {
+    0%, 100% { opacity: .35; transform: translateY(-50%) scaleX(.72); }
+    34% { opacity: .82; transform: translateY(calc(-50% + var(--meteor-wobble, .3rem))) scaleX(1.08); }
+    68% { opacity: .58; transform: translateY(calc(-50% - var(--meteor-wobble, .3rem))) scaleX(.92); }
 }
 
 @keyframes skyBurst {
     from { opacity: .95; transform: scale(.4); }
     to { opacity: 0; transform: scale(8); }
 }
-
 :root[data-theme=light] .sky-meteor,
 :root[data-theme=light] .sky-burst {
     display: none;
