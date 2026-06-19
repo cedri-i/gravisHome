@@ -484,12 +484,34 @@ mark {
 }
 
 .guestbook-like-button {
-    color: var(--sl-color-gray-2);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+    color: var(--sl-color-gray-3);
 }
 
 .guestbook-like-button.is-liked {
-    color: var(--sl-color-text-accent);
+    color: #12a8e8;
     font-weight: 700;
+}
+
+.guestbook-like-button svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.9;
+}
+
+.guestbook-like-button.is-liked svg {
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+.guestbook-like-button span {
+    min-width: 0.5rem;
 }
 
 .guestbook-like-button:disabled {
@@ -534,9 +556,9 @@ mark {
 .guestbook-replies {
     display: grid;
     gap: 0;
-    margin: 0.95rem 0 0;
-    border-left: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 72%, transparent);
-    padding: 0 0 0 0.9rem;
+    margin: 1.05rem 0 0;
+    border-left: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 48%, transparent);
+    padding: 0 0 0 1rem;
     list-style: none;
 }
 
@@ -544,7 +566,7 @@ mark {
     border: 0;
     border-radius: 0;
     background: transparent;
-    padding: 0.72rem 0 0.78rem;
+    padding: 0.9rem 0 0.95rem;
 }
 
 .guestbook-entry.guestbook-reply + .guestbook-entry.guestbook-reply {
