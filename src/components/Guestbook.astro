@@ -388,12 +388,13 @@
         const replyToggle = document.createElement('button');
         replyList.className = 'guestbook-replies';
         replyList.id = replyListId;
+        replyList.hidden = true;
         replyToggle.type = 'button';
         replyToggle.className = 'guestbook-reply-toggle';
         replyToggle.dataset.replyCount = String(replies.length);
-        replyToggle.setAttribute('aria-expanded', 'true');
+        replyToggle.setAttribute('aria-expanded', 'false');
         replyToggle.setAttribute('aria-controls', replyListId);
-        replyToggle.textContent = '收起 ' + replies.length + ' 条回复';
+        replyToggle.textContent = '\u5c55\u5f00 ' + replies.length + ' \u6761\u56de\u590d';
         for (const [index, reply] of replies.entries()) {
           replyList.append(
             createEntry(reply, { ...threadContext, rootId: item.id, isReply: true, floor: index + 1 })
