@@ -1,0 +1,149 @@
+.home-entry-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+    min-height: 7.8rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 76%, transparent);
+    border-radius: 16px;
+    padding: 1.35rem 1.45rem;
+    color: var(--sl-color-text);
+    text-decoration: none;
+    box-shadow:
+        0 20px 54px color-mix(in srgb, #000000 14%, transparent),
+        inset 0 1px 0 color-mix(in srgb, #ffffff 12%, transparent);
+    transition:
+        transform 260ms ease,
+        border-color 260ms ease,
+        box-shadow 260ms ease,
+        filter 260ms ease;
+}
+
+.home-entry-card::before,
+.home-entry-card::after {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    content: "";
+    pointer-events: none;
+}
+
+.home-entry-card::before {
+    background:
+        radial-gradient(circle at 17% 18%, var(--entry-glow-a), transparent 33%),
+        radial-gradient(circle at 78% 75%, var(--entry-glow-b), transparent 36%),
+        linear-gradient(135deg, var(--entry-bg-a), var(--entry-bg-b));
+}
+
+.home-entry-card::after {
+    width: 42%;
+    background: linear-gradient(
+        100deg,
+        transparent,
+        color-mix(in srgb, #ffffff 18%, transparent),
+        transparent
+    );
+    opacity: 0;
+    transform: translateX(-120%) skewX(-14deg);
+    transition:
+        opacity 260ms ease,
+        transform 680ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.home-entry-card:hover {
+    border-color: color-mix(in srgb, var(--entry-border) 74%, var(--sl-color-gray-5));
+    box-shadow:
+        0 28px 76px color-mix(in srgb, var(--entry-shadow) 34%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--entry-border) 26%, transparent),
+        inset 0 1px 0 color-mix(in srgb, #ffffff 16%, transparent);
+    filter: saturate(1.06);
+    transform: translateY(-5px);
+}
+
+.home-entry-card:hover::after {
+    opacity: 1;
+    transform: translateX(260%) skewX(-14deg);
+}
+
+.home-entry-card-notes {
+    --entry-bg-a: color-mix(in srgb, #3e43a6 32%, var(--sl-color-bg-nav));
+    --entry-bg-b: color-mix(in srgb, #13203d 92%, #7148db 8%);
+    --entry-glow-a: color-mix(in srgb, #8478ff 42%, transparent);
+    --entry-glow-b: color-mix(in srgb, #b86cff 28%, transparent);
+    --entry-border: #8f86ff;
+    --entry-shadow: #7167ff;
+}
+
+.home-entry-card-updates {
+    --entry-bg-a: color-mix(in srgb, #49646b 34%, var(--sl-color-bg-nav));
+    --entry-bg-b: color-mix(in srgb, #12252b 90%, #7ea1a6 10%);
+    --entry-glow-a: color-mix(in srgb, #86aeb4 40%, transparent);
+    --entry-glow-b: color-mix(in srgb, #a9c9c2 22%, transparent);
+    --entry-border: #8db3b2;
+    --entry-shadow: #567c83;
+}
+
+:root[data-theme='light'] .home-entry-card {
+    color: #142033;
+    box-shadow:
+        0 20px 58px color-mix(in srgb, #5b6475 18%, transparent),
+        inset 0 1px 0 color-mix(in srgb, #ffffff 58%, transparent);
+}
+
+:root[data-theme='light'] .home-entry-card-notes {
+    --entry-bg-a: #dde3ff;
+    --entry-bg-b: #bfc9ff;
+    --entry-glow-a: color-mix(in srgb, #5f6fff 38%, transparent);
+    --entry-glow-b: color-mix(in srgb, #985de8 28%, transparent);
+    --entry-border: #6a72d8;
+    --entry-shadow: #8790ff;
+}
+
+:root[data-theme='light'] .home-entry-card-updates {
+    --entry-bg-a: #d9e8e7;
+    --entry-bg-b: #b7cecd;
+    --entry-glow-a: color-mix(in srgb, #5e8588 34%, transparent);
+    --entry-glow-b: color-mix(in srgb, #96b8b4 36%, transparent);
+    --entry-border: #587e81;
+    --entry-shadow: #8aacab;
+}
+
+.home-entry-emoji {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 2.7rem;
+    font-size: 2rem;
+    line-height: 1;
+    text-align: center;
+    filter: drop-shadow(0 10px 20px color-mix(in srgb, #000000 28%, transparent));
+}
+
+.home-entry-content {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.home-entry-title {
+    color: color-mix(in srgb, var(--sl-color-text) 96%, var(--entry-border) 4%);
+    font-size: 1.12rem;
+    font-weight: 750;
+    line-height: 1.35;
+}
+
+.home-entry-desc {
+    max-width: 25rem;
+    color: color-mix(in srgb, var(--sl-color-text) 78%, var(--sl-color-gray-2) 22%);
+    font-size: 0.96rem;
+    font-weight: 560;
+    line-height: 1.75;
+}
+
+:root[data-theme='dark'] .home-entry-title {
+    color: color-mix(in srgb, #ffffff 92%, var(--entry-border) 8%);
+}
+
+:root[data-theme='dark'] .home-entry-desc {
+    color: color-mix(in srgb, #ffffff 78%, var(--entry-border) 22%);
+}

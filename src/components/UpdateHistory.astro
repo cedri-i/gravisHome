@@ -7,13 +7,11 @@ type Commit = {
   subject: string;
 };
 
-const maxCommits = 80;
-
 const readCommits = (): Commit[] => {
   try {
     const output = execFileSync(
       'git',
-      ['log', `--max-count=${maxCommits}`, '--date=short', '--pretty=format:%h%x09%ad%x09%s'],
+      ['log', '--date=short', '--pretty=format:%h%x09%ad%x09%s'],
       {
         cwd: process.cwd(),
         encoding: 'utf8',
@@ -55,14 +53,18 @@ const groupedCommits = readCommits().reduce<Record<string, Commit[]>>((groups, c
 }, {});
 
 const entries = Object.entries(groupedCommits);
+const today = new Date().toISOString().slice(0, 10);
 ---
 
 {
   entries.length > 0 ? (
     <div class="update-history">
       {entries.map(([date, commits]) => (
-        <section class="update-history-day" aria-labelledby={`update-${date}`}>
-          <h2 id={`update-${date}`}>{date}</h2>
+        <details class="update-history-day" open={date === today}>
+          <summary id={`update-${date}`}>
+            <span>{date}</span>
+            <small>{commits.length} updates</small>
+          </summary>
           <ol>
             {commits.map((commit) => (
               <li>
@@ -71,7 +73,7 @@ const entries = Object.entries(groupedCommits);
               </li>
             ))}
           </ol>
-        </section>
+        </details>
       ))}
     </div>
   ) : (

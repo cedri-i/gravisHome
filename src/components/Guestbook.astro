@@ -9,7 +9,7 @@
      href="/api/github-auth?action=login">
 
     <!-- GitHub 猫头 -->
-    <svg class="icon" viewBox="0 0 16 16">
+    <svg class="guestbook-auth-icon" viewBox="0 0 16 16">
       <path fill="currentColor"
         d="M8 0C3.58 0 0 3.58 0 8a8.01 8.01 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
         0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
@@ -31,7 +31,7 @@
      href="/api/github-auth?action=logout"
      hidden>
 
-    <svg class="icon" viewBox="0 0 24 24">
+    <svg class="guestbook-auth-icon" viewBox="0 0 24 24">
       <path fill="currentColor"
         d="M16 17v-3H9v-4h7V7l5 5-5 5zM3 5h8v2H5v10h6v2H3V5z"/>
     </svg>
@@ -43,7 +43,7 @@
           id="guestbook-moderate"
           type="button">
 
-    <svg class="icon" viewBox="0 0 24 24">
+    <svg class="guestbook-auth-icon" viewBox="0 0 24 24">
       <path fill="currentColor"
         d="M12 2l8 3v6c0 5-3.4 9.7-8 11
         -4.6-1.3-8-6-8-11V5l8-3z"/>
@@ -348,8 +348,8 @@
     likeButton.disabled = !currentUser || !item.id?.startsWith('github-');
 
     meta.append(name, time);
-    if (currentUser) meta.append(replyButton);
     meta.append(likeButton);
+    if (currentUser) meta.append(replyButton);
 
     if (moderationEnabled && item.id?.startsWith('github-')) {
       const hideButton = document.createElement('button');

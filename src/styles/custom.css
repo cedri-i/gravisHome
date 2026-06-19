@@ -213,6 +213,7 @@ mark {
 
 .notes-link-card {
     position: relative;
+    isolation: isolate;
     min-height: 8.75rem;
     overflow: hidden;
     border: 1px solid var(--sl-color-gray-5);
@@ -222,10 +223,45 @@ mark {
     padding: 1.5rem;
     text-decoration: none;
     box-shadow: 0 8px 22px color-mix(in srgb, #000000 10%, transparent);
+    transition:
+        transform 260ms ease,
+        border-color 260ms ease,
+        box-shadow 260ms ease,
+        filter 260ms ease;
 }
 
 .notes-link-card:hover {
     border-color: var(--sl-color-text-accent);
+    box-shadow:
+        0 24px 64px color-mix(in srgb, var(--sl-color-accent) 18%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
+    filter: saturate(1.04);
+    transform: translateY(-5px);
+}
+
+.notes-link-card::after {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 42%;
+    background: linear-gradient(
+        100deg,
+        transparent,
+        color-mix(in srgb, #ffffff 18%, transparent),
+        transparent
+    );
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-130%) skewX(-14deg);
+    transition:
+        opacity 240ms ease,
+        transform 680ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.notes-link-card:hover::after {
+    opacity: 1;
+    transform: translateX(270%) skewX(-14deg);
 }
 
 .notes-link-card-title,
@@ -323,7 +359,7 @@ mark {
     font-size: 0.9rem;
 }
 
-.icon {
+.guestbook-auth-icon {
     width: 1rem;
     height: 1rem;
     flex-shrink: 0;
@@ -332,6 +368,8 @@ mark {
 .guestbook-login,
 .guestbook-logout,
 .guestbook-moderate-button {
+    position: relative;
+    overflow: hidden;
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
@@ -350,7 +388,40 @@ mark {
         background-color 0.15s ease,
         border-color 0.15s ease,
         color 0.15s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease,
         opacity 0.15s ease;
+}
+
+.guestbook-login::before,
+.guestbook-logout::before,
+.guestbook-moderate-button::before,
+.guestbook-actions button::before,
+.guestbook-reply-actions button::before {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        transparent,
+        color-mix(in srgb, #ffffff 26%, transparent),
+        transparent
+    );
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-125%) skewX(-16deg);
+    transition:
+        opacity 180ms ease,
+        transform 640ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.guestbook-login:hover::before,
+.guestbook-logout:hover::before,
+.guestbook-moderate-button:hover::before,
+.guestbook-actions button:hover::before,
+.guestbook-reply-actions button:hover::before {
+    opacity: 1;
+    transform: translateX(155%) skewX(-16deg);
 }
 
 
@@ -372,7 +443,8 @@ mark {
 .guestbook-login:hover {
     background: transparent;
     color: var(--sl-color-text);
-    transform: translateY(-1px);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--sl-color-accent) 16%, transparent);
+    transform: translateY(-2px);
 }
 
 
@@ -394,7 +466,8 @@ mark {
     border-color: var(--sl-color-text-accent);
     color: var(--sl-color-text-accent);
     background: var(--sl-color-gray-6);
-    transform: translateY(-1px);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+    transform: translateY(-2px);
 }
 
 
@@ -416,7 +489,8 @@ mark {
     color: var(--sl-color-gray-2);
     border-color: var(--sl-color-gray-5);
     background: var(--sl-color-gray-6);
-    transform: translateY(-1px);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--sl-color-gray-3) 12%, transparent);
+    transform: translateY(-2px);
 }
 
 .guestbook-header p {
@@ -479,6 +553,8 @@ mark {
 }
 
 .guestbook-actions button {
+    position: relative;
+    overflow: hidden;
     border: 1px solid var(--sl-color-accent);
     border-radius: 8px;
     background: var(--sl-color-accent);
@@ -487,10 +563,16 @@ mark {
     font: inherit;
     font-weight: 700;
     padding: 0.58rem 0.95rem;
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 .guestbook-actions button:hover {
     background: color-mix(in srgb, var(--sl-color-accent) 84%, white);
+    box-shadow: 0 12px 30px color-mix(in srgb, var(--sl-color-accent) 20%, transparent);
+    transform: translateY(-2px);
 }
 
 .guestbook-actions button:disabled {
@@ -530,7 +612,7 @@ mark {
 .guestbook-entry-meta {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     gap: 0.55rem;
     color: var(--sl-color-gray-3);
     font-size: 0.86rem;
@@ -555,6 +637,7 @@ mark {
     cursor: pointer;
     font: inherit;
     font-size: 0.84rem;
+    line-height: 1.2;
     padding: 0;
 }
 
@@ -563,6 +646,7 @@ mark {
     align-items: center;
     gap: 0.28rem;
     color: var(--sl-color-gray-3);
+    transform: translateY(0.02rem);
 }
 
 .guestbook-like-button.is-liked {
@@ -571,8 +655,8 @@ mark {
 }
 
 .guestbook-like-button svg {
-    width: 1rem;
-    height: 1rem;
+    width: 0.98rem;
+    height: 0.98rem;
     fill: none;
     stroke: currentColor;
     stroke-linecap: round;
@@ -689,6 +773,8 @@ mark {
 }
 
 .guestbook-reply-actions button {
+    position: relative;
+    overflow: hidden;
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 8px;
     background: var(--sl-color-bg-nav);
@@ -697,12 +783,22 @@ mark {
     font: inherit;
     font-weight: 650;
     padding: 0.42rem 0.72rem;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 .guestbook-reply-actions button[type='submit'] {
     border-color: var(--sl-color-accent);
     background: var(--sl-color-accent);
     color: var(--sl-color-black);
+}
+
+.guestbook-reply-actions button:hover {
+    border-color: color-mix(in srgb, var(--sl-color-accent) 58%, var(--sl-color-gray-5));
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+    transform: translateY(-2px);
 }
 
 .guestbook-status {
@@ -712,30 +808,123 @@ mark {
     line-height: 1.6;
 }
 
+:where(
+    button,
+    a[role='button'],
+    .sl-link-button,
+    .action,
+    .card,
+    .notes-link-card,
+    .home-entry-card
+):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next']) {
+    transition:
+        transform 260ms ease,
+        border-color 260ms ease,
+        box-shadow 260ms ease,
+        filter 260ms ease;
+}
+
+:where(
+    button,
+    a[role='button'],
+    .sl-link-button,
+    .action,
+    .card,
+    .notes-link-card,
+    .home-entry-card
+):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next']):hover {
+    transform: translateY(-3px);
+}
+
+:where(.sl-link-button, .action, .card):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next']) {
+    position: relative;
+    overflow: hidden;
+}
+
+:where(.sl-link-button, .action, .card):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next'])::after {
+    position: absolute;
+    inset: 0;
+    width: 38%;
+    background: linear-gradient(
+        105deg,
+        transparent,
+        color-mix(in srgb, #ffffff 22%, transparent),
+        transparent
+    );
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-130%) skewX(-16deg);
+    transition:
+        opacity 180ms ease,
+        transform 640ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:where(.sl-link-button, .action, .card):not([rel='prev']):not([rel='next']):not([aria-label='Previous']):not([aria-label='Next']):hover::after {
+    opacity: 1;
+    transform: translateX(270%) skewX(-16deg);
+}
+
 .update-history {
     display: grid;
-    gap: 1.4rem;
+    gap: 0.95rem;
 }
 
 .update-history-day {
-    border: 1px solid var(--sl-color-gray-5);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 78%, transparent);
     border-radius: 8px;
-    background: color-mix(in srgb, var(--sl-color-bg-nav) 88%, transparent);
-    padding: 1rem;
+    background:
+        radial-gradient(
+            circle at 12% 0%,
+            color-mix(in srgb, #8bb7b8 16%, transparent),
+            transparent 34%
+        ),
+        color-mix(in srgb, var(--sl-color-bg-nav) 90%, transparent);
+    box-shadow: 0 16px 42px color-mix(in srgb, #000000 12%, transparent);
 }
 
-.update-history-day h2 {
-    margin: 0 0 0.75rem;
+.update-history-day summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
     color: var(--sl-color-text);
-    font-size: 1.1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 720;
     line-height: 1.4;
+    list-style: none;
+}
+
+.update-history-day summary::-webkit-details-marker {
+    display: none;
+}
+
+.update-history-day summary::after {
+    color: var(--sl-color-gray-3);
+    content: "+";
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+}
+
+.update-history-day[open] summary::after {
+    transform: rotate(45deg);
+}
+
+.update-history-day summary small {
+    margin-left: auto;
+    color: var(--sl-color-gray-3);
+    font-size: 0.78rem;
+    font-weight: 560;
 }
 
 .update-history-day ol {
     display: grid;
     gap: 0.55rem;
     margin: 0;
-    padding: 0;
+    padding: 0 1rem 1rem;
     list-style: none;
 }
 
@@ -911,78 +1100,6 @@ main:has(.baiyun-meta) .sl-markdown-content h2 {
     .baiyun-photo-pair {
         grid-template-columns: 1fr;
     }
-}
-
-.entry-card {
-    display: flex;
-    align-items: stretch;
-
-    position: relative;
-
-    padding: 1.2rem;
-    gap: 1rem;
-
-    border-radius: 16px;
-
-    background: linear-gradient(
-        135deg,
-        rgba(120, 140, 255, 0.08),
-        rgba(80, 200, 255, 0.05)
-    );
-
-    border: 1px solid var(--sl-color-gray-5);
-
-    text-decoration: none;
-
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        border-color .25s ease;
-}
-
-.entry-card:hover {
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 12px 40px rgba(0,0,0,.12),
-        0 0 0 1px rgba(120,140,255,.15);
-}
-
-.icon {
-    width: 3.2rem;
-    height: 3.2rem;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 1.8rem;
-
-    border-radius: 14px;
-
-    background: linear-gradient(
-        135deg,
-        rgba(120,140,255,.25),
-        rgba(80,200,255,.18)
-    );
-
-    flex-shrink: 0;
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.title {
-    font-size: 1.05rem;
-    font-weight: 600;
-}
-
-.desc {
-    font-size: 0.9rem;
-    color: var(--sl-color-gray-2);
 }
 
 [hidden] {

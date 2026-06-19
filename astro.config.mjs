@@ -29,7 +29,7 @@ export default defineConfig({
     integrations: [
         starlight({
             title: 'My Docs',
-            customCss: ['./src/styles/custom.css'],
+            customCss: ['./src/styles/custom.css', './src/styles/home-entry.css'],
             sidebar: [
                 {
                     label: 'My Notes',
