@@ -913,6 +913,73 @@ main:has(.baiyun-meta) .sl-markdown-content h2 {
     }
 }
 
+.entry-card {
+    position: relative;
+    padding-left: 4.8rem;
+
+    border-radius: 14px;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease,
+        background-color .25s ease;
+}
+
+/* 左侧“光感 icon 容器” */
+.entry-card::before {
+    content: "";
+    position: absolute;
+
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 2.6rem;
+    height: 2.6rem;
+
+    border-radius: 12px;
+
+    background: var(--icon-bg);
+    box-shadow: var(--icon-shadow);
+}
+
+/* hover 浮起（关键高级感） */
+.entry-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+
+.entry-notes {
+    --icon-bg: radial-gradient(circle at 30% 30%, #6ea8ff, #4f46e5);
+    --icon-shadow: 0 8px 20px rgba(79,70,229,.25);
+}
+
+.entry-notes::before {
+    content: "📚";
+}
+
+.entry-updates {
+    --icon-bg: radial-gradient(circle at 30% 30%, #34d399, #0ea5e9);
+    --icon-shadow: 0 8px 20px rgba(14,165,233,.25);
+}
+
+.entry-updates::before {
+    content: "🕓";
+}
+
+.entry-card:hover::before {
+    transform: translateY(-50%) scale(1.06);
+}
+
+.entry-card h3 {
+    font-weight: 600;
+}
+
+.entry-card p {
+    color: var(--sl-color-gray-2);
+}
+
 [hidden] {
     display: none !important;
 }
