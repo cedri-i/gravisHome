@@ -3,203 +3,269 @@ import '../styles/waterpond.css';
 ---
 
 <div id="water-pond" aria-hidden="true">
-  <button id="fish-food-bag" type="button" aria-label="鱼食"></button>
+  <button id="fish-food-bag" type="button" aria-label="fish food"></button>
+  <button id="fish-net-tool" type="button" aria-label="fish net" tabindex="-1"></button>
 
   <span class="pond-leaf leaf-1"></span>
   <span class="pond-leaf leaf-2"></span>
   <span class="pond-leaf leaf-3"></span>
 
-    <span class="pond-fish fish-1 koi-orange">
+  <span class="pond-turtle turtle-1">
+    <span class="turtle-head"></span>
+    <span class="turtle-leg leg-1"></span>
+    <span class="turtle-leg leg-2"></span>
+    <span class="turtle-leg leg-3"></span>
+    <span class="turtle-leg leg-4"></span>
+  </span>
+
+  <span class="pond-fish fish-1 koi-orange">
     <span class="fish-tail"></span>
     <span class="fish-fin top"></span>
     <span class="fish-fin side"></span>
     <span class="fish-eye"></span>
     <span class="fish-mark mark-1"></span>
     <span class="fish-mark mark-2"></span>
-    </span>
+  </span>
 
-    <span class="pond-fish fish-2 koi-red">
+  <span class="pond-fish fish-2 koi-red">
     <span class="fish-tail"></span>
     <span class="fish-fin top"></span>
     <span class="fish-fin side"></span>
     <span class="fish-eye"></span>
     <span class="fish-mark mark-1"></span>
     <span class="fish-mark mark-2"></span>
-    </span>
+  </span>
 
-    <span class="pond-fish mini-fish mini-1 koi-white"></span>
-    <span class="pond-fish mini-fish mini-2 koi-gold"></span>
-    <span class="pond-fish mini-fish mini-3 koi-blue"></span>
-    <span class="pond-fish mini-fish mini-4 koi-white"></span>
-    <span class="pond-fish mini-fish mini-5 koi-gold"></span>
+  <span class="pond-fish mini-fish mini-1 koi-white"></span>
+  <span class="pond-fish mini-fish mini-2 koi-gold"></span>
+  <span class="pond-fish mini-fish mini-3 koi-blue"></span>
+  <span class="pond-fish mini-fish mini-4 koi-white"></span>
+  <span class="pond-fish mini-fish mini-5 koi-gold"></span>
 </div>
 
 <script is:inline>
-  const pond = document.getElementById('water-pond');
-  const foodBag = document.getElementById('fish-food-bag');
+  (() => {
+    const pond = document.getElementById('water-pond');
+    const foodBag = document.getElementById('fish-food-bag');
 
-  let feedingMode = false;
-  let foodTarget = null;
-  const fishes = [];
-
-  function createRipple(x, y) {
     if (!pond) return;
 
-    const ripple = document.createElement('span');
-    ripple.className = 'pond-ripple';
-    ripple.style.left = `${x}px`;
-    ripple.style.top = `${y}px`;
-    pond.appendChild(ripple);
+    let feedingMode = false;
+    let foodTarget = null;
+    const swimmers = [];
 
-    setTimeout(() => ripple.remove(), 1500);
-  }
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+    const angleDiff = (target, current) => ((target - current + 540) % 360) - 180;
 
-  foodBag?.addEventListener('click', (event) => {
-    event.stopPropagation();
+    function createRipple(x, y, strength = 1) {
+      const rings = strength > 1 ? 3 : 2;
 
-    feedingMode = !feedingMode;
-    foodBag.classList.toggle('is-active', feedingMode);
-    document.body.classList.toggle('is-feeding-fish', feedingMode);
-  });
+      for (let i = 0; i < rings; i++) {
+        const ripple = document.createElement('span');
+        ripple.className = 'pond-ripple';
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        ripple.style.setProperty('--ripple-delay', `${i * 110}ms`);
+        ripple.style.setProperty('--ripple-size', `${(strength > 1 ? 150 : 112) + i * 34}px`);
+        ripple.style.setProperty('--ripple-opacity', `${0.42 - i * 0.08}`);
+        pond.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 2200 + i * 120);
+      }
+    }
 
-function initFish() {
-  const startPoints = [
-    { x: 0.18, y: 0.58, vx: 0.35, vy: 0.08, size: 1.08 },
-    { x: 0.72, y: 0.36, vx: -0.28, vy: -0.05, size: 0.92 },
+    function setFeedingMode(next) {
+      feedingMode = next;
+      foodBag?.classList.toggle('is-active', feedingMode);
+      document.body.classList.toggle('is-feeding-fish', feedingMode);
+    }
 
-    { x: 0.12, y: 0.28, vx: 0.24, vy: 0.04, size: 0.48 },
-    { x: 0.34, y: 0.74, vx: 0.2, vy: -0.03, size: 0.42 },
-    { x: 0.58, y: 0.22, vx: -0.22, vy: 0.02, size: 0.46 },
-    { x: 0.82, y: 0.68, vx: -0.25, vy: -0.05, size: 0.4 },
-    { x: 0.48, y: 0.48, vx: 0.18, vy: 0.03, size: 0.44 },
-  ];
-
-  document.querySelectorAll('.pond-fish').forEach((el, index) => {
-    const p = startPoints[index];
-
-    fishes.push({
-      el,
-      x: window.innerWidth * p.x,
-      y: window.innerHeight * p.y,
-      vx: p.vx,
-      vy: p.vy,
-      size: p.size,
-      wander: Math.random() * Math.PI * 2,
+    foodBag?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      setFeedingMode(!feedingMode);
     });
-  });
-}
 
-  function animateFish() {
-    for (const fish of fishes) {
-      fish.wander += 0.01;
+    function initSwimmers() {
+      const startPoints = [
+        { selector: '.fish-1', x: 0.18, y: 0.58, vx: 0.35, vy: 0.08, size: 1.08, kind: 'big' },
+        { selector: '.fish-2', x: 0.72, y: 0.36, vx: -0.28, vy: -0.05, size: 0.92, kind: 'big' },
+        { selector: '.mini-1', x: 0.12, y: 0.28, vx: 0.24, vy: 0.04, size: 0.48, kind: 'mini' },
+        { selector: '.mini-2', x: 0.34, y: 0.74, vx: 0.2, vy: -0.03, size: 0.42, kind: 'mini' },
+        { selector: '.mini-3', x: 0.58, y: 0.22, vx: -0.22, vy: 0.02, size: 0.46, kind: 'mini' },
+        { selector: '.mini-4', x: 0.82, y: 0.68, vx: -0.25, vy: -0.05, size: 0.4, kind: 'mini' },
+        { selector: '.mini-5', x: 0.48, y: 0.48, vx: 0.18, vy: 0.03, size: 0.44, kind: 'mini' },
+        { selector: '.turtle-1', x: 0.68, y: 0.66, vx: -0.08, vy: 0.025, size: 1, kind: 'turtle' },
+      ];
 
-      let targetVx = Math.cos(fish.wander) * 0.45;
-      let targetVy = Math.sin(fish.wander) * 0.18;
+      for (const p of startPoints) {
+        const el = document.querySelector(p.selector);
+        if (!el) continue;
 
-      fish.vx += (targetVx - fish.vx) * 0.015;
-      fish.vy += (targetVy - fish.vy) * 0.015;
+        swimmers.push({
+          el,
+          kind: p.kind,
+          x: window.innerWidth * p.x,
+          y: window.innerHeight * p.y,
+          vx: p.vx,
+          vy: p.vy,
+          size: p.size,
+          angle: Math.atan2(p.vy, p.vx) * 180 / Math.PI,
+          wander: Math.random() * Math.PI * 2,
+          wanderSpeed: p.kind === 'turtle' ? 0.004 : 0.007 + Math.random() * 0.006,
+        });
+      }
+    }
 
-      if (foodTarget) {
-        const dx = foodTarget.x - fish.x;
-        const dy = foodTarget.y - fish.y;
+    function clearFoodTarget() {
+      foodTarget = null;
+    }
+
+    function animateSwimmers(now = performance.now()) {
+      if (foodTarget && now > foodTarget.expiresAt) clearFoodTarget();
+
+      let dinersNearFood = 0;
+
+      for (const fish of swimmers) {
+        fish.wander += fish.wanderSpeed;
+
+        const isTurtle = fish.kind === 'turtle';
+        const isMini = fish.kind === 'mini';
+        let targetVx = Math.cos(fish.wander) * (isTurtle ? 0.16 : 0.48);
+        let targetVy = Math.sin(fish.wander * 0.82) * (isTurtle ? 0.08 : 0.2);
+
+        if (foodTarget) {
+          const dx = foodTarget.x - fish.x;
+          const dy = foodTarget.y - fish.y;
+          const d = Math.hypot(dx, dy);
+          const pull = isTurtle ? 0.42 : isMini ? 0.92 : 1.08;
+
+          if (d > 20) {
+            targetVx += (dx / d) * pull;
+            targetVy += (dy / d) * pull * 0.78;
+          } else {
+            dinersNearFood += 1;
+            targetVx *= 0.35;
+            targetVy *= 0.35;
+          }
+        }
+
+        fish.vx += (targetVx - fish.vx) * (isTurtle ? 0.012 : 0.022);
+        fish.vy += (targetVy - fish.vy) * (isTurtle ? 0.012 : 0.022);
+
+        for (const other of swimmers) {
+          if (other === fish || other.kind === 'turtle') continue;
+
+          const dx = fish.x - other.x;
+          const dy = fish.y - other.y;
+          const d = Math.hypot(dx, dy);
+          const comfort = isMini ? 58 : 82;
+
+          if (d > 0.1 && d < comfort) {
+            const push = (comfort - d) / comfort;
+            fish.vx += (dx / d) * push * (isMini ? 0.018 : 0.028);
+            fish.vy += (dy / d) * push * (isMini ? 0.015 : 0.024);
+          }
+        }
+
+        const speed = Math.hypot(fish.vx, fish.vy);
+        const maxSpeed = isTurtle ? 0.72 : foodTarget ? 2.05 : 2.65;
+
+        if (speed > maxSpeed) {
+          fish.vx = (fish.vx / speed) * maxSpeed;
+          fish.vy = (fish.vy / speed) * maxSpeed;
+        }
+
+        fish.x += fish.vx;
+        fish.y += fish.vy;
+
+        if (fish.x < -140) fish.x = window.innerWidth + 140;
+        if (fish.x > window.innerWidth + 140) fish.x = -140;
+        if (fish.y < 86) {
+          fish.y = 86;
+          fish.vy = Math.abs(fish.vy) * 0.72;
+        }
+        if (fish.y > window.innerHeight - 82) {
+          fish.y = window.innerHeight - 82;
+          fish.vy = -Math.abs(fish.vy) * 0.72;
+        }
+
+        if (speed > 0.035) {
+          const targetAngle = Math.atan2(fish.vy, fish.vx) * 180 / Math.PI;
+          const turnRate = isTurtle ? 0.035 : isMini ? 0.055 : 0.075;
+          fish.angle += angleDiff(targetAngle, fish.angle) * turnRate;
+        }
+
+        fish.el.style.transform = `translate3d(${fish.x}px, ${fish.y}px, 0) rotate(${fish.angle}deg) scale(${fish.size})`;
+      }
+
+      if (foodTarget && dinersNearFood >= Math.max(3, Math.ceil(swimmers.length * 0.45)) && now > foodTarget.createdAt + 1900) {
+        clearFoodTarget();
+      }
+
+      requestAnimationFrame(animateSwimmers);
+    }
+
+    let lastRipple = 0;
+
+    window.addEventListener('pointermove', (event) => {
+      if (document.documentElement.dataset.theme !== 'light') return;
+
+      const now = Date.now();
+
+      if (now - lastRipple > 145) {
+        lastRipple = now;
+        createRipple(event.clientX, event.clientY, 0.85);
+      }
+
+      if (feedingMode) return;
+
+      for (const fish of swimmers) {
+        if (fish.kind === 'turtle') continue;
+
+        const dx = fish.x - event.clientX;
+        const dy = fish.y - event.clientY;
         const d = Math.hypot(dx, dy);
 
-        if (d > 10) {
-          fish.vx += (dx / d) * 0.055;
-          fish.vy += (dy / d) * 0.045;
-        } else {
-          fish.vx *= 0.65;
-          fish.vy *= 0.65;
+        if (d < 180 && d > 0.1) {
+          const force = (180 - d) / 180;
+          fish.vx += (dx / d) * force * 0.55;
+          fish.vy += (dy / d) * force * 0.42;
         }
       }
+    });
 
-      for (const other of fishes) {
-  if (other === fish) continue;
+    window.addEventListener('click', (event) => {
+      if (!feedingMode) return;
+      if (event.target.closest?.('#fish-food-bag')) return;
 
-  const dx = fish.x - other.x;
-  const dy = fish.y - other.y;
-  const d = Math.hypot(dx, dy);
+      const now = performance.now();
+      foodTarget = {
+        x: event.clientX,
+        y: event.clientY,
+        createdAt: now,
+        expiresAt: now + 4700,
+      };
 
-  if (d > 0.1 && d < 86) {
-    const push = (86 - d) / 86;
-    fish.vx += (dx / d) * push * 0.035;
-    fish.vy += (dy / d) * push * 0.028;
-  }
-}
-
-      const speed = Math.hypot(fish.vx, fish.vy);
-      const maxSpeed = feedingMode ? 2.15 : 2.8;
-
-      if (speed > maxSpeed) {
-        fish.vx = (fish.vx / speed) * maxSpeed;
-        fish.vy = (fish.vy / speed) * maxSpeed;
+      for (let i = 0; i < 14; i++) {
+        const food = document.createElement('span');
+        food.className = 'fish-food-grain';
+        food.style.left = `${event.clientX + (Math.random() - 0.5) * 42}px`;
+        food.style.top = `${event.clientY + (Math.random() - 0.5) * 28}px`;
+        food.style.setProperty('--food-drift', `${(Math.random() - 0.5) * 32}px`);
+        pond.appendChild(food);
+        setTimeout(() => food.remove(), 4300);
       }
 
-      fish.x += fish.vx;
-      fish.y += fish.vy;
+      createRipple(event.clientX, event.clientY, 1.5);
+    });
 
-      if (fish.x < -120) fish.x = window.innerWidth + 120;
-      if (fish.x > window.innerWidth + 120) fish.x = -120;
-      if (fish.y < 80 || fish.y > window.innerHeight - 80) fish.vy *= -0.75;
-
-      const angle = Math.atan2(fish.vy, fish.vx) * 180 / Math.PI;
-
-   fish.el.style.transform =
-  `translate3d(${fish.x}px, ${fish.y}px, 0) rotate(${angle}deg) scale(${fish.size})`;
-  }
-
-    requestAnimationFrame(animateFish);
-  }
-
-  let lastRipple = 0;
-
-  window.addEventListener('pointermove', (event) => {
-    if (document.documentElement.dataset.theme !== 'light') return;
-
-    const now = Date.now();
-
-    if (now - lastRipple > 110) {
-      lastRipple = now;
-      createRipple(event.clientX, event.clientY);
-    }
-
-    if (feedingMode) return;
-
-    for (const fish of fishes) {
-      const dx = fish.x - event.clientX;
-      const dy = fish.y - event.clientY;
-      const d = Math.hypot(dx, dy);
-
-      if (d < 180 && d > 0.1) {
-        const force = (180 - d) / 180;
-        fish.vx += (dx / d) * force * 0.9;
-        fish.vy += (dy / d) * force * 0.7;
+    window.addEventListener('resize', () => {
+      for (const fish of swimmers) {
+        fish.x = clamp(fish.x, -120, window.innerWidth + 120);
+        fish.y = clamp(fish.y, 86, window.innerHeight - 82);
       }
-    }
-  });
+    });
 
-  window.addEventListener('click', (event) => {
-    if (!feedingMode) return;
-    if (event.target.closest?.('#fish-food-bag')) return;
-
-    foodTarget = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-
-    for (let i = 0; i < 12; i++) {
-      const food = document.createElement('span');
-      food.className = 'fish-food-grain';
-      food.style.left = `${event.clientX + (Math.random() - 0.5) * 36}px`;
-      food.style.top = `${event.clientY + (Math.random() - 0.5) * 24}px`;
-
-      pond?.appendChild(food);
-      setTimeout(() => food.remove(), 4200);
-    }
-
-    createRipple(event.clientX, event.clientY);
-  });
-
-  initFish();
-  animateFish();
+    initSwimmers();
+    animateSwimmers();
+  })();
 </script>
