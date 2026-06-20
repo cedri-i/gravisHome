@@ -307,3 +307,36 @@ body:has(.home-starsky) .page {
 :root[data-theme="light"] #sky-stars {
     display: none;
 }
+
+#sky-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.sky-star {
+    position: fixed;
+    border-radius: 999px;
+    background: red;
+    box-shadow: 0 0 20px red;
+    animation: testStar 1s ease-in-out infinite alternate;
+}
+
+@keyframes testStar {
+    from {
+        opacity: 0.2;
+        transform: scale(0.7);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.8);
+    }
+}
+
+body:has(.home-starsky) .page {
+    position: relative;
+    z-index: 1;
+}

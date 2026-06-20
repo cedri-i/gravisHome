@@ -1,40 +1,27 @@
 <div id="sky-stars" aria-hidden="true"></div>
 
 <script is:inline>
+  console.log('SkyStars loaded');
+
   const root = document.getElementById('sky-stars');
-  const colors = ['white', 'blue', 'yellow'];
 
   function createStar() {
-    if (!root || document.documentElement.dataset.theme === 'light') return;
+    if (!root) return;
 
     const star = document.createElement('span');
-    const type = colors[Math.floor(Math.random() * colors.length)];
-    const size = Math.random() < 0.08 ? 3 : Math.random() * 1.8 + 1;
+    star.className = 'sky-star';
 
-    star.className = `sky-star sky-star-${type}`;
     star.style.left = `${Math.random() * 100}vw`;
     star.style.top = `${Math.random() * 100}vh`;
-    star.style.width = `${size}px`;
-    star.style.height = `${size}px`;
-    star.style.setProperty('--twinkle-speed', `${2 + Math.random() * 6}s`);
-    star.style.setProperty('--life', `${8 + Math.random() * 22}s`);
-
-    if (Math.random() < 0.025) {
-      star.classList.add('is-supernova');
-    }
+    star.style.width = `${2 + Math.random() * 4}px`;
+    star.style.height = star.style.width;
 
     root.appendChild(star);
 
-    setTimeout(() => star.remove(), parseFloat(star.style.getPropertyValue('--life')) * 1000);
+    setTimeout(() => star.remove(), 12000);
   }
 
-  for (let i = 0; i < 90; i++) createStar();
+  for (let i = 0; i < 160; i++) createStar();
 
-  setInterval(() => {
-    if (root.children.length < 150) createStar();
-
-    if (Math.random() < 0.35 && root.children.length > 70) {
-      root.children[Math.floor(Math.random() * root.children.length)]?.remove();
-    }
-  }, 700);
+  setInterval(createStar, 300);
 </script>
