@@ -448,24 +448,27 @@ body.is-feeding-fish {
     transform-origin: 50% 50%;
     background:
         radial-gradient(circle at 50% 42%, rgba(255, 255, 255, .22) 0 12%, transparent 13%),
-        repeating-radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, .18) 0 2px, transparent 3px 12px),
-        linear-gradient(135deg, #86a65b, #3f6f4b 56%, #214d35);
+        repeating-radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, .2) 0 2px, transparent 3px 10px),
+        linear-gradient(45deg, transparent 45%, rgba(21, 76, 50, .22) 46% 48%, transparent 49%),
+        linear-gradient(-45deg, transparent 45%, rgba(21, 76, 50, .18) 46% 48%, transparent 49%),
+        radial-gradient(ellipse at 38% 30%, rgba(236, 252, 203, .36), transparent 28%),
+        linear-gradient(135deg, #9dbb68, #4f8750 46%, #214d35 100%);
     box-shadow:
         inset 7px 5px 12px rgba(255, 255, 255, .2),
         inset -10px -9px 14px rgba(21, 76, 50, .38),
         0 12px 22px rgba(20, 80, 90, .16);
-    opacity: .78;
-    filter: drop-shadow(0 8px 13px rgba(20, 80, 90, .14));
+    opacity: .84;
+    filter: drop-shadow(0 9px 14px rgba(20, 80, 90, .16));
     will-change: transform;
 }
 
 .pond-turtle::before {
     content: "";
     position: absolute;
-    inset: 8px 13px;
+    inset: 7px 12px;
     border-radius: 50%;
-    border: 1px solid rgba(236, 252, 203, .35);
-    box-shadow: inset 0 0 0 7px rgba(20, 83, 45, .12);
+    border: 1px solid rgba(236, 252, 203, .42);
+    box-shadow: inset 0 0 0 7px rgba(20, 83, 45, .12), inset 0 0 18px rgba(236, 252, 203, .14);
 }
 
 .turtle-head {
@@ -494,25 +497,30 @@ body.is-feeding-fish {
     position: absolute;
     width: 14px;
     height: 9px;
-    border-radius: 70% 30%;
+    border-radius: 75% 35% 70% 35%;
+    transform-origin: center center;
     background: #416f3b;
     opacity: .82;
-    animation: turtlePaddle 2.8s ease-in-out infinite alternate;
+    animation: turtlePaddle 1.55s ease-in-out infinite alternate;
 }
 
-.leg-1 { left: 8px; top: 2px; transform: rotate(-26deg); }
-.leg-2 { left: 8px; bottom: 2px; transform: rotate(26deg); animation-delay: .5s; }
-.leg-3 { right: 10px; top: 2px; transform: rotate(24deg); animation-delay: .25s; }
-.leg-4 { right: 10px; bottom: 2px; transform: rotate(-24deg); animation-delay: .75s; }
+.leg-1 { left: 6px; top: 1px; transform: rotate(-28deg); transform-origin: 85% 70%; }
+.leg-2 { left: 6px; bottom: 1px; transform: rotate(28deg); transform-origin: 85% 30%; animation-delay: .45s; }
+.leg-3 { right: 9px; top: 1px; transform: rotate(24deg); transform-origin: 15% 70%; animation-delay: .22s; }
+.leg-4 { right: 9px; bottom: 1px; transform: rotate(-24deg); transform-origin: 15% 30%; animation-delay: .67s; }
 
 @keyframes turtlePaddle {
-    from { translate: 0 0; }
-    to { translate: -2px 1px; }
+    from { translate: 0 0; rotate: -7deg; }
+    55% { translate: -3px 1px; rotate: 8deg; }
+    to { translate: -1px 2px; rotate: -3deg; }
 }
 
 .fish-food-grain {
     z-index: 12;
-    background: radial-gradient(circle, #fef3c7 0 28%, #b45309 40%, #78350f 100%);
+    background: #9a5a1f;
+    box-shadow:
+        inset 0 -1px 2px rgba(74, 35, 12, .28),
+        0 4px 8px rgba(80, 40, 10, .18);
     animation: foodSink 4.3s ease-in forwards;
 }
 
@@ -548,16 +556,17 @@ body.is-feeding-fish {
     content: "";
     left: 50%;
     top: 53%;
-    width: 2.25rem;
+    width: 2.35rem;
     height: 1.18rem;
-    border-radius: 60% 48% 48% 60%;
+    border-radius: 62% 48% 48% 62%;
     transform: translate(-50%, -50%);
     background:
-        radial-gradient(circle at 78% 39%, rgba(28, 25, 23, .88) 0 5%, transparent 6%),
-        radial-gradient(circle at 40% 52%, rgba(255, 255, 255, .55) 0 15%, transparent 16%),
-        linear-gradient(90deg, #fff7ed 0%, #fed7aa 34%, #fb923c 72%, #c2410c 100%);
+        radial-gradient(circle at 80% 40%, #1c1917 0 5%, transparent 5.8%),
+        linear-gradient(90deg, #fed7aa 0%, #fb923c 48%, #c2410c 100%);
     box-shadow:
-        -1.05rem 0 0 -.32rem #f97316,
+        -1.08rem 0 0 -.34rem #f97316,
+        inset 0 3px 5px rgba(255, 247, 237, .38),
+        inset 0 -4px 6px rgba(124, 45, 18, .24),
         0 3px 8px rgba(120, 53, 15, .24);
 }
 
@@ -572,8 +581,6 @@ body.is-feeding-fish {
     box-shadow: 0 1.55rem 0 -.18rem rgba(255, 247, 237, .25);
 }
 
-#fish-food-bag:hover,
-#fish-food-bag:focus-visible,
 #fish-food-bag.is-active {
     transform: translateY(-7px) rotate(-3deg);
     filter: saturate(1.06);
@@ -632,8 +639,7 @@ body.is-feeding-fish {
     transform-origin: left center;
 }
 
-#fish-net-tool:hover,
-#fish-net-tool:focus-visible {
+#fish-net-tool.is-active {
     transform: translateY(-7px) rotate(-11deg);
     filter: drop-shadow(0 10px 18px rgba(20, 80, 90, .2));
 }
@@ -646,8 +652,6 @@ body.is-feeding-fish {
         transform-origin: right bottom;
     }
 
-    #fish-food-bag:hover,
-    #fish-food-bag:focus-visible,
     #fish-food-bag.is-active {
         transform: translateY(-6px) rotate(-3deg) scale(.88);
     }
@@ -659,8 +663,7 @@ body.is-feeding-fish {
         transform-origin: right bottom;
     }
 
-    #fish-net-tool:hover,
-    #fish-net-tool:focus-visible {
+    #fish-net-tool.is-active {
         transform: translateY(-6px) rotate(-11deg) scale(.86);
     }
 }
