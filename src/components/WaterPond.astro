@@ -1,0 +1,38 @@
+<div id="water-pond">
+  <span class="pond-leaf leaf-1"></span>
+  <span class="pond-leaf leaf-2"></span>
+  <span class="pond-leaf leaf-3"></span>
+
+  <span class="pond-fish fish-1"></span>
+  <span class="pond-fish fish-2"></span>
+</div>
+
+<script is:inline>
+const pond = document.getElementById('water-pond');
+
+function createRipple(x, y) {
+  const ripple = document.createElement('span');
+
+  ripple.className = 'pond-ripple';
+  ripple.style.left = `${x}px`;
+  ripple.style.top = `${y}px`;
+
+  pond.appendChild(ripple);
+
+  setTimeout(() => ripple.remove(), 1500);
+}
+
+let timer = 0;
+
+window.addEventListener('pointermove', (e) => {
+  if (document.documentElement.dataset.theme !== 'light') return;
+
+  const now = Date.now();
+
+  if (now - timer < 100) return;
+
+  timer = now;
+
+  createRipple(e.clientX, e.clientY);
+});
+</script>

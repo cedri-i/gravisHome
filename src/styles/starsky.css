@@ -62,17 +62,174 @@ body:has(.home-starsky) .content-panel {
     background: transparent;
 }
 
-/* 浅色模式先用干净蓝天，不画丑风车 */
+/* 浅色模式：一潭水 */
 :root[data-theme="light"] body:has(.home-starsky) {
     background:
-        radial-gradient(ellipse at 20% 18%, rgba(255,255,255,.85) 0 8%, transparent 9%),
-        radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.6) 0 10%, transparent 11%),
-        radial-gradient(ellipse at 78% 22%, rgba(255,255,255,.7) 0 12%, transparent 13%),
-        linear-gradient(180deg, #8fdcff 0%, #c8f1ff 62%, #eafcff 76%, #b8e986 77%, #69bd61 100%);
+        radial-gradient(circle at 18% 16%, rgba(255,255,255,.38), transparent 18%),
+        radial-gradient(circle at 76% 24%, rgba(255,255,255,.22), transparent 16%),
+        radial-gradient(ellipse at 50% 115%, rgba(24, 94, 112, .34), transparent 48%),
+        linear-gradient(
+            180deg,
+            #c9f1f7 0%,
+            #9bd8e4 36%,
+            #78bdcf 68%,
+            #5da8bd 100%
+        );
 }
 
 :root[data-theme="light"] body:has(.home-starsky)::before {
     display: none;
+}
+
+/* 深色星星、流星、动态星星在浅色模式隐藏 */
+:root[data-theme="light"] #sky-stars,
+:root[data-theme="light"] .sky-meteor,
+:root[data-theme="light"] .sky-burst {
+    display: none;
+}
+
+/* 池塘层只在浅色模式显示 */
+#water-pond {
+    display: none;
+}
+
+:root[data-theme="light"] #water-pond {
+    display: block;
+}
+
+#water-pond {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.pond-ripple {
+    position: fixed;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 999px;
+
+    border: 2px solid rgba(255,255,255,.55);
+
+    transform: translate(-50%, -50%);
+
+    animation: pondRipple 1.5s ease-out forwards;
+}
+
+@keyframes pondRipple {
+    from {
+        width: 8px;
+        height: 8px;
+        opacity: .7;
+    }
+
+    to {
+        width: 90px;
+        height: 90px;
+        opacity: 0;
+    }
+}
+
+.pond-leaf {
+    position: fixed;
+
+    width: 42px;
+    height: 24px;
+
+    border-radius: 60% 40% 60% 40%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d97706,
+            #92400e
+        );
+
+    opacity: .65;
+}
+
+.leaf-1 {
+    left: 20%;
+    top: 28%;
+    animation: leafFloat 17s ease-in-out infinite;
+}
+
+.leaf-2 {
+    left: 72%;
+    top: 38%;
+    animation: leafFloat 22s ease-in-out infinite reverse;
+}
+
+.leaf-3 {
+    left: 46%;
+    top: 70%;
+    animation: leafFloat 19s ease-in-out infinite;
+}
+
+@keyframes leafFloat {
+    0%,100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(18px) rotate(12deg);
+    }
+}
+
+.pond-fish {
+    position: fixed;
+
+    width: 70px;
+    height: 26px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff7ed,
+            #fb923c
+        );
+
+    opacity: .72;
+}
+
+.fish-1 {
+    top: 55%;
+    left: -10%;
+
+    animation: fishSwim1 28s linear infinite;
+}
+
+.fish-2 {
+    top: 32%;
+    left: 110%;
+
+    animation: fishSwim2 36s linear infinite;
+}
+
+@keyframes fishSwim1 {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(130vw);
+    }
+}
+
+@keyframes fishSwim2 {
+    from {
+        transform: translateX(0) scaleX(-1);
+    }
+
+    to {
+        transform: translateX(-130vw) scaleX(-1);
+    }
 }
 
 body:has(.home-starsky) .page {
