@@ -136,100 +136,176 @@ body:has(.home-starsky) .content-panel {
 
 .pond-leaf {
     position: fixed;
-
-    width: 42px;
-    height: 24px;
-
-    border-radius: 60% 40% 60% 40%;
-
+    width: 54px;
+    height: 30px;
+    border-radius: 70% 18% 65% 22%;
     background:
-        linear-gradient(
-            135deg,
-            #d97706,
-            #92400e
-        );
-
-    opacity: .65;
+        linear-gradient(90deg, transparent 48%, rgba(120,53,15,.55) 49% 51%, transparent 52%),
+        radial-gradient(circle at 28% 34%, rgba(255,220,130,.35), transparent 22%),
+        linear-gradient(135deg, #b45309 0%, #92400e 46%, #5f2b0a 100%);
+    opacity: .72;
+    box-shadow:
+        inset 8px 4px 10px rgba(255,237,213,.22),
+        inset -10px -8px 12px rgba(60,25,8,.35),
+        0 8px 18px rgba(20,70,85,.16);
 }
 
-.leaf-1 {
-    left: 20%;
-    top: 28%;
-    animation: leafFloat 17s ease-in-out infinite;
+.pond-leaf::before {
+    content: "";
+    position: absolute;
+    left: 9px;
+    right: 7px;
+    top: 50%;
+    height: 1px;
+    background: rgba(255,237,213,.45);
+    transform: rotate(-12deg);
 }
 
-.leaf-2 {
-    left: 72%;
-    top: 38%;
-    animation: leafFloat 22s ease-in-out infinite reverse;
+.pond-leaf::after {
+    content: "";
+    position: absolute;
+    right: -5px;
+    top: 13px;
+    width: 14px;
+    height: 3px;
+    border-radius: 999px;
+    background: #78350f;
+    transform: rotate(-20deg);
 }
 
-.leaf-3 {
-    left: 46%;
-    top: 70%;
-    animation: leafFloat 19s ease-in-out infinite;
-}
+.leaf-1 { left: 18%; top: 28%; animation: leafDrift 24s ease-in-out infinite; }
+.leaf-2 { left: 72%; top: 38%; animation: leafDrift 31s ease-in-out infinite reverse; }
+.leaf-3 { left: 46%; top: 70%; animation: leafDrift 27s ease-in-out infinite; }
 
-@keyframes leafFloat {
-    0%,100% {
-        transform: translateY(0) rotate(0deg);
-    }
-
-    50% {
-        transform: translateY(18px) rotate(12deg);
-    }
+@keyframes leafDrift {
+    0%,100% { transform: translate(0,0) rotate(-8deg); }
+    35% { transform: translate(26px,14px) rotate(7deg); }
+    70% { transform: translate(-18px,24px) rotate(-16deg); }
 }
 
 .pond-fish {
     position: fixed;
-
-    width: 70px;
-    height: 26px;
-
-    border-radius: 50%;
-
+    left: 0;
+    top: 0;
+    width: 92px;
+    height: 34px;
+    border-radius: 55% 48% 48% 55%;
+    transform-origin: 50% 50%;
     background:
-        linear-gradient(
+        radial-gradient(circle at 30% 42%, rgba(255,255,255,.95) 0 18%, transparent 19%),
+        radial-gradient(circle at 54% 58%, rgba(239,68,68,.85) 0 13%, transparent 14%),
+        radial-gradient(circle at 68% 34%, rgba(249,115,22,.72) 0 16%, transparent 17%),
+        linear-gradient(90deg, #fff7ed 0%, #fed7aa 34%, #fb923c 70%, #ea580c 100%);
+    opacity: .84;
+    filter: drop-shadow(0 8px 14px rgba(20,80,90,.2));
+    transition: filter .2s ease;
+}
+
+.pond-fish::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 4px;
+    width: 68px;
+    height: 25px;
+    border-radius: 50%;
+    background:
+        repeating-linear-gradient(
             90deg,
-            #fff7ed,
-            #fb923c
+            rgba(255,255,255,.18) 0 4px,
+            transparent 5px 10px
         );
-
-    opacity: .72;
+    opacity: .34;
 }
 
-.fish-1 {
-    top: 55%;
-    left: -10%;
-
-    animation: fishSwim1 28s linear infinite;
+.fish-tail {
+    position: absolute;
+    left: -18px;
+    top: 5px;
+    width: 28px;
+    height: 25px;
+    background: linear-gradient(135deg, #fb923c, #c2410c);
+    clip-path: polygon(100% 50%, 0 0, 18% 50%, 0 100%);
+    opacity: .9;
+    animation: tailWave .48s ease-in-out infinite alternate;
+    transform-origin: right center;
 }
 
-.fish-2 {
-    top: 32%;
-    left: 110%;
-
-    animation: fishSwim2 36s linear infinite;
+.fish-fin {
+    position: absolute;
+    background: rgba(194,65,12,.68);
 }
 
-@keyframes fishSwim1 {
-    from {
-        transform: translateX(0);
-    }
-
-    to {
-        transform: translateX(130vw);
-    }
+.fish-fin.top {
+    top: -6px;
+    left: 42px;
+    width: 22px;
+    height: 13px;
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
 }
 
-@keyframes fishSwim2 {
-    from {
-        transform: translateX(0) scaleX(-1);
-    }
+.fish-fin.side {
+    left: 46px;
+    top: 19px;
+    width: 22px;
+    height: 12px;
+    border-radius: 80% 20%;
+    transform: rotate(18deg);
+}
 
-    to {
-        transform: translateX(-130vw) scaleX(-1);
-    }
+.fish-eye {
+    position: absolute;
+    right: 13px;
+    top: 10px;
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(20,20,20,.86);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.7);
+}
+
+.fish-mark {
+    position: absolute;
+    border-radius: 999px;
+    background: rgba(185,28,28,.72);
+    mix-blend-mode: multiply;
+}
+
+.mark-1 {
+    left: 28px;
+    top: 7px;
+    width: 18px;
+    height: 10px;
+    transform: rotate(-18deg);
+}
+
+.mark-2 {
+    left: 58px;
+    top: 17px;
+    width: 15px;
+    height: 9px;
+    transform: rotate(22deg);
+}
+
+@keyframes tailWave {
+    from { transform: rotate(-12deg) scaleY(.92); }
+    to { transform: rotate(14deg) scaleY(1.08); }
+}
+
+.pond-ripple {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.55);
+    box-shadow: 0 0 18px rgba(255,255,255,.18);
+    transform: translate(-50%, -50%);
+    animation: pondRipple 1.5s ease-out forwards;
+}
+
+@keyframes pondRipple {
+    from { width: 8px; height: 8px; opacity: .75; }
+    to { width: 110px; height: 110px; opacity: 0; }
 }
 
 body:has(.home-starsky) .page {

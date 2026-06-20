@@ -1,38 +1,102 @@
-<div id="water-pond">
+<div id="water-pond" aria-hidden="true">
   <span class="pond-leaf leaf-1"></span>
   <span class="pond-leaf leaf-2"></span>
   <span class="pond-leaf leaf-3"></span>
 
-  <span class="pond-fish fish-1"></span>
-  <span class="pond-fish fish-2"></span>
+  <span class="pond-fish fish-1">
+    <span class="fish-tail"></span>
+    <span class="fish-fin top"></span>
+    <span class="fish-fin side"></span>
+    <span class="fish-eye"></span>
+    <span class="fish-mark mark-1"></span>
+    <span class="fish-mark mark-2"></span>
+  </span>
+
+  <span class="pond-fish fish-2">
+    <span class="fish-tail"></span>
+    <span class="fish-fin top"></span>
+    <span class="fish-fin side"></span>
+    <span class="fish-eye"></span>
+    <span class="fish-mark mark-1"></span>
+    <span class="fish-mark mark-2"></span>
+  </span>
 </div>
 
 <script is:inline>
-const pond = document.getElementById('water-pond');
+  const pond = document.getElementById('water-pond');
+  const fishes = [];
 
-function createRipple(x, y) {
-  const ripple = document.createElement('span');
+  function createRipple(x, y) {
+    if (!pond) return;
+    const ripple = document.createElement('span');
+    ripple.className = 'pond-ripple';
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    pond.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 1500);
+  }
 
-  ripple.className = 'pond-ripple';
-  ripple.style.left = `${x}px`;
-  ripple.style.top = `${y}px`;
+  function initFish() {
+    document.querySelectorAll('.pond-fish').forEach((el, index) => {
+      fishes.push({
+        el,
+        x: index === 0 ? window.innerWidth * 0.22 : window.innerWidth * 0.72,
+        y: index === 0 ? window.innerHeight * 0.58 : window.innerHeight * 0.36,
+        vx: index === 0 ? 0.35 : -0.28,
+        vy: index === 0 ? 0.08 : -0.05,
+        angle: 0,
+      });
+    });
+  }
 
-  pond.appendChild(ripple);
+  function animateFish() {
+    for (const fish of fishes) {
+      fish.x += fish.vx;
+      fish.y += fish.vy;
 
-  setTimeout(() => ripple.remove(), 1500);
-}
+      fish.vx += (Math.random() - 0.5) * 0.012;
+      fish.vy += (Math.random() - 0.5) * 0.008;
 
-let timer = 0;
+      fish.vx *= 0.992;
+      fish.vy *= 0.992;
 
-window.addEventListener('pointermove', (e) => {
-  if (document.documentElement.dataset.theme !== 'light') return;
+      if (fish.x < -90) fish.x = window.innerWidth + 90;
+      if (fish.x > window.innerWidth + 90) fish.x = -90;
+      if (fish.y < 90 || fish.y > window.innerHeight - 80) fish.vy *= -1;
 
-  const now = Date.now();
+      fish.angle = Math.atan2(fish.vy, fish.vx) * 180 / Math.PI;
 
-  if (now - timer < 100) return;
+      fish.el.style.transform =
+        `translate3d(${fish.x}px, ${fish.y}px, 0) rotate(${fish.angle}deg)`;
+    }
 
-  timer = now;
+    requestAnimationFrame(animateFish);
+  }
 
-  createRipple(e.clientX, e.clientY);
-});
+  let lastRipple = 0;
+
+  window.addEventListener('pointermove', (e) => {
+    if (document.documentElement.dataset.theme !== 'light') return;
+
+    const now = Date.now();
+    if (now - lastRipple > 110) {
+      lastRipple = now;
+      createRipple(e.clientX, e.clientY);
+    }
+
+    for (const fish of fishes) {
+      const dx = fish.x - e.clientX;
+      const dy = fish.y - e.clientY;
+      const d = Math.sqrt(dx * dx + dy * dy);
+
+      if (d < 180) {
+        const force = (180 - d) / 180;
+        fish.vx += (dx / d) * force * 1.8;
+        fish.vy += (dy / d) * force * 1.35;
+      }
+    }
+  });
+
+  initFish();
+  animateFish();
 </script>
