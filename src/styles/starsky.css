@@ -2,13 +2,18 @@
 
 body:has(.home-starsky) {
     background:
-        radial-gradient(ellipse at 14% 42%, rgba(168, 85, 247, .16), transparent 31%),
-        radial-gradient(ellipse at 82% 30%, rgba(45, 212, 191, .11), transparent 29%),
-        radial-gradient(ellipse at 58% 82%, rgba(244, 114, 182, .09), transparent 34%),
-        radial-gradient(circle at 18% 20%, rgba(126, 87, 255, .22), transparent 28%),
-        radial-gradient(circle at 72% 18%, rgba(56, 189, 248, .16), transparent 34%),
-        radial-gradient(circle at 45% 78%, rgba(236, 72, 153, .10), transparent 38%),
-        linear-gradient(180deg, #070716 0%, #0b1028 48%, #050816 100%);
+        radial-gradient(ellipse at 34% 42%, rgba(255,255,255,.09), transparent 18%),
+        radial-gradient(ellipse at 38% 44%, rgba(150,190,255,.12), transparent 32%),
+
+        radial-gradient(ellipse at 14% 42%, rgba(168, 85, 247, .28), transparent 31%),
+        radial-gradient(ellipse at 82% 30%, rgba(45, 212, 191, .22), transparent 29%),
+        radial-gradient(ellipse at 58% 82%, rgba(244, 114, 182, .16), transparent 34%),
+
+        radial-gradient(circle at 18% 20%, rgba(126, 87, 255, .36), transparent 28%),
+        radial-gradient(circle at 72% 18%, rgba(56, 189, 248, .28), transparent 34%),
+        radial-gradient(circle at 45% 78%, rgba(236, 72, 153, .18), transparent 38%),
+
+        linear-gradient(180deg,#050814 0%,#07112e 48%,#040712 100%);
 }
 
 /* 星星层，铺满整个窗口 */
@@ -376,6 +381,134 @@ body:has(.home-starsky) .page {
     12% { opacity: .45; }
     88% { opacity: .45; }
     100% { opacity: 0; }
+}
+
+:root[data-theme="light"] #sky-stars {
+    display: none;
+}
+
+#sky-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.sky-star {
+    position: fixed;
+    border-radius: 999px;
+    opacity: 0;
+    background: var(--star-color);
+    box-shadow: 0 0 6px var(--star-glow);
+    animation:
+        starSoftTwinkle var(--twinkle-speed, 18s) ease-in-out infinite,
+        starLife var(--life, 60s) linear forwards;
+}
+
+.sky-star-white {
+    --star-color: rgba(255,255,255,.95);
+    --star-glow: rgba(255,255,255,.85);
+}
+
+.sky-star-blue {
+    --star-color: rgba(200,225,255,.92);
+    --star-glow: rgba(96,165,250,.72);
+}
+
+.sky-star-yellow {
+    --star-color: rgba(255,238,180,.92);
+    --star-glow: rgba(250,204,21,.62);
+}
+
+.sky-star.is-fixed-star {
+    opacity: .75;
+    box-shadow:
+        0 0 7px var(--star-glow),
+        0 0 16px var(--star-glow);
+}
+
+.sky-star.is-giant-star {
+    width: 2.8px !important;
+    height: 2.8px !important;
+    box-shadow:
+        0 0 8px rgba(255,255,255,.95),
+        0 0 20px rgba(255,255,255,.8),
+        0 0 42px rgba(180,220,255,.5);
+}
+
+.sky-star.is-supernova {
+    width: 3.2px !important;
+    height: 3.2px !important;
+    animation:
+        supernova 2.2s ease-out forwards,
+        starLife var(--life, 60s) linear forwards;
+}
+
+.is-dipper-star {
+    --star-color: rgba(225,238,255,.98);
+    --star-glow: rgba(147,197,253,.8);
+}
+
+.is-triangle-star {
+    --star-color: rgba(255,246,210,.96);
+    --star-glow: rgba(250,204,21,.64);
+}
+
+.is-orion-star {
+    --star-color: rgba(210,230,255,.95);
+    --star-glow: rgba(125,211,252,.62);
+}
+
+@keyframes starSoftTwinkle {
+    0%, 100% {
+        opacity: .16;
+        transform: scale(.72);
+    }
+
+    46% {
+        opacity: .22;
+        transform: scale(.82);
+    }
+
+    52% {
+        opacity: .92;
+        transform: scale(1.45);
+    }
+
+    59% {
+        opacity: .28;
+        transform: scale(.86);
+    }
+}
+
+@keyframes starLife {
+    0% { opacity: 0; }
+    14% { opacity: .46; }
+    88% { opacity: .46; }
+    100% { opacity: 0; }
+}
+
+@keyframes supernova {
+    0% {
+        opacity: .18;
+        transform: scale(.8);
+        box-shadow: 0 0 8px rgba(255,255,255,.5);
+    }
+
+    42% {
+        opacity: 1;
+        transform: scale(5.5);
+        box-shadow:
+            0 0 20px rgba(255,255,255,.95),
+            0 0 52px rgba(147,197,253,.78),
+            0 0 96px rgba(250,204,21,.36);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(9);
+    }
 }
 
 :root[data-theme="light"] #sky-stars {

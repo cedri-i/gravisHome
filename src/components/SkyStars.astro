@@ -4,58 +4,76 @@
   const root = document.getElementById('sky-stars');
   const colors = ['white', 'white', 'white', 'blue', 'yellow'];
 
-  function rand(min, max) {
-    return min + Math.random() * (max - min);
-  }
+  const rand = (min, max) => min + Math.random() * (max - min);
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-  function makeStar(x, y, fixed = false) {
+  function makeStar(x, y, fixed = false, className = '') {
     if (!root) return;
 
     const star = document.createElement('span');
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    const size = fixed ? rand(1.4, 2.2) : rand(0.7, 1.5);
+    const color = pick(colors);
+    const size = fixed ? rand(1.2, 2.1) : rand(0.55, 1.35);
 
-    star.className = `sky-star sky-star-${color}${fixed ? ' is-fixed-star' : ''}`;
+    star.className = `sky-star sky-star-${color}${fixed ? ' is-fixed-star' : ''} ${className}`;
     star.style.left = `${x}vw`;
     star.style.top = `${y}vh`;
     star.style.width = `${size}px`;
     star.style.height = `${size}px`;
-    star.style.setProperty('--twinkle-speed', `${rand(9, 22)}s`);
-    star.style.setProperty('--life', `${rand(28, 70)}s`);
-    star.style.animationDelay = `${rand(0, 12)}s`;
+    star.style.setProperty('--twinkle-speed', `${rand(12, 28)}s`);
+    star.style.setProperty('--life', `${rand(36, 90)}s`);
+    star.style.animationDelay = `${rand(0, 18)}s`;
+
+    if (!fixed && Math.random() < 0.035) {
+      star.classList.add('is-giant-star');
+    }
+
+    if (!fixed && Math.random() < 0.012) {
+      star.classList.add('is-supernova');
+    }
 
     root.appendChild(star);
 
     if (!fixed) {
-      setTimeout(() => star.remove(), rand(30000, 80000));
+      setTimeout(() => star.remove(), rand(42000, 95000));
     }
   }
 
-  function makeDipper() {
-    const points = [
-      [72, 18], [74, 15], [77, 16], [79, 20],
-      [82, 18], [85, 16], [88, 14],
-    ];
-
-    points.forEach(([x, y]) => makeStar(x, y, true));
+  function makeConstellation(points, className) {
+    points.forEach(([x, y]) => makeStar(x, y, true, className));
   }
 
-  for (let i = 0; i < 45; i++) {
+  // 北斗七星：右上角
+  makeConstellation([
+    [72, 18], [74, 15], [77, 16], [79, 20],
+    [82, 18], [85, 16], [88, 14],
+  ], 'is-dipper-star');
+
+  // 夏季大三角：偏中上
+  makeConstellation([
+    [36, 22], [50, 34], [31, 48],
+  ], 'is-triangle-star');
+
+  // 猎户座简化：偏左下
+  makeConstellation([
+    [18, 58], [22, 61], [26, 64],
+    [20, 70], [24, 72],
+  ], 'is-orion-star');
+
+  for (let i = 0; i < 55; i++) {
     makeStar(rand(0, 100), rand(0, 100));
   }
-
-  makeDipper();
 
   setInterval(() => {
     if (!root || document.documentElement.dataset.theme === 'light') return;
 
-    if (root.querySelectorAll('.sky-star:not(.is-fixed-star)').length < 65) {
+    const dynamicStars = root.querySelectorAll('.sky-star:not(.is-fixed-star)');
+
+    if (dynamicStars.length < 75) {
       makeStar(rand(0, 100), rand(0, 100));
     }
 
-    if (Math.random() < 0.12) {
-      const stars = [...root.querySelectorAll('.sky-star:not(.is-fixed-star)')];
-      stars[Math.floor(Math.random() * stars.length)]?.remove();
+    if (Math.random() < 0.10 && dynamicStars.length > 38) {
+      dynamicStars[Math.floor(Math.random() * dynamicStars.length)]?.remove();
     }
-  }, 3500);
+  }, 4200);
 </script>
