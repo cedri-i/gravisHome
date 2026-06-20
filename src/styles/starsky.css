@@ -50,7 +50,8 @@ body:has(.home-starsky)::before {
         640px 540px,
         900px 760px;
 
-    opacity: .58;
+    opacity: .70;
+    filter: brightness(1.15);
     animation: starTwinkle 7s ease-in-out infinite alternate;
 }
 
@@ -155,16 +156,17 @@ body:has(.home-starsky) .page {
 }
 
 .sky-meteor.is-super-meteorite {
-    width: var(--meteor-length, 40rem);
-    height: 15px;
+    width: var(--meteor-length, 46rem);
+    height: 11px;
+
     background:
-        radial-gradient(circle at 100% 50%, #fffaf0 0 10px, #fed7aa 11px 15px, #fb923c 16px 22px, #6b2f12 23px 32px, transparent 34px),
-        radial-gradient(circle at 92% 35%, rgba(43, 20, 10, .72) 0 2px, transparent 3px),
-        radial-gradient(circle at 86% 64%, rgba(255, 237, 213, .54) 0 2px, transparent 3px),
-        radial-gradient(circle at 78% 44%, rgba(84, 35, 14, .6) 0 2.5px, transparent 3.5px),
-        repeating-linear-gradient(90deg, rgba(255, 237, 213, .48) 0 5px, rgba(120, 53, 15, .22) 6px 10px, rgba(251, 146, 60, .16) 11px 16px),
-        linear-gradient(90deg, transparent 0%, rgba(248, 113, 113, .18) 25%, rgba(251, 146, 60, .58) 74%, rgba(255, 247, 237, .98) 100%);
-    box-shadow: 0 0 42px rgba(255, 180, 98, .92), 0 0 90px rgba(255, 109, 64, .38), 0 0 150px rgba(252, 165, 165, .16);
+        radial-gradient(circle at 100% 50%, #fffaf0 0 7px, #fed7aa 8px 12px, #fb923c 13px 18px, transparent 20px),
+        linear-gradient(90deg, transparent 0%, rgba(248,113,113,.14) 28%, rgba(251,146,60,.42) 72%, rgba(255,247,237,.96) 100%);
+
+    box-shadow:
+        0 0 34px rgba(255,180,98,.88),
+        0 0 78px rgba(255,109,64,.36),
+        0 0 130px rgba(252,165,165,.14);
 }
 
 .sky-meteor.is-super-meteorite::before {
@@ -175,15 +177,25 @@ body:has(.home-starsky) .page {
 }
 
 .sky-meteor.is-super-meteorite::after {
-    width: 2.35rem;
-    height: 2.35rem;
+    width: 3.2rem;
+    height: 3.2rem;
+
+    right: -0.35rem;
+
     background:
-        radial-gradient(circle at 35% 32%, rgba(255, 255, 255, .72) 0 10%, transparent 11%),
-        radial-gradient(circle at 63% 60%, rgba(70, 28, 12, .78) 0 13%, transparent 14%),
-        radial-gradient(circle at 45% 68%, rgba(124, 45, 18, .62) 0 8%, transparent 9%),
-        radial-gradient(circle, #fff7ed 0 20%, #fdba74 38%, #ea580c 58%, #431407 100%);
-    box-shadow: 0 0 36px #fed7aa, 0 0 86px #fb923c, inset -7px -8px 12px rgba(67, 20, 7, .5);
+        radial-gradient(circle at 34% 28%, rgba(255,255,255,.62) 0 7%, transparent 8%),
+        radial-gradient(circle at 62% 38%, rgba(120,53,15,.75) 0 9%, transparent 10%),
+        radial-gradient(circle at 45% 62%, rgba(67,20,7,.68) 0 12%, transparent 13%),
+        radial-gradient(circle at 73% 70%, rgba(154,52,18,.58) 0 8%, transparent 9%),
+        radial-gradient(circle at 50% 50%, #fed7aa 0 18%, #fb923c 34%, #9a3412 58%, #431407 100%);
+
+    box-shadow:
+        0 0 28px #fed7aa,
+        0 0 70px rgba(251,146,60,.86),
+        inset -10px -12px 16px rgba(67,20,7,.62),
+        inset 8px 7px 12px rgba(255,237,213,.32);
 }
+
 .sky-burst {
     position: fixed;
     z-index: 2;
@@ -225,166 +237,6 @@ body:has(.home-starsky) .page {
     .sky-burst {
         animation: none;
     }
-}
-
-#sky-stars {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.sky-star {
-    position: fixed;
-    border-radius: 999px;
-    opacity: 0;
-    animation:
-        starRandomTwinkle var(--twinkle-speed) ease-in-out infinite,
-        starLife var(--life) linear forwards;
-}
-
-.sky-star-white {
-    background: rgba(255,255,255,.95);
-    box-shadow: 0 0 8px rgba(255,255,255,.55);
-}
-
-.sky-star-blue {
-    background: rgba(191,219,254,.95);
-    box-shadow: 0 0 10px rgba(96,165,250,.55);
-}
-
-.sky-star-yellow {
-    background: rgba(254,240,138,.95);
-    box-shadow: 0 0 10px rgba(250,204,21,.45);
-}
-
-.sky-star.is-supernova {
-    width: 4px !important;
-    height: 4px !important;
-    animation:
-        supernova 1.4s ease-out forwards,
-        starLife var(--life) linear forwards;
-}
-
-@keyframes starRandomTwinkle {
-    0%, 100% {
-        opacity: .18;
-        transform: scale(.75);
-    }
-    37% {
-        opacity: .95;
-        transform: scale(1.35);
-    }
-    63% {
-        opacity: .32;
-        transform: scale(.9);
-    }
-}
-
-@keyframes starLife {
-    0% { opacity: 0; }
-    12% { opacity: .75; }
-    82% { opacity: .75; }
-    100% { opacity: 0; }
-}
-
-@keyframes supernova {
-    0% {
-        opacity: .25;
-        transform: scale(.8);
-        box-shadow: 0 0 8px rgba(255,255,255,.5);
-    }
-    45% {
-        opacity: 1;
-        transform: scale(4.8);
-        box-shadow:
-            0 0 18px rgba(255,255,255,.95),
-            0 0 44px rgba(147,197,253,.75),
-            0 0 80px rgba(250,204,21,.35);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(9);
-    }
-}
-
-:root[data-theme="light"] #sky-stars {
-    display: none;
-}
-
-#sky-stars {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.sky-star {
-    position: fixed;
-    border-radius: 999px;
-    opacity: 0;
-    background: var(--star-color);
-    box-shadow: 0 0 6px var(--star-glow);
-    animation:
-        starSoftTwinkle var(--twinkle-speed, 14s) ease-in-out infinite,
-        starLife var(--life, 48s) linear forwards;
-}
-
-.sky-star-white {
-    --star-color: rgba(255,255,255,.82);
-    --star-glow: rgba(255,255,255,.45);
-}
-
-.sky-star-blue {
-    --star-color: rgba(175,210,255,.78);
-    --star-glow: rgba(96,165,250,.42);
-}
-
-.sky-star-yellow {
-    --star-color: rgba(255,232,170,.78);
-    --star-glow: rgba(250,204,21,.34);
-}
-
-.sky-star.is-fixed-star {
-    opacity: .75;
-    box-shadow:
-        0 0 7px var(--star-glow),
-        0 0 14px var(--star-glow);
-}
-
-@keyframes starSoftTwinkle {
-    0%, 100% {
-        opacity: .18;
-        transform: scale(.75);
-    }
-
-    48% {
-        opacity: .2;
-        transform: scale(.8);
-    }
-
-    52% {
-        opacity: .88;
-        transform: scale(1.35);
-    }
-
-    58% {
-        opacity: .28;
-        transform: scale(.85);
-    }
-}
-
-@keyframes starLife {
-    0% { opacity: 0; }
-    12% { opacity: .45; }
-    88% { opacity: .45; }
-    100% { opacity: 0; }
-}
-
-:root[data-theme="light"] #sky-stars {
-    display: none;
 }
 
 #sky-stars {

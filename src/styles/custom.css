@@ -754,7 +754,8 @@ button[aria-label*="theme"] {
 
 .guestbook-like-button.is-liked svg {
     fill: currentColor;
-    stroke: currentColor;
+    stroke: color-mix(in srgb, var(--sl-color-bg) 78%, white);
+    stroke-width: 1.7;
 }
 
 .guestbook-like-button span {
@@ -868,36 +869,53 @@ button[aria-label*="theme"] {
 .guestbook-reply-actions {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     gap: 0.6rem;
+    margin-top: 0.25rem;
 }
 
 .guestbook-reply-actions button {
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 8px;
-    background: var(--sl-color-bg-nav);
-    color: var(--sl-color-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 5.5rem;
+    height: 2.4rem;
+
+    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 58%, transparent);
+    border-radius: 9px;
+
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 68%, transparent);
+    color: var(--sl-color-gray-2);
+
     cursor: pointer;
     font: inherit;
+    font-size: 0.9rem;
     font-weight: 650;
-    padding: 0.42rem 0.72rem;
+
+    padding: 0;
+    box-shadow: none;
+
     transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
+        background-color .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        transform .18s ease;
 }
 
 .guestbook-reply-actions button[type='submit'] {
-    border-color: var(--sl-color-accent);
-    background: var(--sl-color-accent);
-    color: var(--sl-color-black);
+    border-color: color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+    background: color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
+    color: var(--sl-color-text-accent);
 }
 
 .guestbook-reply-actions button:hover {
-    border-color: color-mix(in srgb, var(--sl-color-accent) 58%, var(--sl-color-gray-5));
-    box-shadow: 0 6px 16px color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
     transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--sl-color-accent) 42%, var(--sl-color-gray-5));
+}
+
+.guestbook-reply-actions button[type='submit']:hover {
+    background: color-mix(in srgb, var(--sl-color-accent) 26%, transparent);
 }
 
 .guestbook-status {
