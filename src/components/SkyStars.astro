@@ -1,27 +1,61 @@
 <div id="sky-stars" aria-hidden="true"></div>
 
 <script is:inline>
-  console.log('SkyStars loaded');
-
   const root = document.getElementById('sky-stars');
+  const colors = ['white', 'white', 'white', 'blue', 'yellow'];
 
-  function createStar() {
+  function rand(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function makeStar(x, y, fixed = false) {
     if (!root) return;
 
     const star = document.createElement('span');
-    star.className = 'sky-star';
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const size = fixed ? rand(1.4, 2.2) : rand(0.7, 1.5);
 
-    star.style.left = `${Math.random() * 100}vw`;
-    star.style.top = `${Math.random() * 100}vh`;
-    star.style.width = `${2 + Math.random() * 4}px`;
-    star.style.height = star.style.width;
+    star.className = `sky-star sky-star-${color}${fixed ? ' is-fixed-star' : ''}`;
+    star.style.left = `${x}vw`;
+    star.style.top = `${y}vh`;
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    star.style.setProperty('--twinkle-speed', `${rand(9, 22)}s`);
+    star.style.setProperty('--life', `${rand(28, 70)}s`);
+    star.style.animationDelay = `${rand(0, 12)}s`;
 
     root.appendChild(star);
 
-    setTimeout(() => star.remove(), 12000);
+    if (!fixed) {
+      setTimeout(() => star.remove(), rand(30000, 80000));
+    }
   }
 
-  for (let i = 0; i < 160; i++) createStar();
+  function makeDipper() {
+    const points = [
+      [72, 18], [74, 15], [77, 16], [79, 20],
+      [82, 18], [85, 16], [88, 14],
+    ];
 
-  setInterval(createStar, 300);
+    points.forEach(([x, y]) => makeStar(x, y, true));
+  }
+
+  for (let i = 0; i < 45; i++) {
+    makeStar(rand(0, 100), rand(0, 100));
+  }
+
+  makeDipper();
+
+  setInterval(() => {
+    if (!root || document.documentElement.dataset.theme === 'light') return;
+
+    if (root.querySelectorAll('.sky-star:not(.is-fixed-star)').length < 65) {
+      makeStar(rand(0, 100), rand(0, 100));
+    }
+
+    if (Math.random() < 0.12) {
+      const stars = [...root.querySelectorAll('.sky-star:not(.is-fixed-star)')];
+      stars[Math.floor(Math.random() * stars.length)]?.remove();
+    }
+  }, 3500);
 </script>
