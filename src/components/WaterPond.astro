@@ -1,4 +1,10 @@
+---
+import '../styles/waterpond.css';
+---
+
 <div id="water-pond" aria-hidden="true">
+  <button id="fish-food-bag" type="button" aria-label="鱼食"></button>
+
   <span class="pond-leaf leaf-1"></span>
   <span class="pond-leaf leaf-2"></span>
   <span class="pond-leaf leaf-3"></span>
@@ -24,17 +30,31 @@
 
 <script is:inline>
   const pond = document.getElementById('water-pond');
+  const foodBag = document.getElementById('fish-food-bag');
+
+  let feedingMode = false;
+  let foodTarget = null;
   const fishes = [];
 
   function createRipple(x, y) {
     if (!pond) return;
+
     const ripple = document.createElement('span');
     ripple.className = 'pond-ripple';
     ripple.style.left = `${x}px`;
     ripple.style.top = `${y}px`;
     pond.appendChild(ripple);
+
     setTimeout(() => ripple.remove(), 1500);
   }
+
+  foodBag?.addEventListener('click', (event) => {
+    event.stopPropagation();
+
+    feedingMode = !feedingMode;
+    foodBag.classList.toggle('is-active', feedingMode);
+    document.body.classList.toggle('is-feeding-fish', feedingMode);
+  });
 
   function initFish() {
     document.querySelectorAll('.pond-fish').forEach((el, index) => {
@@ -44,30 +64,54 @@
         y: index === 0 ? window.innerHeight * 0.58 : window.innerHeight * 0.36,
         vx: index === 0 ? 0.35 : -0.28,
         vy: index === 0 ? 0.08 : -0.05,
-        angle: 0,
+        wander: Math.random() * Math.PI * 2,
       });
     });
   }
 
   function animateFish() {
     for (const fish of fishes) {
+      fish.wander += 0.01;
+
+      let targetVx = Math.cos(fish.wander) * 0.45;
+      let targetVy = Math.sin(fish.wander) * 0.18;
+
+      fish.vx += (targetVx - fish.vx) * 0.015;
+      fish.vy += (targetVy - fish.vy) * 0.015;
+
+      if (foodTarget) {
+        const dx = foodTarget.x - fish.x;
+        const dy = foodTarget.y - fish.y;
+        const d = Math.hypot(dx, dy);
+
+        if (d > 10) {
+          fish.vx += (dx / d) * 0.055;
+          fish.vy += (dy / d) * 0.045;
+        } else {
+          fish.vx *= 0.65;
+          fish.vy *= 0.65;
+        }
+      }
+
+      const speed = Math.hypot(fish.vx, fish.vy);
+      const maxSpeed = feedingMode ? 2.15 : 2.8;
+
+      if (speed > maxSpeed) {
+        fish.vx = (fish.vx / speed) * maxSpeed;
+        fish.vy = (fish.vy / speed) * maxSpeed;
+      }
+
       fish.x += fish.vx;
       fish.y += fish.vy;
 
-      fish.vx += (Math.random() - 0.5) * 0.012;
-      fish.vy += (Math.random() - 0.5) * 0.008;
+      if (fish.x < -120) fish.x = window.innerWidth + 120;
+      if (fish.x > window.innerWidth + 120) fish.x = -120;
+      if (fish.y < 80 || fish.y > window.innerHeight - 80) fish.vy *= -0.75;
 
-      fish.vx *= 0.992;
-      fish.vy *= 0.992;
-
-      if (fish.x < -90) fish.x = window.innerWidth + 90;
-      if (fish.x > window.innerWidth + 90) fish.x = -90;
-      if (fish.y < 90 || fish.y > window.innerHeight - 80) fish.vy *= -1;
-
-      fish.angle = Math.atan2(fish.vy, fish.vx) * 180 / Math.PI;
+      const angle = Math.atan2(fish.vy, fish.vx) * 180 / Math.PI;
 
       fish.el.style.transform =
-        `translate3d(${fish.x}px, ${fish.y}px, 0) rotate(${fish.angle}deg)`;
+        `translate3d(${fish.x}px, ${fish.y}px, 0) rotate(${angle}deg)`;
     }
 
     requestAnimationFrame(animateFish);
@@ -75,26 +119,51 @@
 
   let lastRipple = 0;
 
-  window.addEventListener('pointermove', (e) => {
+  window.addEventListener('pointermove', (event) => {
     if (document.documentElement.dataset.theme !== 'light') return;
 
     const now = Date.now();
+
     if (now - lastRipple > 110) {
       lastRipple = now;
-      createRipple(e.clientX, e.clientY);
+      createRipple(event.clientX, event.clientY);
     }
+
+    if (feedingMode) return;
 
     for (const fish of fishes) {
-      const dx = fish.x - e.clientX;
-      const dy = fish.y - e.clientY;
-      const d = Math.sqrt(dx * dx + dy * dy);
+      const dx = fish.x - event.clientX;
+      const dy = fish.y - event.clientY;
+      const d = Math.hypot(dx, dy);
 
-      if (d < 180) {
+      if (d < 180 && d > 0.1) {
         const force = (180 - d) / 180;
-        fish.vx += (dx / d) * force * 1.8;
-        fish.vy += (dy / d) * force * 1.35;
+        fish.vx += (dx / d) * force * 0.9;
+        fish.vy += (dy / d) * force * 0.7;
       }
     }
+  });
+
+  window.addEventListener('click', (event) => {
+    if (!feedingMode) return;
+    if (event.target.closest?.('#fish-food-bag')) return;
+
+    foodTarget = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+
+    for (let i = 0; i < 12; i++) {
+      const food = document.createElement('span');
+      food.className = 'fish-food-grain';
+      food.style.left = `${event.clientX + (Math.random() - 0.5) * 36}px`;
+      food.style.top = `${event.clientY + (Math.random() - 0.5) * 24}px`;
+
+      pond?.appendChild(food);
+      setTimeout(() => food.remove(), 4200);
+    }
+
+    createRipple(event.clientX, event.clientY);
   });
 
   initFish();
