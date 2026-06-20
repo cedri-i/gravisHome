@@ -261,3 +261,85 @@ body.is-feeding-fish {
         transform: translateY(54px) scale(.55);
     }
 }
+
+/* 大鱼尺寸略不同 */
+.fish-1 {
+    width: 98px;
+    height: 36px;
+}
+
+.fish-2 {
+    width: 86px;
+    height: 32px;
+}
+
+/* 微型小鱼 */
+.mini-fish {
+    width: 54px;
+    height: 20px;
+    opacity: .68;
+}
+
+.mini-fish::before {
+    display: none;
+}
+
+.mini-fish::after {
+    content: "";
+    position: absolute;
+    left: -11px;
+    top: 4px;
+    width: 17px;
+    height: 13px;
+    background: currentColor;
+    clip-path: polygon(100% 50%, 0 0, 20% 50%, 0 100%);
+    opacity: .82;
+    animation: tailWave .7s ease-in-out infinite alternate;
+    transform-origin: right center;
+}
+
+.mini-fish .fish-tail,
+.mini-fish .fish-fin,
+.mini-fish .fish-eye,
+.mini-fish .fish-mark {
+    display: none;
+}
+
+/* 颜色差异 */
+.koi-orange {
+    background:
+        radial-gradient(circle at 30% 42%, rgba(255,255,255,.95) 0 18%, transparent 19%),
+        radial-gradient(circle at 54% 58%, rgba(239,68,68,.85) 0 13%, transparent 14%),
+        radial-gradient(circle at 68% 34%, rgba(249,115,22,.72) 0 16%, transparent 17%),
+        linear-gradient(90deg, #fff7ed 0%, #fed7aa 34%, #fb923c 70%, #ea580c 100%);
+}
+
+.koi-red {
+    background:
+        radial-gradient(circle at 34% 44%, rgba(255,255,255,.92) 0 17%, transparent 18%),
+        radial-gradient(circle at 56% 35%, rgba(220,38,38,.82) 0 15%, transparent 16%),
+        radial-gradient(circle at 72% 60%, rgba(127,29,29,.48) 0 13%, transparent 14%),
+        linear-gradient(90deg, #fff1f2 0%, #fecaca 32%, #ef4444 68%, #991b1b 100%);
+}
+
+.koi-gold {
+    color: #ca8a04;
+    background: linear-gradient(90deg, #fef3c7, #facc15, #ca8a04);
+}
+
+.koi-blue {
+    color: #0e7490;
+    background: linear-gradient(90deg, #ecfeff, #67e8f9, #0e7490);
+}
+
+/* 彩蛋：白鱼 */
+.koi-white {
+    color: #f8fafc;
+    background:
+        radial-gradient(circle at 70% 40%, rgba(148,163,184,.35) 0 10%, transparent 11%),
+        linear-gradient(90deg, #ffffff, #e0f2fe, #f8fafc);
+    box-shadow:
+        inset 6px 3px 8px rgba(255,255,255,.5),
+        inset -8px -6px 10px rgba(148,163,184,.22),
+        0 8px 14px rgba(20,80,90,.16);
+}

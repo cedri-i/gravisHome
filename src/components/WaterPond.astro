@@ -9,23 +9,29 @@ import '../styles/waterpond.css';
   <span class="pond-leaf leaf-2"></span>
   <span class="pond-leaf leaf-3"></span>
 
-  <span class="pond-fish fish-1">
+    <span class="pond-fish fish-1 koi-orange">
     <span class="fish-tail"></span>
     <span class="fish-fin top"></span>
     <span class="fish-fin side"></span>
     <span class="fish-eye"></span>
     <span class="fish-mark mark-1"></span>
     <span class="fish-mark mark-2"></span>
-  </span>
+    </span>
 
-  <span class="pond-fish fish-2">
+    <span class="pond-fish fish-2 koi-red">
     <span class="fish-tail"></span>
     <span class="fish-fin top"></span>
     <span class="fish-fin side"></span>
     <span class="fish-eye"></span>
     <span class="fish-mark mark-1"></span>
     <span class="fish-mark mark-2"></span>
-  </span>
+    </span>
+
+    <span class="pond-fish mini-fish mini-1 koi-white"></span>
+    <span class="pond-fish mini-fish mini-2 koi-gold"></span>
+    <span class="pond-fish mini-fish mini-3 koi-blue"></span>
+    <span class="pond-fish mini-fish mini-4 koi-white"></span>
+    <span class="pond-fish mini-fish mini-5 koi-gold"></span>
 </div>
 
 <script is:inline>
@@ -56,18 +62,32 @@ import '../styles/waterpond.css';
     document.body.classList.toggle('is-feeding-fish', feedingMode);
   });
 
-  function initFish() {
-    document.querySelectorAll('.pond-fish').forEach((el, index) => {
-      fishes.push({
-        el,
-        x: index === 0 ? window.innerWidth * 0.22 : window.innerWidth * 0.72,
-        y: index === 0 ? window.innerHeight * 0.58 : window.innerHeight * 0.36,
-        vx: index === 0 ? 0.35 : -0.28,
-        vy: index === 0 ? 0.08 : -0.05,
-        wander: Math.random() * Math.PI * 2,
-      });
+function initFish() {
+  const startPoints = [
+    { x: 0.18, y: 0.58, vx: 0.35, vy: 0.08, size: 1.08 },
+    { x: 0.72, y: 0.36, vx: -0.28, vy: -0.05, size: 0.92 },
+
+    { x: 0.12, y: 0.28, vx: 0.24, vy: 0.04, size: 0.48 },
+    { x: 0.34, y: 0.74, vx: 0.2, vy: -0.03, size: 0.42 },
+    { x: 0.58, y: 0.22, vx: -0.22, vy: 0.02, size: 0.46 },
+    { x: 0.82, y: 0.68, vx: -0.25, vy: -0.05, size: 0.4 },
+    { x: 0.48, y: 0.48, vx: 0.18, vy: 0.03, size: 0.44 },
+  ];
+
+  document.querySelectorAll('.pond-fish').forEach((el, index) => {
+    const p = startPoints[index];
+
+    fishes.push({
+      el,
+      x: window.innerWidth * p.x,
+      y: window.innerHeight * p.y,
+      vx: p.vx,
+      vy: p.vy,
+      size: p.size,
+      wander: Math.random() * Math.PI * 2,
     });
-  }
+  });
+}
 
   function animateFish() {
     for (const fish of fishes) {
@@ -93,6 +113,20 @@ import '../styles/waterpond.css';
         }
       }
 
+      for (const other of fishes) {
+  if (other === fish) continue;
+
+  const dx = fish.x - other.x;
+  const dy = fish.y - other.y;
+  const d = Math.hypot(dx, dy);
+
+  if (d > 0.1 && d < 86) {
+    const push = (86 - d) / 86;
+    fish.vx += (dx / d) * push * 0.035;
+    fish.vy += (dy / d) * push * 0.028;
+  }
+}
+
       const speed = Math.hypot(fish.vx, fish.vy);
       const maxSpeed = feedingMode ? 2.15 : 2.8;
 
@@ -110,9 +144,9 @@ import '../styles/waterpond.css';
 
       const angle = Math.atan2(fish.vy, fish.vx) * 180 / Math.PI;
 
-      fish.el.style.transform =
-        `translate3d(${fish.x}px, ${fish.y}px, 0) rotate(${angle}deg)`;
-    }
+   fish.el.style.transform =
+  `translate3d(${fish.x}px, ${fish.y}px, 0) rotate(${angle}deg) scale(${fish.size})`;
+  }
 
     requestAnimationFrame(animateFish);
   }
