@@ -221,3 +221,89 @@ body:has(.home-starsky) .page {
         animation: none;
     }
 }
+
+#sky-stars {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.sky-star {
+    position: fixed;
+    border-radius: 999px;
+    opacity: 0;
+    animation:
+        starRandomTwinkle var(--twinkle-speed) ease-in-out infinite,
+        starLife var(--life) linear forwards;
+}
+
+.sky-star-white {
+    background: rgba(255,255,255,.95);
+    box-shadow: 0 0 8px rgba(255,255,255,.55);
+}
+
+.sky-star-blue {
+    background: rgba(191,219,254,.95);
+    box-shadow: 0 0 10px rgba(96,165,250,.55);
+}
+
+.sky-star-yellow {
+    background: rgba(254,240,138,.95);
+    box-shadow: 0 0 10px rgba(250,204,21,.45);
+}
+
+.sky-star.is-supernova {
+    width: 4px !important;
+    height: 4px !important;
+    animation:
+        supernova 1.4s ease-out forwards,
+        starLife var(--life) linear forwards;
+}
+
+@keyframes starRandomTwinkle {
+    0%, 100% {
+        opacity: .18;
+        transform: scale(.75);
+    }
+    37% {
+        opacity: .95;
+        transform: scale(1.35);
+    }
+    63% {
+        opacity: .32;
+        transform: scale(.9);
+    }
+}
+
+@keyframes starLife {
+    0% { opacity: 0; }
+    12% { opacity: .75; }
+    82% { opacity: .75; }
+    100% { opacity: 0; }
+}
+
+@keyframes supernova {
+    0% {
+        opacity: .25;
+        transform: scale(.8);
+        box-shadow: 0 0 8px rgba(255,255,255,.5);
+    }
+    45% {
+        opacity: 1;
+        transform: scale(4.8);
+        box-shadow:
+            0 0 18px rgba(255,255,255,.95),
+            0 0 44px rgba(147,197,253,.75),
+            0 0 80px rgba(250,204,21,.35);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(9);
+    }
+}
+
+:root[data-theme="light"] #sky-stars {
+    display: none;
+}

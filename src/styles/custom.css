@@ -1466,3 +1466,23 @@ starlight-theme-select svg,
         min-height: 8.5rem;
     }
 }
+
+.baiyun-bookshelf {
+    isolation: isolate;
+}
+
+.baiyun-bookshelf .card-grid {
+    position: relative;
+    z-index: 1;
+}
+
+.baiyun-bookshelf .sl-link-card {
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+.baiyun-bookshelf .sl-link-card::before,
+.baiyun-bookshelf .sl-link-card::after {
+    pointer-events: none;
+}
