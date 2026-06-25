@@ -738,3 +738,194 @@ body.is-feeding-fish {
     74% { opacity: 1; }
     100% { opacity: 0; transform: translate(-50%, -155%) scale(.98); }
 }
+/* Livelier pond ornaments and hand-held net */
+.pond-leaf {
+    width: 64px;
+    height: 34px;
+    border-radius: 74% 18% 68% 24% / 70% 24% 72% 28%;
+    background:
+        radial-gradient(ellipse at 30% 26%, rgba(255, 217, 130, .5), transparent 24%),
+        radial-gradient(ellipse at 64% 68%, rgba(83, 35, 9, .28), transparent 36%),
+        linear-gradient(88deg, transparent 48%, rgba(92, 41, 11, .58) 49% 51%, transparent 52%),
+        repeating-linear-gradient(24deg, transparent 0 8px, rgba(255, 232, 171, .18) 9px 10px),
+        linear-gradient(135deg, #d78320 0%, #a94710 48%, #6b2d0d 100%);
+    opacity: .78;
+    filter: drop-shadow(0 10px 12px rgba(22, 96, 108, .14));
+    transform-origin: 60% 50%;
+}
+
+.pond-leaf::before {
+    left: 10px;
+    right: 10px;
+    top: 49%;
+    height: 1.5px;
+    background: rgba(255, 235, 174, .5);
+    transform: rotate(-10deg);
+    box-shadow: 12px -5px 0 -1px rgba(255, 235, 174, .24), 19px 6px 0 -1px rgba(92, 41, 11, .18);
+}
+
+.pond-leaf::after {
+    right: -8px;
+    top: 15px;
+    width: 17px;
+    height: 4px;
+    background: linear-gradient(90deg, #7c2d12, #4b1d09);
+    transform: rotate(-22deg);
+}
+
+.leaf-1 { left: 16%; top: 29%; animation: leafDrift 21s ease-in-out infinite; }
+.leaf-2 { left: 74%; top: 41%; animation: leafDrift 27s ease-in-out infinite reverse; }
+.leaf-3 { left: 47%; top: 72%; animation: leafDrift 24s ease-in-out infinite; }
+
+@keyframes leafDrift {
+    0%, 100% { transform: translate(0, 0) rotate(-13deg) scale(1); }
+    24% { transform: translate(22px, -7px) rotate(9deg) scale(1.04); }
+    52% { transform: translate(37px, 18px) rotate(23deg) scale(.97); }
+    78% { transform: translate(-16px, 26px) rotate(-21deg) scale(1.02); }
+}
+
+.pond-lotus {
+    position: fixed;
+    z-index: 2;
+    width: 108px;
+    height: 82px;
+    border-radius: 58% 42% 55% 45% / 45% 45% 55% 55%;
+    background:
+        radial-gradient(circle at 54% 48%, rgba(116, 64, 28, .24) 0 4%, transparent 5%),
+        conic-gradient(from 26deg at 54% 50%, rgba(28, 85, 55, .36), transparent 10deg 34deg, rgba(28, 85, 55, .28) 46deg, transparent 68deg 84deg, rgba(28, 85, 55, .34) 96deg, transparent 118deg 138deg, rgba(28, 85, 55, .28) 150deg, transparent 172deg 196deg, rgba(28, 85, 55, .33) 214deg, transparent 236deg 262deg, rgba(28, 85, 55, .26) 282deg, transparent 306deg 330deg, rgba(28, 85, 55, .34) 350deg),
+        radial-gradient(ellipse at 43% 36%, rgba(225, 246, 190, .45), transparent 34%),
+        linear-gradient(140deg, #89b85f, #4f8b51 58%, #2f6640);
+    box-shadow:
+        inset 8px 8px 18px rgba(230, 250, 190, .25),
+        inset -14px -10px 20px rgba(30, 80, 52, .36),
+        0 16px 26px rgba(22, 96, 108, .14);
+    opacity: .58;
+    pointer-events: none;
+    animation: lotusFloat 32s ease-in-out infinite;
+}
+
+.pond-lotus::after {
+    content: "";
+    position: absolute;
+    right: 7px;
+    bottom: 22px;
+    width: 28px;
+    height: 26px;
+    clip-path: polygon(100% 50%, 0 0, 26% 50%, 0 100%);
+    background: rgba(174, 220, 137, .82);
+    transform: rotate(-16deg);
+}
+
+.lotus-1 { left: 8%; top: 63%; transform: rotate(-10deg) scale(.86); }
+.lotus-2 { right: 11%; top: 58%; transform: rotate(18deg) scale(.72); animation-delay: -11s; }
+
+@keyframes lotusFloat {
+    0%, 100% { translate: 0 0; rotate: -3deg; }
+    35% { translate: 20px -12px; rotate: 5deg; }
+    70% { translate: -12px 16px; rotate: -8deg; }
+}
+
+body.is-netting-fish {
+    cursor: none;
+}
+
+#fish-net-tool.is-active {
+    opacity: .38;
+    transform: translateY(2px) rotate(-11deg) scale(.88);
+}
+
+#fish-net-cursor {
+    position: fixed;
+    left: -120px;
+    top: -120px;
+    z-index: 26;
+    width: 5.4rem;
+    height: 5.4rem;
+    pointer-events: none;
+    transform: translate(-42%, -42%) rotate(-15deg);
+    filter: drop-shadow(0 14px 18px rgba(20, 80, 90, .2));
+}
+
+#fish-net-cursor[hidden] {
+    display: none !important;
+}
+
+#fish-net-cursor::before,
+#fish-net-cursor::after {
+    content: "";
+    position: absolute;
+}
+
+#fish-net-cursor::before {
+    left: .12rem;
+    top: .05rem;
+    width: 3.55rem;
+    height: 2.85rem;
+    border: 2px solid rgba(63, 82, 100, .74);
+    border-radius: 50% 54% 48% 56%;
+    background:
+        repeating-linear-gradient(35deg, rgba(14, 116, 144, .32) 0 1px, transparent 1px 8px),
+        repeating-linear-gradient(126deg, rgba(14, 116, 144, .26) 0 1px, transparent 1px 8px),
+        radial-gradient(ellipse at 45% 35%, rgba(255, 255, 255, .62), rgba(186, 230, 253, .28) 46%, rgba(14, 116, 144, .12) 100%);
+    box-shadow: inset 0 0 14px rgba(255, 255, 255, .5);
+}
+
+#fish-net-cursor::after {
+    left: 3.12rem;
+    top: 2.62rem;
+    width: 2.6rem;
+    height: .38rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #8b3f10, #eba43b 48%, #6f2f0c);
+    transform: rotate(48deg);
+    transform-origin: left center;
+}
+
+#fish-food-bag {
+    width: 5.05rem;
+    height: 4.65rem;
+    border: 1px solid rgba(128, 68, 22, .34);
+    border-radius: 30% 30% 18% 18% / 22% 22% 20% 20%;
+    clip-path: none;
+    background:
+        radial-gradient(ellipse at 46% 20%, rgba(255, 249, 223, .66), transparent 21%),
+        radial-gradient(ellipse at 32% 50%, rgba(255, 255, 255, .18), transparent 30%),
+        radial-gradient(ellipse at 70% 68%, rgba(106, 50, 14, .24), transparent 34%),
+        linear-gradient(145deg, #fee08a 0%, #d79328 52%, #93510f 100%);
+    box-shadow:
+        0 16px 30px rgba(92, 56, 20, .22),
+        inset 10px 7px 14px rgba(255, 246, 206, .42),
+        inset -12px -10px 18px rgba(89, 39, 11, .24);
+}
+
+#fish-food-bag::before {
+    top: 54%;
+    width: 2.28rem;
+    height: 1.05rem;
+    border-radius: 62% 46% 46% 62%;
+    background:
+        radial-gradient(circle at 80% 42%, #20130b 0 5%, transparent 6%),
+        linear-gradient(90deg, #ffd59a 0%, #ef8425 52%, #bd4613 100%);
+    box-shadow:
+        -1rem 0 0 -.38rem #d34c1e,
+        .86rem .02rem 0 -.43rem #f0a13b,
+        inset 0 2px 4px rgba(255, 248, 220, .38),
+        inset 0 -4px 6px rgba(92, 42, 12, .24),
+        0 3px 8px rgba(92, 42, 12, .24);
+}
+
+#fish-food-bag::after {
+    left: 11%;
+    right: 11%;
+    top: .22rem;
+    height: 1.2rem;
+    border-radius: 55% 45% 40% 50%;
+    background:
+        radial-gradient(ellipse at 23% 32%, rgba(255, 249, 223, .72), transparent 34%),
+        linear-gradient(90deg, #fff1b9, #e7b057 48%, #b06417);
+    box-shadow:
+        0 .88rem 0 -.42rem #b91c1c,
+        .92rem .83rem 0 -.48rem #c21f1f,
+        -.92rem .83rem 0 -.48rem #b91c1c,
+        0 1.15rem 0 -.53rem rgba(115, 29, 22, .85);
+}

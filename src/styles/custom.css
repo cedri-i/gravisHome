@@ -1753,3 +1753,32 @@ starlight-theme-select svg,
 :root[data-theme="light"] .guestbook-section {
     color: rgba(30, 46, 55, .86);
 }
+/* Refined Baiyun caption notes */
+.baiyun-caption-note {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: .72rem auto 0 !important;
+    padding: .34rem .68rem;
+    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 58%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sl-color-bg) 86%, var(--sl-color-gray-6) 14%);
+    box-shadow: 0 10px 24px color-mix(in srgb, #000000 8%, transparent);
+    color: color-mix(in srgb, var(--sl-color-gray-2) 86%, var(--sl-color-text) 14%) !important;
+    font-family: "Songti SC", SimSun, "Noto Serif SC", serif;
+    font-size: .82rem;
+    line-height: 1.75;
+    text-align: center;
+    text-indent: 0 !important;
+}
+
+.baiyun-photo-pair figure > .baiyun-caption-note {
+    margin-inline: auto !important;
+}
+
+:root[data-theme="light"] .baiyun-caption-note {
+    background: rgba(255, 255, 255, .72);
+    border-color: rgba(120, 130, 145, .2);
+    box-shadow: 0 12px 26px rgba(35, 48, 64, .1);
+    color: #4b5563 !important;
+}

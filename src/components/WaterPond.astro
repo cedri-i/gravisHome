@@ -9,6 +9,9 @@ import '../styles/waterpond.css';
   <span class="pond-leaf leaf-1"></span>
   <span class="pond-leaf leaf-2"></span>
   <span class="pond-leaf leaf-3"></span>
+  <span class="pond-lotus lotus-1"></span>
+  <span class="pond-lotus lotus-2"></span>
+  <span id="fish-net-cursor" aria-hidden="true" hidden></span>
 
   <span class="pond-turtle turtle-1">
     <span class="turtle-head"></span>
@@ -48,6 +51,7 @@ import '../styles/waterpond.css';
     const pond = document.getElementById('water-pond');
     const foodBag = document.getElementById('fish-food-bag');
     const fishNet = document.getElementById('fish-net-tool');
+    const fishNetCursor = document.getElementById('fish-net-cursor');
 
     if (!pond) return;
 
@@ -79,6 +83,7 @@ import '../styles/waterpond.css';
       fishNet?.classList.toggle('is-active', next);
       fishNet?.setAttribute('aria-pressed', String(next));
       document.body.classList.toggle('is-netting-fish', next);
+      fishNetCursor?.toggleAttribute('hidden', !next);
     }
 
     function setFeedingMode(next) {
@@ -272,6 +277,11 @@ import '../styles/waterpond.css';
       if (now - lastRipple > 145) {
         lastRipple = now;
         createRipple(event.clientX, event.clientY, 0.85);
+      }
+
+      if (fishNet?.classList.contains('is-active') && fishNetCursor) {
+        fishNetCursor.style.left = `${event.clientX}px`;
+        fishNetCursor.style.top = `${event.clientY}px`;
       }
 
       if (feedingMode) return;
