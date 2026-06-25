@@ -1943,3 +1943,239 @@ starlight-theme-select svg,
         inline-size: 1.72rem;
     }
 }
+
+
+/* Fix Baiyun spines: keep books upright and title-only */
+.baiyun-spines {
+    align-items: flex-end;
+    gap: .38rem;
+    min-height: 17rem;
+    overflow: visible;
+}
+
+.baiyun-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: clamp(2.65rem, 4.8vw, 3.55rem);
+    height: var(--spine-height, 15.5rem);
+    inline-size: auto;
+    block-size: auto;
+    flex: 0 0 auto;
+    padding: .72rem .44rem .92rem;
+    writing-mode: horizontal-tb;
+}
+
+.baiyun-spine-no,
+.baiyun-spine-title {
+    display: block;
+    margin: 0;
+    letter-spacing: 0;
+}
+
+.baiyun-spine-no {
+    color: color-mix(in srgb, #fff8e8 74%, transparent);
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    font-size: .78rem;
+    line-height: 1;
+    text-orientation: mixed;
+    transform: rotate(90deg);
+    transform-origin: center;
+}
+
+.baiyun-spine-title {
+    margin-top: .86rem;
+    color: #fff8e8;
+    font-family: "Songti SC", SimSun, "Noto Serif SC", serif;
+    font-size: clamp(1.08rem, 1.7vw, 1.34rem);
+    font-weight: 750;
+    line-height: 1.28;
+    text-align: center;
+}
+
+.baiyun-spine-empty {
+    width: clamp(1.55rem, 2.8vw, 2.15rem);
+    inline-size: auto;
+}
+
+@media (max-width: 48rem) {
+    .baiyun-spines {
+        min-height: 14.25rem;
+        gap: .28rem;
+    }
+
+    .baiyun-spine {
+        width: 2.55rem;
+        height: calc(var(--spine-height, 14rem) - 1.9rem);
+        inline-size: auto;
+        block-size: auto;
+        padding: .62rem .34rem .78rem;
+    }
+
+    .baiyun-spine-title {
+        margin-top: .72rem;
+        font-size: 1rem;
+        line-height: 1.25;
+    }
+
+    .baiyun-spine-empty {
+        width: 1.55rem;
+        inline-size: auto;
+    }
+}
+
+
+/* Baiyun fish net scene */
+.baiyun-bookshelf {
+    min-height: 25rem;
+}
+
+.baiyun-catch-scene {
+    position: absolute;
+    z-index: 2;
+    top: 1rem;
+    right: clamp(1rem, 5vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .68rem;
+    pointer-events: auto;
+}
+
+.baiyun-net {
+    position: relative;
+    width: 10.5rem;
+    height: 7.8rem;
+    animation: baiyun-net-lift 4.8s ease-in-out infinite;
+}
+
+.baiyun-net-handle {
+    position: absolute;
+    top: .36rem;
+    right: .4rem;
+    width: 7.5rem;
+    height: .24rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(86, 55, 31, .22), rgba(80, 50, 28, .76));
+    transform: rotate(-33deg);
+    transform-origin: right center;
+}
+
+.baiyun-net-rim,
+.baiyun-net-mesh {
+    position: absolute;
+    left: 1rem;
+    bottom: .48rem;
+    width: 6.7rem;
+    height: 5.2rem;
+    border-radius: 52% 48% 58% 42%;
+    transform: rotate(-9deg);
+}
+
+.baiyun-net-rim {
+    border: .28rem solid rgba(92, 68, 45, .72);
+    box-shadow: inset 0 0 18px rgba(79, 116, 126, .18), 0 10px 20px rgba(80, 55, 34, .16);
+}
+
+.baiyun-net-mesh {
+    overflow: hidden;
+    background:
+        repeating-linear-gradient(38deg, rgba(255, 255, 255, .45) 0 1px, transparent 1px .62rem),
+        repeating-linear-gradient(-38deg, rgba(255, 255, 255, .34) 0 1px, transparent 1px .62rem),
+        radial-gradient(ellipse at 50% 72%, rgba(113, 171, 186, .26), rgba(255, 255, 255, .12) 62%, transparent 66%);
+    opacity: .86;
+}
+
+.baiyun-fish {
+    position: absolute;
+    z-index: 2;
+    width: 1.72rem;
+    height: .72rem;
+    border-radius: 999px 68% 68% 999px;
+    background: linear-gradient(90deg, #fff4c4, #f2a55e 58%, #c86b42);
+    box-shadow: inset .18rem .12rem .2rem rgba(255, 255, 255, .34), 0 .1rem .2rem rgba(48, 33, 22, .16);
+    animation: baiyun-fish-wiggle 1.45s ease-in-out infinite;
+}
+
+.baiyun-fish::before {
+    content: "";
+    position: absolute;
+    right: -.44rem;
+    top: .11rem;
+    border-left: .55rem solid #c86b42;
+    border-top: .25rem solid transparent;
+    border-bottom: .25rem solid transparent;
+}
+
+.baiyun-fish::after {
+    content: "";
+    position: absolute;
+    left: .28rem;
+    top: .22rem;
+    width: .12rem;
+    height: .12rem;
+    border-radius: 50%;
+    background: rgba(50, 33, 22, .78);
+}
+
+.baiyun-fish-one { left: 2.35rem; bottom: 2.45rem; }
+.baiyun-fish-two { left: 4.25rem; bottom: 3.55rem; scale: .84; rotate: -12deg; animation-delay: -.42s; }
+.baiyun-fish-three { left: 3.55rem; bottom: 1.65rem; scale: .72; rotate: 14deg; animation-delay: -.8s; }
+
+.baiyun-choice {
+    display: inline-flex;
+    gap: .46rem;
+    padding: .22rem;
+    border: 1px solid rgba(120, 82, 48, .2);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sl-color-bg) 78%, transparent);
+    box-shadow: 0 10px 22px rgba(100, 70, 42, .12);
+}
+
+.baiyun-choice button {
+    min-width: 3.4rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: color-mix(in srgb, var(--sl-color-text) 78%, #8b5a2b 22%);
+    cursor: pointer;
+    font: inherit;
+    font-size: .82rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: .48rem .72rem;
+    transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+
+.baiyun-choice button:hover,
+.baiyun-choice button:focus-visible {
+    background: rgba(143, 96, 48, .16);
+    color: var(--sl-color-text);
+    outline: none;
+}
+
+.baiyun-choice button:active {
+    transform: translateY(1px) scale(.98);
+}
+
+@keyframes baiyun-net-lift {
+    0%, 100% { transform: translateY(.18rem) rotate(-1deg); }
+    50% { transform: translateY(-.55rem) rotate(2deg); }
+}
+
+@keyframes baiyun-fish-wiggle {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    45% { transform: translateX(.2rem) rotate(5deg); }
+    70% { transform: translateX(-.1rem) rotate(-4deg); }
+}
+
+@media (max-width: 48rem) {
+    .baiyun-bookshelf { min-height: 23rem; }
+    .baiyun-catch-scene {
+        top: .9rem;
+        right: .85rem;
+        transform: scale(.84);
+        transform-origin: top right;
+    }
+}
