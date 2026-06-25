@@ -6,13 +6,16 @@
 <script is:inline>
   const btn = document.getElementById('sky-toggle');
 
-  btn?.addEventListener('click', () => {
-    const root = document.documentElement;
-    const current = root.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
+  if (btn && btn.dataset.bound !== 'true') {
+    btn.dataset.bound = 'true';
+    btn.addEventListener('click', () => {
+      const root = document.documentElement;
+      const current = root.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
 
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('starlight-theme', next);
-    window.StarlightThemeProvider?.updatePickers?.(next);
-  });
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('starlight-theme', next);
+      window.StarlightThemeProvider?.updatePickers?.(next);
+    });
+  }
 </script>

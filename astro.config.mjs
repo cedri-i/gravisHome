@@ -30,6 +30,43 @@ export default defineConfig({
         starlight({
             title: 'My Docs',
             customCss: ['./src/styles/custom.css', './src/styles/home-entry.css'],
+            head: [
+                {
+                    tag: 'script',
+                    attrs: { type: 'module' },
+                    content: `const bindSkyToggle = () => {
+  let btn = document.getElementById('sky-toggle');
+
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'sky-toggle';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Toggle day night');
+    btn.innerHTML = '<span class="moon">&#127769;</span><span class="sun">&#9728;&#65039;</span>';
+    document.body.appendChild(btn);
+  }
+
+  if (btn.dataset.bound === 'true') return;
+  btn.dataset.bound = 'true';
+
+  btn.addEventListener('click', () => {
+    const root = document.documentElement;
+    const current = root.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('starlight-theme', next);
+    window.StarlightThemeProvider?.updatePickers?.(next);
+  });
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindSkyToggle, { once: true });
+} else {
+  bindSkyToggle();
+}`,
+                },
+            ],
             locales: {
                 root: {
                     label: '简体中文',
