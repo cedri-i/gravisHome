@@ -3,15 +3,16 @@ title: "白鱼n"
 description: 公众号文章归档
 ---
 
-import { LinkCard, CardGrid } from '@astrojs/starlight/components';
-
 <div class="baiyun-bookshelf">
 
-<CardGrid>
-  <LinkCard title="01｜游苍山记" href="/baiyun/you-cangshan-ji/" description="2025.7.31 22:35，广东。苍山、索道、松林、墓碑与白腹锦鸡" />
-  <LinkCard title="02｜触山" href="/baiyun/chu-shan/" description="2025.8.4 23:47，广东。共工氏、水府、甘露瓮与不周山" />
-  <LinkCard title="03｜不懂杭州" href="/baiyun/bu-dong-hangzhou/" description="2025.9.17 18:09，浙江。杭州、省博、军训与独来独往" />
-  <LinkCard title="04｜逢秋满陇" href="/baiyun/feng-qiu-man-long/" description="2025.10.27 17:48，浙江。满觉陇、桂花、秋意、水乐洞与龙井茶冰淇淋" />
-</CardGrid>
+<div class="baiyun-spines" aria-label="白鱼n文章书架">
+  <a class="baiyun-spine" href="/baiyun/you-cangshan-ji/"><span>01</span>游苍山记</a>
+  <a class="baiyun-spine" href="/baiyun/chu-shan/"><span>02</span>触山</a>
+  <a class="baiyun-spine" href="/baiyun/bu-dong-hangzhou/"><span>03</span>不懂杭州</a>
+  <a class="baiyun-spine" href="/baiyun/feng-qiu-man-long/"><span>04</span>逢秋满陇</a>
+  <span class="baiyun-spine baiyun-spine-empty" aria-hidden="true"></span>
+  <span class="baiyun-spine baiyun-spine-empty" aria-hidden="true"></span>
+  <span class="baiyun-spine baiyun-spine-empty" aria-hidden="true"></span>
+</div>
 
 </div>

@@ -1782,3 +1782,164 @@ starlight-theme-select svg,
     box-shadow: 0 12px 26px rgba(35, 48, 64, .1);
     color: #4b5563 !important;
 }
+
+
+/* Baiyun title-only book spines */
+.baiyun-bookshelf {
+    --baiyun-shelf-edge: rgba(143, 96, 48, .32);
+    margin-top: 1.65rem;
+    padding: 1.45rem 1.25rem 2.35rem;
+    overflow: hidden;
+}
+
+.baiyun-spines {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: .34rem;
+    min-height: 17rem;
+    margin: 0;
+    padding: .2rem .35rem 1.2rem;
+}
+
+.baiyun-spine {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    inline-size: clamp(2.7rem, 7vw, 4.15rem);
+    block-size: var(--spine-height, 15.5rem);
+    padding: 1rem .52rem .95rem;
+    border: 1px solid color-mix(in srgb, #f3d59a 26%, transparent);
+    border-radius: 5px 7px 7px 5px;
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, .18) 0 .18rem, transparent .19rem .44rem, rgba(0, 0, 0, .16) .45rem .62rem, transparent .63rem),
+        linear-gradient(160deg, var(--spine-top), var(--spine-mid) 56%, var(--spine-bottom));
+    box-shadow: inset 6px 0 0 rgba(255, 255, 255, .08), 0 14px 26px rgba(0, 0, 0, .24);
+    color: #fff8e8;
+    font-family: "Songti SC", SimSun, "Noto Serif SC", serif;
+    font-size: clamp(1.08rem, 1.55vw, 1.34rem);
+    font-weight: 700;
+    line-height: 1.18;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .34);
+    writing-mode: vertical-rl;
+    transform: translateY(var(--spine-drop, 0)) rotate(var(--spine-tilt, 0deg));
+    transform-origin: bottom center;
+    transition: transform .22s ease, box-shadow .22s ease, filter .22s ease, opacity .22s ease;
+}
+
+.baiyun-spine span {
+    margin-block-end: .45rem;
+    color: color-mix(in srgb, #fff8e8 72%, transparent);
+    font-size: .74em;
+    letter-spacing: 0;
+}
+
+.baiyun-spine:nth-child(1) {
+    --spine-height: 14.2rem;
+    --spine-drop: .25rem;
+    --spine-tilt: -.7deg;
+    --spine-top: #6f9ab4;
+    --spine-mid: #416f89;
+    --spine-bottom: #23465f;
+}
+
+.baiyun-spine:nth-child(2) {
+    --spine-height: 16.5rem;
+    --spine-top: #89b88f;
+    --spine-mid: #4f865f;
+    --spine-bottom: #244d3f;
+}
+
+.baiyun-spine:nth-child(3) {
+    --spine-height: 13.6rem;
+    --spine-drop: .45rem;
+    --spine-tilt: .45deg;
+    --spine-top: #b091b5;
+    --spine-mid: #805b88;
+    --spine-bottom: #4d3159;
+}
+
+.baiyun-spine:nth-child(4) {
+    --spine-height: 14.8rem;
+    --spine-drop: .18rem;
+    --spine-top: #c99158;
+    --spine-mid: #925923;
+    --spine-bottom: #5c3212;
+}
+
+.baiyun-spine-empty {
+    --spine-height: 12.4rem;
+    --spine-top: rgba(166, 145, 113, .24);
+    --spine-mid: rgba(111, 93, 70, .26);
+    --spine-bottom: rgba(61, 50, 39, .28);
+    inline-size: clamp(1.7rem, 4.4vw, 2.45rem);
+    border-style: dashed;
+    box-shadow: inset 5px 0 0 rgba(255, 255, 255, .05), 0 10px 18px rgba(0, 0, 0, .12);
+    opacity: .5;
+}
+
+.baiyun-spine-empty:nth-child(6) {
+    --spine-height: 10.8rem;
+}
+
+.baiyun-spine-empty:nth-child(7) {
+    --spine-height: 13.9rem;
+}
+
+.baiyun-spines:has(.baiyun-spine:hover) .baiyun-spine:not(:hover),
+.baiyun-spines:has(.baiyun-spine:focus-visible) .baiyun-spine:not(:focus-visible) {
+    filter: saturate(.75) brightness(.85);
+    opacity: .66;
+}
+
+.baiyun-spine:hover,
+.baiyun-spine:focus-visible {
+    box-shadow: inset 6px 0 0 rgba(255, 255, 255, .14), 0 19px 34px rgba(0, 0, 0, .3), 0 0 22px rgba(245, 214, 160, .2);
+    outline: none;
+    transform: translateY(calc(var(--spine-drop, 0) - .85rem)) rotate(var(--spine-tilt, 0deg));
+}
+
+:root[data-theme="light"] .baiyun-spine {
+    border-color: rgba(83, 66, 43, .25);
+    box-shadow: inset 6px 0 0 rgba(255, 255, 255, .24), 0 13px 24px rgba(96, 67, 42, .18);
+    text-shadow: 0 1px 2px rgba(36, 28, 18, .32);
+}
+
+:root[data-theme="light"] .baiyun-spine-empty {
+    border-color: rgba(118, 93, 62, .18);
+    opacity: .46;
+}
+
+@media (max-width: 48rem) {
+    .baiyun-bookshelf {
+        padding: 1rem .72rem 2.1rem;
+    }
+
+    .baiyun-spines {
+        min-height: 14.5rem;
+        gap: .24rem;
+        overflow-x: auto;
+        padding-inline: .15rem;
+        scrollbar-width: none;
+    }
+
+    .baiyun-spines::-webkit-scrollbar {
+        display: none;
+    }
+
+    .baiyun-spine {
+        flex: 0 0 auto;
+        inline-size: 2.72rem;
+        block-size: calc(var(--spine-height, 14rem) - 1.8rem);
+        font-size: 1.02rem;
+    }
+
+    .baiyun-spine-empty {
+        inline-size: 1.72rem;
+    }
+}
