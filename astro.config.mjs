@@ -66,6 +66,51 @@ if (document.readyState === 'loading') {
   bindSkyToggle();
 }`,
                 },
+                {
+                    tag: 'script',
+                    attrs: { type: 'module' },
+                    content: String.raw`const visitorKey = 'gravis-home-visitor-id';
+const formatVisitorNumber = (value) => new Intl.NumberFormat('zh-CN').format(Number(value) || 0);
+const getVisitorId = () => {
+  try {
+    const existing = localStorage.getItem(visitorKey);
+    if (existing) return existing;
+    const next = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem(visitorKey, next);
+    return next;
+  } catch {
+    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
+};
+const mountVisitorStats = async () => {
+  if (document.getElementById('visitor-stats')) return;
+  const stats = document.createElement('section');
+  stats.id = 'visitor-stats';
+  stats.className = 'visitor-stats';
+  stats.setAttribute('aria-label', '访客统计');
+  stats.innerHTML = '<span>访客统计</span><strong id="visitor-views">--</strong><span>人次</span><strong id="visitor-people">--</strong><span>人数</span>';
+  document.body.appendChild(stats);
+  try {
+    const response = await fetch('/api/visitors', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ visitorId: getVisitorId(), path: location.pathname }),
+    });
+    if (!response.ok) throw new Error('Visitor counter unavailable.');
+    const data = await response.json();
+    document.getElementById('visitor-views').textContent = formatVisitorNumber(data.totalViews);
+    document.getElementById('visitor-people').textContent = formatVisitorNumber(data.uniqueVisitors);
+  } catch {
+    stats.classList.add('is-muted');
+    stats.innerHTML = '<span>访客统计暂不可用</span>';
+  }
+};
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mountVisitorStats, { once: true });
+} else {
+  mountVisitorStats();
+}`,
+                },
             ],
             locales: {
                 root: {

@@ -2024,3 +2024,39 @@ starlight-theme-select svg,
         inline-size: auto;
     }
 }
+
+
+/* Visitor stats footer */
+.visitor-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .42rem;
+    width: min(100% - 2rem, 58rem);
+    margin: 2.4rem auto 1.4rem;
+    padding: .72rem 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 58%, transparent);
+    color: color-mix(in srgb, var(--sl-color-gray-2) 82%, var(--sl-color-text) 18%);
+    font-size: .84rem;
+    line-height: 1;
+}
+
+.visitor-stats strong {
+    color: color-mix(in srgb, var(--sl-color-text) 86%, var(--sl-color-text-accent) 14%);
+    font-variant-numeric: tabular-nums;
+    font-weight: 760;
+}
+
+.visitor-stats.is-muted {
+    color: color-mix(in srgb, var(--sl-color-gray-3) 76%, transparent);
+}
+
+@media (max-width: 42rem) {
+    .visitor-stats {
+        flex-wrap: wrap;
+        gap: .35rem;
+        margin-block: 1.6rem 1rem;
+        padding-inline: .5rem;
+        font-size: .8rem;
+    }
+}
