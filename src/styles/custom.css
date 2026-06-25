@@ -1,4 +1,4 @@
-@import "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css";
+@import "katex/dist/katex.min.css";
 @import "./starsky.css";
 @import "./sky-toggle.css";
 
@@ -1631,4 +1631,125 @@ starlight-theme-select svg,
 :root[data-theme="light"] .baiyun-bookshelf .sl-link-card:focus-within {
     border-color: rgba(180, 118, 57, .46);
     box-shadow: inset 7px 0 0 rgba(255, 255, 255, .4), 0 18px 30px rgba(120, 82, 48, .18), 0 0 22px rgba(217, 170, 109, .2);
+}
+
+/* Darker light-mode Baiyun bookshelf */
+:root[data-theme="light"] .baiyun-bookshelf {
+    border-color: rgba(136, 93, 48, .36);
+    background:
+        linear-gradient(180deg, rgba(252, 245, 231, .96), rgba(238, 222, 194, .86)),
+        radial-gradient(ellipse at 50% 112%, rgba(136, 85, 38, .22), transparent 58%);
+    box-shadow: inset 0 -26px 34px rgba(124, 76, 34, .12), 0 18px 34px rgba(96, 67, 42, .12);
+}
+
+:root[data-theme="light"] .baiyun-bookshelf .sl-link-card {
+    border-color: rgba(65, 75, 83, .32);
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, .42) 0 .18rem, transparent .19rem .52rem, rgba(33, 44, 52, .2) .53rem .74rem, transparent .75rem),
+        radial-gradient(ellipse at 75% 18%, rgba(255, 255, 255, .22), transparent 42%),
+        linear-gradient(145deg, #9fb9ca, #5f879e 55%, #31536c);
+    box-shadow: inset 7px 0 0 rgba(255, 255, 255, .22), 0 13px 24px rgba(72, 57, 42, .2);
+}
+
+:root[data-theme="light"] .baiyun-bookshelf .sl-link-card:nth-child(2) {
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, .38) 0 .18rem, transparent .19rem .52rem, rgba(37, 58, 44, .2) .53rem .74rem, transparent .75rem),
+        radial-gradient(ellipse at 78% 18%, rgba(255, 255, 255, .2), transparent 42%),
+        linear-gradient(145deg, #a9c4a8, #67966d 55%, #345f48);
+}
+
+:root[data-theme="light"] .baiyun-bookshelf .sl-link-card:nth-child(3) {
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, .4) 0 .18rem, transparent .19rem .52rem, rgba(59, 39, 62, .18) .53rem .74rem, transparent .75rem),
+        radial-gradient(ellipse at 76% 18%, rgba(255, 255, 255, .2), transparent 42%),
+        linear-gradient(145deg, #c0a3bd, #8b658d 55%, #5b3b63);
+}
+
+:root[data-theme="light"] .baiyun-bookshelf .sl-link-card:nth-child(4) {
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, .38) 0 .18rem, transparent .19rem .52rem, rgba(76, 48, 30, .2) .53rem .74rem, transparent .75rem),
+        radial-gradient(ellipse at 76% 18%, rgba(255, 255, 255, .2), transparent 42%),
+        linear-gradient(145deg, #d0a778, #9b6533 55%, #643916);
+}
+
+:root[data-theme="light"] .baiyun-bookshelf .sl-link-card .title,
+:root[data-theme="light"] .baiyun-bookshelf .sl-link-card .description {
+    text-shadow: 0 1px 2px rgba(35, 28, 20, .34);
+}
+
+:root[data-theme="light"] .baiyun-bookshelf .card-grid:has(.sl-link-card:hover) .sl-link-card:not(:hover),
+:root[data-theme="light"] .baiyun-bookshelf .card-grid:has(.sl-link-card:focus-within) .sl-link-card:not(:focus-within) {
+    filter: blur(1.1px) saturate(.74) brightness(.9);
+    opacity: .7;
+}
+/* Baiyun article photo rhythm */
+.baiyun-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem .7rem;
+    margin: -0.35rem 0 2.2rem;
+    color: color-mix(in srgb, var(--sl-color-gray-2) 78%, var(--sl-color-text) 22%);
+    font-size: .94rem;
+}
+
+.baiyun-meta span:first-child {
+    padding: .08rem .36rem;
+    border-radius: .22rem;
+    background: color-mix(in srgb, var(--sl-color-gray-6) 72%, transparent);
+    color: color-mix(in srgb, var(--sl-color-text) 74%, transparent);
+}
+
+.baiyun-photo-pair,
+.baiyun-photo-wide {
+    margin: 1.35rem 0 1.65rem;
+}
+
+.baiyun-photo-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .9rem;
+}
+
+.baiyun-photo-pair figure,
+.baiyun-photo-wide {
+    margin-inline: 0;
+}
+
+.baiyun-photo-pair img,
+.baiyun-photo-wide img {
+    display: block;
+    width: 100%;
+    border-radius: .55rem;
+    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 70%, transparent);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .16);
+}
+
+.baiyun-photo-pair figcaption,
+.baiyun-photo-wide figcaption {
+    grid-column: 1 / -1;
+    margin-top: .5rem;
+    color: var(--sl-color-gray-2);
+    font-size: .9rem;
+    text-align: center;
+}
+
+.baiyun-signoff {
+    margin-top: 2rem;
+    color: var(--sl-color-gray-2);
+}
+
+@media (max-width: 42rem) {
+    .baiyun-photo-pair {
+        grid-template-columns: 1fr;
+    }
+}
+
+:root[data-theme="light"] body:has(#water-pond) .page {
+    background-color: #aee3ec;
+}
+
+:root[data-theme="light"] .hero,
+:root[data-theme="light"] .feature-grid,
+:root[data-theme="light"] .guestbook-section {
+    color: rgba(30, 46, 55, .86);
 }

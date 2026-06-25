@@ -667,3 +667,74 @@ body.is-feeding-fish {
         transform: translateY(-6px) rotate(-11deg) scale(.86);
     }
 }
+
+/* Paper food bag and catching feedback */
+#fish-food-bag {
+    border-color: rgba(126, 72, 24, .42);
+    border-radius: .35rem .35rem .92rem .92rem;
+    clip-path: polygon(9% 0, 91% 0, 100% 100%, 0 100%);
+    background:
+        linear-gradient(100deg, rgba(255, 255, 255, .18) 0 8%, transparent 8% 100%),
+        repeating-linear-gradient(8deg, rgba(120, 53, 15, .06) 0 1px, transparent 1px 7px),
+        linear-gradient(160deg, #f7c85a 0%, #e49a23 48%, #b45a12 100%);
+    box-shadow:
+        0 17px 30px rgba(92, 56, 20, .24),
+        inset 0 5px 0 rgba(255, 238, 162, .48),
+        inset 0 -18px 24px rgba(92, 42, 12, .18);
+}
+
+#fish-food-bag::before {
+    top: 58%;
+    width: 2.45rem;
+    height: 1.08rem;
+    background:
+        radial-gradient(circle at 80% 42%, #20130b 0 5%, transparent 6%),
+        linear-gradient(90deg, #ffd39a 0%, #f27f24 52%, #b93613 100%);
+    box-shadow:
+        -1rem .02rem 0 -.38rem #d94a1f,
+        .85rem .02rem 0 -.42rem #f2a23b,
+        inset 0 2px 4px rgba(255, 248, 220, .38),
+        inset 0 -4px 6px rgba(92, 42, 12, .24),
+        0 3px 8px rgba(92, 42, 12, .26);
+}
+
+#fish-food-bag::after {
+    left: 13%;
+    right: 13%;
+    top: .5rem;
+    height: .64rem;
+    border-radius: .22rem;
+    background:
+        linear-gradient(180deg, rgba(255, 245, 190, .62), rgba(133, 77, 14, .16)),
+        linear-gradient(90deg, rgba(92, 42, 12, .32), rgba(255, 238, 162, .36), rgba(92, 42, 12, .28));
+    box-shadow:
+        0 1.55rem 0 -.22rem rgba(255, 236, 153, .2),
+        0 3.8rem 0 -.28rem rgba(92, 42, 12, .1);
+}
+
+#fish-food-bag.is-active {
+    filter: saturate(1.12) contrast(1.03);
+}
+
+.pond-catch-toast {
+    position: fixed;
+    z-index: 24;
+    transform: translate(-50%, -115%);
+    padding: .42rem .72rem;
+    border: 1px solid rgba(13, 83, 100, .2);
+    border-radius: 999px;
+    background: rgba(255, 252, 235, .86);
+    color: #5f300c;
+    box-shadow: 0 12px 24px rgba(35, 90, 100, .16), inset 0 1px 0 rgba(255, 255, 255, .58);
+    font-size: .88rem;
+    font-weight: 700;
+    pointer-events: none;
+    animation: catchToast 2.1s ease forwards;
+}
+
+@keyframes catchToast {
+    0% { opacity: 0; transform: translate(-50%, -70%) scale(.92); }
+    16% { opacity: 1; transform: translate(-50%, -115%) scale(1); }
+    74% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -155%) scale(.98); }
+}

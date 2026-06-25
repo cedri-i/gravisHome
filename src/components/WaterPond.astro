@@ -54,6 +54,7 @@ import '../styles/waterpond.css';
     let feedingMode = false;
     let foodTarget = null;
     const swimmers = [];
+    const catchLines = ['\u5927\u695a\u5174\uff0c\u9648\u80dc\u738b\u3002'];
 
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
     const angleDiff = (target, current) => ((target - current + 540) % 360) - 180;
@@ -74,7 +75,14 @@ import '../styles/waterpond.css';
       }
     }
 
+    function setNetMode(next) {
+      fishNet?.classList.toggle('is-active', next);
+      fishNet?.setAttribute('aria-pressed', String(next));
+      document.body.classList.toggle('is-netting-fish', next);
+    }
+
     function setFeedingMode(next) {
+      if (next) setNetMode(false);
       feedingMode = next;
       foodBag?.classList.toggle('is-active', feedingMode);
       foodBag?.setAttribute('aria-pressed', String(feedingMode));
@@ -88,8 +96,9 @@ import '../styles/waterpond.css';
 
     fishNet?.addEventListener('click', (event) => {
       event.stopPropagation();
-      fishNet.classList.toggle('is-active');
-      fishNet.setAttribute('aria-pressed', String(fishNet.classList.contains('is-active')));
+      const next = !fishNet.classList.contains('is-active');
+      if (next) setFeedingMode(false);
+      setNetMode(next);
     });
 
     function initSwimmers() {
@@ -126,6 +135,46 @@ import '../styles/waterpond.css';
 
     function clearFoodTarget() {
       foodTarget = null;
+    }
+
+    function showCatchToast(message, x, y) {
+      const toast = document.createElement('span');
+      toast.className = 'pond-catch-toast';
+      toast.textContent = message;
+      toast.style.left = `${x}px`;
+      toast.style.top = `${y}px`;
+      pond.appendChild(toast);
+      setTimeout(() => toast.remove(), 2100);
+    }
+
+    function tryCatchFish(x, y) {
+      let target = null;
+      let bestDistance = Infinity;
+
+      for (const fish of swimmers) {
+        if (fish.kind === 'turtle') continue;
+
+        const distance = Math.hypot(fish.x - x, fish.y - y);
+        const radius = fish.kind === 'mini' ? 58 : 76;
+
+        if (distance < radius && distance < bestDistance) {
+          target = fish;
+          bestDistance = distance;
+        }
+      }
+
+      createRipple(x, y, target ? 1.45 : 1);
+
+      if (!target) return;
+
+      const message = catchLines[Math.floor(Math.random() * catchLines.length)];
+      showCatchToast(message, target.x, target.y - 28);
+
+      const dx = target.x - x || (Math.random() - 0.5);
+      const dy = target.y - y || (Math.random() - 0.5);
+      const distance = Math.hypot(dx, dy) || 1;
+      target.vx += (dx / distance) * 1.8;
+      target.vy += (dy / distance) * 1.25;
     }
 
     function animateSwimmers(now = performance.now()) {
@@ -243,8 +292,15 @@ import '../styles/waterpond.css';
     });
 
     window.addEventListener('click', (event) => {
+      if (event.target.closest?.('#fish-food-bag, #fish-net-tool')) return;
+      if (document.documentElement.dataset.theme !== 'light') return;
+
+      if (fishNet?.classList.contains('is-active')) {
+        tryCatchFish(event.clientX, event.clientY);
+        return;
+      }
+
       if (!feedingMode) return;
-      if (event.target.closest?.('#fish-food-bag')) return;
 
       const now = performance.now();
       foodTarget = {
