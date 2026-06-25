@@ -135,6 +135,10 @@ export default defineConfig({
                                     label: '不懂杭州',
                                     link: '/baiyun/bu-dong-hangzhou/',
                                 },
+                                {
+                                    label: '逢秋满陇',
+                                    link: '/baiyun/feng-qiu-man-long/',
+                                },
                             ],
                         },
                     ],
