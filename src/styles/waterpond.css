@@ -929,3 +929,160 @@ body.is-netting-fish {
         -.92rem .83rem 0 -.48rem #b91c1c,
         0 1.15rem 0 -.53rem rgba(115, 29, 22, .85);
 }
+
+
+/* Catch result appears only after a successful net click */
+.pond-catch-result {
+    position: fixed;
+    z-index: 26;
+    display: grid;
+    justify-items: center;
+    gap: .65rem;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(.5rem) scale(.94);
+    transition: opacity .22s ease, transform .22s ease;
+}
+
+.pond-catch-result.is-ready {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0) scale(1);
+}
+
+.pond-catch-result.is-dismissed {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(.35rem) scale(.96);
+}
+
+.pond-caught-net {
+    position: relative;
+    width: 10.4rem;
+    height: 7.65rem;
+    filter: drop-shadow(0 18px 20px rgba(35, 77, 86, .16));
+    animation: pondCaughtNet 3.8s ease-in-out infinite;
+}
+
+.pond-caught-handle {
+    position: absolute;
+    top: .32rem;
+    right: .35rem;
+    width: 7.45rem;
+    height: .24rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(86, 55, 31, .22), rgba(80, 50, 28, .76));
+    transform: rotate(-33deg);
+    transform-origin: right center;
+}
+
+.pond-caught-rim,
+.pond-caught-mesh {
+    position: absolute;
+    left: 1rem;
+    bottom: .46rem;
+    width: 6.72rem;
+    height: 5.18rem;
+    border-radius: 52% 48% 58% 42%;
+    transform: rotate(-9deg);
+}
+
+.pond-caught-rim {
+    border: .28rem solid rgba(92, 68, 45, .72);
+    box-shadow: inset 0 0 18px rgba(79, 116, 126, .18), 0 10px 20px rgba(80, 55, 34, .16);
+}
+
+.pond-caught-mesh {
+    overflow: hidden;
+    background:
+        repeating-linear-gradient(38deg, rgba(255, 255, 255, .45) 0 1px, transparent 1px .62rem),
+        repeating-linear-gradient(-38deg, rgba(255, 255, 255, .34) 0 1px, transparent 1px .62rem),
+        radial-gradient(ellipse at 50% 72%, rgba(113, 171, 186, .26), rgba(255, 255, 255, .12) 62%, transparent 66%);
+    opacity: .86;
+}
+
+.pond-caught-fish {
+    position: absolute;
+    z-index: 2;
+    width: 1.72rem;
+    height: .72rem;
+    border-radius: 999px 68% 68% 999px;
+    background: linear-gradient(90deg, #fff4c4, #f2a55e 58%, #c86b42);
+    box-shadow: inset .18rem .12rem .2rem rgba(255, 255, 255, .34), 0 .1rem .2rem rgba(48, 33, 22, .16);
+    animation: pondCaughtFish 1.45s ease-in-out infinite;
+}
+
+.pond-caught-fish::before {
+    content: "";
+    position: absolute;
+    right: -.44rem;
+    top: .11rem;
+    border-left: .55rem solid #c86b42;
+    border-top: .25rem solid transparent;
+    border-bottom: .25rem solid transparent;
+}
+
+.pond-caught-fish::after {
+    content: "";
+    position: absolute;
+    left: .28rem;
+    top: .22rem;
+    width: .12rem;
+    height: .12rem;
+    border-radius: 50%;
+    background: rgba(50, 33, 22, .78);
+}
+
+.pond-caught-fish.fish-a { left: 2.35rem; bottom: 2.45rem; }
+.pond-caught-fish.fish-b { left: 4.25rem; bottom: 3.55rem; scale: .84; rotate: -12deg; animation-delay: -.42s; }
+.pond-caught-fish.fish-c { left: 3.55rem; bottom: 1.65rem; scale: .72; rotate: 14deg; animation-delay: -.8s; }
+
+.pond-catch-actions {
+    display: inline-flex;
+    gap: .46rem;
+    padding: .22rem;
+    border: 1px solid rgba(120, 82, 48, .2);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .82);
+    box-shadow: 0 12px 24px rgba(35, 90, 100, .16), inset 0 1px 0 rgba(255, 255, 255, .58);
+}
+
+.pond-catch-actions button {
+    min-width: 3.4rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #173044;
+    cursor: pointer;
+    font: inherit;
+    font-size: .86rem;
+    font-weight: 760;
+    line-height: 1;
+    padding: .5rem .78rem;
+    transition: background .18s ease, transform .18s ease;
+}
+
+.pond-catch-actions button:hover,
+.pond-catch-actions button:focus-visible {
+    background: rgba(143, 96, 48, .14);
+    outline: none;
+}
+
+.pond-catch-actions button:active {
+    transform: translateY(1px) scale(.98);
+}
+
+@keyframes pondCaughtNet {
+    0%, 100% { transform: translateY(.16rem) rotate(-1deg); }
+    50% { transform: translateY(-.48rem) rotate(2deg); }
+}
+
+@keyframes pondCaughtFish {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    45% { transform: translateX(.2rem) rotate(5deg); }
+    70% { transform: translateX(-.1rem) rotate(-4deg); }
+}
+
+@media (max-width: 42rem) {
+    .pond-catch-result {
+        scale: .88;
+    }
+}

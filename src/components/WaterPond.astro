@@ -58,8 +58,6 @@ import '../styles/waterpond.css';
     let feedingMode = false;
     let foodTarget = null;
     const swimmers = [];
-    const catchLines = ['\u5927\u695a\u5174\uff0c\u9648\u80dc\u738b\u3002'];
-
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
     const angleDiff = (target, current) => ((target - current + 540) % 360) - 180;
 
@@ -142,14 +140,40 @@ import '../styles/waterpond.css';
       foodTarget = null;
     }
 
-    function showCatchToast(message, x, y) {
-      const toast = document.createElement('span');
-      toast.className = 'pond-catch-toast';
-      toast.textContent = message;
-      toast.style.left = `${x}px`;
-      toast.style.top = `${y}px`;
-      pond.appendChild(toast);
-      setTimeout(() => toast.remove(), 2100);
+    function showCatchResult(x, y) {
+      pond.querySelector('.pond-catch-result')?.remove();
+
+      const result = document.createElement('div');
+      result.className = 'pond-catch-result';
+      result.setAttribute('role', 'dialog');
+      result.setAttribute('aria-label', '捞到鱼之后的选择');
+      result.style.left = clamp(x, 150, window.innerWidth - 150) + 'px';
+      result.style.top = clamp(y - 48, 135, window.innerHeight - 150) + 'px';
+      result.innerHTML = [
+        '<div class="pond-caught-net" aria-hidden="true">',
+          '<span class="pond-caught-handle"></span>',
+          '<span class="pond-caught-rim"></span>',
+          '<span class="pond-caught-mesh"></span>',
+          '<span class="pond-caught-fish fish-a"></span>',
+          '<span class="pond-caught-fish fish-b"></span>',
+          '<span class="pond-caught-fish fish-c"></span>',
+        '</div>',
+        '<div class="pond-catch-actions" aria-label="捞到的鱼怎么办">',
+          '<button type="button">带走</button>',
+          '<button type="button">放生</button>',
+        '</div>',
+      ].join('');
+
+      result.querySelectorAll('button').forEach((button) => {
+        button.addEventListener('click', (event) => {
+          event.stopPropagation();
+          result.classList.add('is-dismissed');
+          setTimeout(() => result.remove(), 220);
+        });
+      });
+
+      pond.appendChild(result);
+      setTimeout(() => result.classList.add('is-ready'), 20);
     }
 
     function tryCatchFish(x, y) {
@@ -172,8 +196,8 @@ import '../styles/waterpond.css';
 
       if (!target) return;
 
-      const message = catchLines[Math.floor(Math.random() * catchLines.length)];
-      showCatchToast(message, target.x, target.y - 28);
+      setNetMode(false);
+      showCatchResult(target.x, target.y);
 
       const dx = target.x - x || (Math.random() - 0.5);
       const dy = target.y - y || (Math.random() - 0.5);
@@ -302,7 +326,7 @@ import '../styles/waterpond.css';
     });
 
     window.addEventListener('click', (event) => {
-      if (event.target.closest?.('#fish-food-bag, #fish-net-tool')) return;
+      if (event.target.closest?.('#fish-food-bag, #fish-net-tool, .pond-catch-result')) return;
       if (document.documentElement.dataset.theme !== 'light') return;
 
       if (fishNet?.classList.contains('is-active')) {
