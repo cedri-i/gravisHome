@@ -4,6 +4,12 @@ const markerStart = '<!-- gravis-guestbook:v1 -->';
 const markerEnd = '<!-- /gravis-guestbook -->';
 
 const legacyAuthors = {
+  karlwang: {
+    name: 'karl-wang2006',
+    githubLogin: 'karl-wang2006',
+    avatarUrl: 'https://github.com/karl-wang2006.png',
+    profileUrl: 'https://github.com/karl-wang2006',
+  },
   'WeiBing Wang': {
     name: 'BillLin-123',
     githubLogin: 'BillLin-123',
