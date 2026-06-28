@@ -1086,3 +1086,8 @@ body.is-netting-fish {
         scale: .88;
     }
 }
+
+/* Use canvas leaves instead of DOM leaves */
+.pond-leaf {
+    display: none !important;
+}
