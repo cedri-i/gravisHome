@@ -540,11 +540,6 @@ body:has(.home-starsky) .page {
     --star-glow: rgba(147,197,253,.8);
 }
 
-.is-triangle-star {
-    --star-color: rgba(255,246,210,.96);
-    --star-glow: rgba(250,204,21,.64);
-}
-
 .is-orion-star {
     --star-color: rgba(210,230,255,.95);
     --star-glow: rgba(125,211,252,.62);
@@ -613,27 +608,21 @@ body:has(.home-starsky)::after {
     pointer-events: none;
     background-image:
         radial-gradient(ellipse at 50% 50%, rgba(255, 247, 221, .42) 0 1.2%, rgba(151, 190, 255, .18) 2.8%, transparent 7.2%),
-        conic-gradient(from 18deg at 24% 32%, transparent 0 19deg, rgba(149, 196, 255, .10) 23deg 34deg, transparent 39deg 68deg, rgba(245, 213, 156, .08) 73deg 87deg, transparent 94deg 360deg),
         radial-gradient(ellipse at 24% 32%, rgba(156, 198, 255, .12), transparent 16%),
         radial-gradient(ellipse at 76% 22%, rgba(255, 238, 204, .22) 0 1%, rgba(108, 154, 255, .10) 2.4%, transparent 6.4%),
-        conic-gradient(from -36deg at 76% 22%, transparent 0 28deg, rgba(255, 232, 172, .09) 35deg 48deg, transparent 54deg 168deg, rgba(129, 190, 255, .08) 176deg 188deg, transparent 196deg 360deg),
         radial-gradient(ellipse at 74% 21%, rgba(126, 194, 255, .09), transparent 15%),
         radial-gradient(ellipse at 18% 70%, rgba(236, 72, 153, .10), transparent 20%),
         radial-gradient(ellipse at 56% 78%, rgba(45, 212, 191, .08), transparent 19%);
     background-size:
         48vw 32vw,
-        48vw 32vw,
         50vw 34vw,
-        38vw 25vw,
         38vw 25vw,
         40vw 27vw,
         62vw 38vw,
         54vw 34vw;
     background-position:
         0 5vh,
-        0 5vh,
         -1vw 4vh,
-        54vw 1vh,
         54vw 1vh,
         53vw 0,
         -22vw 53vh,
