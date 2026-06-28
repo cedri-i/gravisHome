@@ -331,6 +331,13 @@ mark {
     opacity: 0.22;
 }
 
+.notes-link-card-intro::before {
+    background:
+        linear-gradient(135deg, rgba(45, 212, 191, 0.28), transparent 48%),
+        linear-gradient(315deg, rgba(251, 191, 36, 0.2), transparent 52%),
+        var(--card-art-image, none);
+}
+
 .notes-link-card-baiyun::before {
     position: absolute;
     inset: 0 0 0 auto;
@@ -2062,6 +2069,7 @@ starlight-theme-select svg,
         font-size: .8rem;
     }
 }
+
 /* Align Baiyun book spines on the shelf */
 .baiyun-spines {
     align-items: flex-end;

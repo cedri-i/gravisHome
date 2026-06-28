@@ -199,6 +199,66 @@ if (document.readyState === 'loading') {
                             ],
                         },
                         {
+                            label: '计算机导论',
+                            collapsed: true,
+                            items: [
+                                {
+                                    label: 'Overview',
+                                    link: '/intro-computer/',
+                                },
+                                {
+                                    label: 'Havard: CS50x',
+                                    collapsed: true,
+                                    items: [
+                                        {
+                                            label: 'Overview',
+                                            link: '/intro-computer/cs50x/',
+                                        },
+                                        {
+                                            label: '00 CS50x Scratch',
+                                            link: '/intro-computer/cs50x/scratch/',
+                                        },
+                                        {
+                                            label: '01 CS50x C',
+                                            link: '/intro-computer/cs50x/c/',
+                                        },
+                                        {
+                                            label: '02 CS50x Arrays',
+                                            link: '/intro-computer/cs50x/arrays/',
+                                        },
+                                        {
+                                            label: '03 CS50x Algorithms',
+                                            link: '/intro-computer/cs50x/algorithms/',
+                                        },
+                                        {
+                                            label: '04 CS50x Memory',
+                                            link: '/intro-computer/cs50x/memory/',
+                                        },
+                                        {
+                                            label: '05 CS50x Data Structures',
+                                            link: '/intro-computer/cs50x/data-structures/',
+                                        },
+                                        {
+                                            label: '06 CS50x Python',
+                                            link: '/intro-computer/cs50x/python/',
+                                        },
+                                        {
+                                            label: '07 CS50x SQL',
+                                            link: '/intro-computer/cs50x/sql/',
+                                        },
+                                        {
+                                            label: 'SQL 专用笔记',
+                                            link: '/intro-computer/cs50x/sql-notes/',
+                                        },
+                                        {
+                                            label: 'Artificial Intelligence',
+                                            link: '/intro-computer/cs50x/artificial-intelligence/',
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                        {
                             label: '白鱼n',
                             items: [
                                 {
