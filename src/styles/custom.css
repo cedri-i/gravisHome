@@ -332,10 +332,18 @@ mark {
 }
 
 .notes-link-card-intro::before {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(52%, 14rem);
     background:
-        linear-gradient(135deg, rgba(45, 212, 191, 0.28), transparent 48%),
-        linear-gradient(315deg, rgba(251, 191, 36, 0.2), transparent 52%),
-        var(--card-art-image, none);
+        linear-gradient(
+            270deg,
+            color-mix(in srgb, var(--sl-color-bg-nav) 10%, transparent),
+            var(--sl-color-bg-nav)
+        ),
+        url('/cards/computer-intro.svg') right center / contain no-repeat;
+    content: "";
+    opacity: 0.24;
 }
 
 .notes-link-card-baiyun::before {

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" role="img" aria-label="Computer introduction learning motif">
+  <defs>
+    <linearGradient id="scratch" x1="44" y1="34" x2="156" y2="124" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="code" x1="110" y1="24" x2="226" y2="126" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="data" x1="130" y1="98" x2="218" y2="166" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M48 66h66a14 14 0 0 1 14 14v18a14 14 0 0 1-14 14H48a14 14 0 0 1-14-14V80a14 14 0 0 1 14-14Z" fill="url(#scratch)" opacity=".82" stroke="#0f172a" stroke-width="5"/>
+    <path d="M66 66v-9a12 12 0 0 1 24 0v9M82 112v11a12 12 0 0 0 24 0v-11" stroke="#0f172a" stroke-width="5" opacity=".72"/>
+    <path d="M158 50l-22 24 22 24M192 50l22 24-22 24" stroke="url(#code)" stroke-width="10"/>
+    <path d="M178 42l-18 64" stroke="#f8fafc" stroke-width="6" opacity=".78"/>
+    <ellipse cx="176" cy="116" rx="42" ry="16" fill="url(#data)" opacity=".7" stroke="#0f172a" stroke-width="5"/>
+    <path d="M134 116v28c0 9 19 16 42 16s42-7 42-16v-28" fill="url(#data)" opacity=".45" stroke="#0f172a" stroke-width="5"/>
+    <path d="M145 142c8 5 19 7 31 7s23-2 31-7" stroke="#f8fafc" stroke-width="4" opacity=".62"/>
+    <path d="M58 90h36M106 90h6" stroke="#f8fafc" stroke-width="6" opacity=".82"/>
+    <circle cx="52" cy="38" r="8" fill="#38bdf8" opacity=".78"/>
+    <circle cx="224" cy="44" r="7" fill="#f59e0b" opacity=".78"/>
+    <circle cx="232" cy="132" r="9" fill="#22c55e" opacity=".76"/>
+    <path d="M44 142l18-10 2 20 7-6 8 12" stroke="#e2e8f0" stroke-width="5" opacity=".8"/>
+  </g>
+</svg>
