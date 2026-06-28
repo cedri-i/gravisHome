@@ -2062,3 +2062,21 @@ starlight-theme-select svg,
         font-size: .8rem;
     }
 }
+/* Align Baiyun book spines on the shelf */
+.baiyun-spines {
+    align-items: flex-end;
+}
+
+.baiyun-spine,
+.baiyun-spine:nth-child(1),
+.baiyun-spine:nth-child(2),
+.baiyun-spine:nth-child(3),
+.baiyun-spine:nth-child(4) {
+    --spine-drop: 0rem;
+    transform: rotate(var(--spine-tilt, 0deg));
+}
+
+.baiyun-spine:hover,
+.baiyun-spine:focus-visible {
+    transform: translateY(-.85rem) rotate(var(--spine-tilt, 0deg));
+}
