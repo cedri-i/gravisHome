@@ -37,7 +37,7 @@
   let h = 0;
   let dpr = 1;
   let lastTime = performance.now();
-  let nextNovaTime = 1200 + Math.random() * 2500;
+  let nextNovaTime = 45000 + Math.random() * 75000;
 
   const novas = [];
   const dust = [];
@@ -220,7 +220,7 @@
     nextNovaTime -= dt * 1000;
     if (nextNovaTime <= 0) {
       createNova();
-      nextNovaTime = rand(6500, 14500);
+      nextNovaTime = rand(90000, 210000);
     }
 
     for (let i = novas.length - 1; i >= 0; i--) {
@@ -244,7 +244,6 @@
   window.addEventListener("resize", resize, { passive: true });
   resize();
 
-  setTimeout(createNova, 700);
   requestAnimationFrame(frame);
 })();
 </script>

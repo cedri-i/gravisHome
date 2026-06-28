@@ -326,8 +326,13 @@ body:has(.home-starsky) .page {
     left: var(--meteor-left, 106vw);
     width: var(--meteor-length, 14rem);
     height: 3px;
+    padding: 1.35rem 1.35rem 1.35rem .9rem;
+    margin-top: -1.35rem;
+    margin-left: -.9rem;
     border: 0;
     border-radius: 999px;
+    background-origin: content-box;
+    background-clip: content-box;
     pointer-events: auto;
     cursor: crosshair;
     background:
