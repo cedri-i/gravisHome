@@ -1172,3 +1172,63 @@ body.is-netting-fish {
     width: 104px;
     transform: translate(-10px, -50%) rotate(-24deg);
 }
+
+/* More detailed turtle, including a quiet rest pose */
+.pond-turtle {
+    width: 78px;
+    height: 52px;
+    border-radius: 56% 44% 52% 48% / 48% 46% 54% 52%;
+    background:
+        radial-gradient(circle at 50% 42%, rgba(242, 252, 212, .26) 0 10%, transparent 11%),
+        repeating-radial-gradient(ellipse at 50% 50%, rgba(242, 252, 212, .16) 0 2px, transparent 3px 11px),
+        conic-gradient(from 20deg at 50% 52%, rgba(28, 82, 47, .34), transparent 22deg 48deg, rgba(28, 82, 47, .28) 66deg, transparent 90deg 124deg, rgba(28, 82, 47, .32) 146deg, transparent 172deg 210deg, rgba(28, 82, 47, .28) 236deg, transparent 262deg 304deg, rgba(28, 82, 47, .34) 326deg),
+        radial-gradient(ellipse at 38% 28%, rgba(230, 250, 190, .38), transparent 28%),
+        linear-gradient(135deg, #a8bd6f, #557f4d 48%, #254a34 100%);
+    box-shadow:
+        inset 8px 6px 13px rgba(235, 249, 200, .24),
+        inset -12px -10px 18px rgba(22, 70, 45, .40),
+        0 12px 22px rgba(35, 86, 92, .16);
+    filter: saturate(.92) drop-shadow(0 9px 14px rgba(35, 86, 92, .14));
+}
+
+.pond-turtle::before {
+    inset: 8px 13px;
+    border: 1px solid rgba(226, 246, 190, .48);
+    background:
+        linear-gradient(35deg, transparent 46%, rgba(33, 89, 54, .20) 47% 50%, transparent 51%),
+        linear-gradient(-35deg, transparent 46%, rgba(33, 89, 54, .16) 47% 50%, transparent 51%);
+    box-shadow:
+        inset 0 0 0 7px rgba(20, 83, 45, .10),
+        inset 0 0 18px rgba(236, 252, 203, .16);
+}
+
+.turtle-head {
+    right: -15px;
+    top: 17px;
+    width: 21px;
+    height: 18px;
+    background:
+        radial-gradient(circle at 76% 38%, rgba(20, 20, 20, .86) 0 7%, transparent 8%),
+        radial-gradient(circle at 48% 28%, rgba(229, 245, 190, .30), transparent 28%),
+        linear-gradient(135deg, #6f9658, #456f3e 70%);
+    box-shadow: inset -4px -3px 6px rgba(20, 83, 45, .34);
+}
+
+.turtle-head::after {
+    right: 4px;
+    top: 5px;
+    width: 3.5px;
+    height: 3.5px;
+    background: rgba(12, 20, 16, .86);
+    box-shadow: -5px 1px 0 -1px rgba(12, 20, 16, .55);
+}
+
+.pond-turtle.is-resting {
+    z-index: 22;
+    filter: saturate(.85) drop-shadow(0 11px 13px rgba(42, 78, 86, .18));
+}
+
+.pond-turtle.is-resting .turtle-leg {
+    animation-duration: 3s;
+    opacity: .58;
+}
