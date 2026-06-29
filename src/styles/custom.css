@@ -2113,13 +2113,3 @@ starlight-theme-select svg,
 .baiyun-spine:focus-visible {
     transform: translateY(-.85rem) rotate(var(--spine-tilt, 0deg));
 }
-
-
-/* Temporary guestbook action alignment debug */
-.guestbook-entry-actions,
-.guestbook-entry-actions *,
-.guestbook-reply-actions,
-.guestbook-reply-actions * {
-    outline: 1px solid red !important;
-    background: rgba(255, 0, 0, 0.08) !important;
-}
