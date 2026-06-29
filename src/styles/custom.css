@@ -1779,13 +1779,13 @@ starlight-theme-select svg,
 }
 
 :root[data-theme="light"] body:has(#water-pond) .page {
-    background-color: #bfdde3;
+    background-color: #adcbd2;
 }
 
 :root[data-theme="light"] .hero,
 :root[data-theme="light"] .feature-grid,
 :root[data-theme="light"] .guestbook-section {
-    color: rgba(30, 46, 55, .86);
+    color: rgba(23, 39, 48, .92);
 }
 /* Refined Baiyun caption notes */
 .baiyun-caption-note {

@@ -65,15 +65,15 @@ body:has(.home-starsky) .content-panel {
 /* 浅色模式：一潭水 */
 :root[data-theme="light"] body:has(.home-starsky) {
     background:
-        radial-gradient(circle at 18% 16%, rgba(255,255,255,.24), transparent 18%),
-        radial-gradient(circle at 76% 24%, rgba(255,255,255,.13), transparent 16%),
+        radial-gradient(circle at 18% 16%, rgba(255,255,255,.10), transparent 18%),
+        radial-gradient(circle at 76% 24%, rgba(255,255,255,.06), transparent 16%),
         radial-gradient(ellipse at 50% 115%, rgba(61, 102, 113, .22), transparent 50%),
         linear-gradient(
             180deg,
-            #d5ecef 0%,
-            #bfdde3 36%,
-            #a7cbd4 68%,
-            #91b7c2 100%
+            #c6dcdf 0%,
+            #adcbd2 36%,
+            #94b9c3 68%,
+            #7fa8b4 100%
         );
 }
 
