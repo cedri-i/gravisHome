@@ -1232,3 +1232,71 @@ body.is-netting-fish {
     animation-duration: 3s;
     opacity: .58;
 }
+/* Abstract pouch inspired by bright aquarium fish-food packaging. */
+#fish-food-bag {
+    width: 5.35rem;
+    height: 6.05rem;
+    overflow: hidden;
+    border: 1px solid rgba(5, 76, 135, 0.36);
+    border-radius: 0.9rem 0.9rem 0.55rem 0.55rem;
+    clip-path: polygon(7% 0, 93% 0, 100% 94%, 86% 100%, 14% 100%, 0 94%);
+    background:
+        radial-gradient(circle at 73% 48%, #ffb21f 0 9%, #ff7a0a 10% 14%, transparent 15%),
+        radial-gradient(circle at 76% 45%, rgba(255, 255, 255, 0.95) 0 1.5%, transparent 1.8%),
+        linear-gradient(180deg, #075eaa 0 22%, transparent 22%),
+        linear-gradient(0deg, #054a99 0 17%, transparent 17%),
+        radial-gradient(ellipse at 50% 51%, rgba(255, 255, 255, 0.96) 0 28%, transparent 29%),
+        linear-gradient(180deg, #76e1df 22%, #2fbccc 64%, #0c87b7 83%);
+    box-shadow:
+        inset 0 0.2rem 0 rgba(255, 255, 255, 0.28),
+        inset 0 -0.32rem 0 rgba(3, 58, 127, 0.2),
+        0 0.45rem 1rem rgba(3, 72, 115, 0.18);
+}
+
+#fish-food-bag::before {
+    content: "Fish\A Food";
+    left: 50%;
+    top: 47%;
+    width: 3.7rem;
+    height: 2.2rem;
+    display: grid;
+    place-items: center;
+    white-space: pre;
+    border-radius: 52% 46% 50% 44% / 48% 52% 42% 55%;
+    background: #fffaf0;
+    color: #0750a4;
+    font-size: 0.9rem;
+    font-weight: 900;
+    line-height: 0.82;
+    letter-spacing: 0;
+    text-align: center;
+    text-shadow: 0.04rem 0.04rem 0 rgba(255, 255, 255, 0.8);
+    transform: translate(-50%, -50%) rotate(-4deg);
+    box-shadow:
+        0.3rem 0.24rem 0 #ff7a0a,
+        0 0 0 0.16rem rgba(255, 255, 255, 0.72),
+        0 0.45rem 0.85rem rgba(0, 60, 120, 0.22);
+}
+
+#fish-food-bag::after {
+    content: "";
+    left: 50%;
+    right: auto;
+    top: auto;
+    bottom: 0.58rem;
+    width: 3.65rem;
+    height: 0.82rem;
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 12% 48%, #9a5a1f 0 8%, transparent 9%),
+        radial-gradient(circle at 25% 45%, #dc7a16 0 8%, transparent 9%),
+        radial-gradient(circle at 39% 55%, #667a2d 0 8%, transparent 9%),
+        radial-gradient(circle at 52% 48%, #c45c1c 0 8%, transparent 9%),
+        radial-gradient(circle at 65% 56%, #b8802c 0 8%, transparent 9%),
+        radial-gradient(circle at 80% 47%, #6f7e31 0 8%, transparent 9%),
+        linear-gradient(180deg, #fff6df, #f3cd85);
+    transform: translateX(-50%);
+    box-shadow:
+        0 0 0 0.12rem rgba(255, 255, 255, 0.95),
+        0 0.18rem 0.42rem rgba(5, 58, 95, 0.22);
+}
