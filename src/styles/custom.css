@@ -20,6 +20,73 @@ button[data-theme-toggle],
   display: none !important;
 }
 
+:root[data-theme="light"] {
+    --sl-color-bg: #adcbd2;
+    --sl-color-bg-nav: #c6dcdf;
+    --sl-color-bg-sidebar: #bed8dd;
+    --sl-color-bg-inline-code: #d7e8eb;
+    --sl-color-hairline-light: rgba(74, 113, 124, .16);
+    --sl-color-hairline: rgba(57, 94, 106, .24);
+    --sl-color-hairline-shade: rgba(42, 76, 88, .32);
+    --sl-color-text: #18323a;
+    --sl-color-white: #102a33;
+    --sl-color-gray-1: #18323a;
+    --sl-color-gray-2: #2f5660;
+    --sl-color-gray-3: #4f7480;
+    --sl-color-gray-4: #7598a2;
+    --sl-color-gray-5: #9fbcc4;
+    --sl-color-gray-6: #d5e7ea;
+    --sl-color-accent-low: #d8eef1;
+    --sl-color-accent: #287f94;
+    --sl-color-accent-high: #13424e;
+}
+
+:root[data-theme="dark"] {
+    --sl-color-bg: #050814;
+    --sl-color-bg-nav: #07112e;
+    --sl-color-bg-sidebar: #071029;
+    --sl-color-bg-inline-code: #101a38;
+    --sl-color-hairline-light: rgba(169, 190, 255, .12);
+    --sl-color-hairline: rgba(142, 169, 255, .18);
+    --sl-color-hairline-shade: rgba(78, 100, 158, .28);
+    --sl-color-text: #dbe7ff;
+    --sl-color-white: #f8fbff;
+    --sl-color-gray-1: #eef5ff;
+    --sl-color-gray-2: #c6d4f3;
+    --sl-color-gray-3: #96a8d0;
+    --sl-color-gray-4: #66769c;
+    --sl-color-gray-5: #2f3b5e;
+    --sl-color-gray-6: #111936;
+    --sl-color-accent-low: #0e2347;
+    --sl-color-accent: #7dd3fc;
+    --sl-color-accent-high: #d8f3ff;
+}
+
+:root[data-theme="light"] body:not(:has(.home-starsky)) {
+    background:
+        radial-gradient(circle at 18% 16%, rgba(255,255,255,.10), transparent 18%),
+        radial-gradient(circle at 76% 24%, rgba(255,255,255,.06), transparent 16%),
+        radial-gradient(ellipse at 50% 115%, rgba(61, 102, 113, .22), transparent 50%),
+        linear-gradient(180deg, #c6dcdf 0%, #adcbd2 36%, #94b9c3 68%, #7fa8b4 100%);
+}
+
+:root[data-theme="dark"] body:not(:has(.home-starsky)) {
+    background:
+        radial-gradient(ellipse at 34% 42%, rgba(255,255,255,.09), transparent 18%),
+        radial-gradient(ellipse at 38% 44%, rgba(150,190,255,.12), transparent 32%),
+        radial-gradient(ellipse at 14% 42%, rgba(168, 85, 247, .28), transparent 31%),
+        radial-gradient(ellipse at 82% 30%, rgba(45, 212, 191, .22), transparent 29%),
+        radial-gradient(ellipse at 58% 82%, rgba(244, 114, 182, .16), transparent 34%),
+        linear-gradient(180deg, #050814 0%, #07112e 48%, #040712 100%);
+}
+
+body:not(:has(.home-starsky)) .page,
+body:not(:has(.home-starsky)) .main-frame,
+body:not(:has(.home-starsky)) main,
+body:not(:has(.home-starsky)) .content-panel {
+    background: transparent;
+}
+
 :root {
     --obsidian-red: #d64545;
     --obsidian-orange: #c76f1d;
