@@ -62,27 +62,27 @@
   }
 
   function createComet() {
-    const startX = rand(w + 80, w * 1.35);
-    const startY = rand(-h * 0.1, h * 0.48);
+    const startX = rand(w + 120, w * 1.32);
+    const startY = rand(-h * 0.06, h * 0.34);
 
-    const endX = rand(-w * 0.38, w * 0.24);
-    const endY = startY + rand(h * 0.22, h * 0.58);
+    const endX = rand(-w * 0.42, w * 0.12);
+    const endY = startY + rand(h * 0.28, h * 0.64);
 
-    const power = rand(0.85, 1.35);
-    const life = rand(4.2, 7.2);
+    const power = rand(0.55, 0.95);
+    const life = rand(2.8, 4.6);
 
     const fragments = [];
-    const fragmentCount = Math.floor(rand(24, 46) * power);
+    const fragmentCount = Math.floor(rand(7, 14) * power);
 
     for (let i = 0; i < fragmentCount; i++) {
       fragments.push({
-        delay: rand(0.05, 0.85),
-        offset: rand(0.05, 0.9),
+        delay: rand(0.12, 0.78),
+        offset: rand(0.12, 0.82),
         side: rand(-1, 1),
-        size: rand(0.8, 2.6) * power,
-        drift: rand(0.4, 1.8),
-        alpha: rand(0.35, 0.9),
-        warm: Math.random() > 0.55
+        size: rand(0.35, 1.05) * power,
+        drift: rand(0.35, 1.15),
+        alpha: rand(0.2, 0.55),
+        warm: Math.random() > 0.72
       });
     }
 
@@ -94,16 +94,14 @@
       age: 0,
       life,
       power,
-      curve: rand(-90, 90),
+      curve: rand(-34, 34),
       wobble: rand(0, Math.PI * 2),
       fragments,
-      spin: rand(-2.2, 2.2),
-      rotation: rand(0, Math.PI * 2),
       headX: startX,
       headY: startY,
       tailX: startX,
       tailY: startY,
-      hitRadius: 72 * power
+      hitRadius: 30 + 18 * power
     });
   }
 
@@ -114,7 +112,7 @@
     const y = c.startY + (c.endY - c.startY) * ease;
 
     const arc = Math.sin(t * Math.PI) * c.curve;
-    const wobble = Math.sin(t * Math.PI * 6 + c.wobble) * 8 * c.power;
+    const wobble = Math.sin(t * Math.PI * 5 + c.wobble) * 1.8 * c.power;
 
     return {
       x,
@@ -136,63 +134,61 @@
     const px = -dy;
     const py = dx;
 
-    const tailLength = (190 + 320 * c.power) * (0.75 + 0.25 * Math.sin(t * Math.PI));
-    const tailWidth = (18 + 20 * c.power) * fade;
+    const pulse = 0.88 + 0.12 * Math.sin(t * Math.PI);
+    const tailLength = (280 + 230 * c.power) * pulse;
+    const coreWidth = (1.35 + 1.9 * c.power) * fade;
+    const glowWidth = (6 + 7 * c.power) * fade;
 
     const tailEndX = head.x + tx * tailLength;
     const tailEndY = head.y + ty * tailLength;
 
-    const grad = ctx.createLinearGradient(head.x, head.y, tailEndX, tailEndY);
-    grad.addColorStop(0, `rgba(255, 255, 255, ${0.72 * fade})`);
-    grad.addColorStop(0.12, `rgba(150, 225, 255, ${0.5 * fade})`);
-    grad.addColorStop(0.42, `rgba(74, 160, 255, ${0.22 * fade})`);
-    grad.addColorStop(0.72, `rgba(255, 178, 95, ${0.09 * fade})`);
-    grad.addColorStop(1, "rgba(0, 0, 0, 0)");
-
     ctx.globalCompositeOperation = "lighter";
-    ctx.fillStyle = grad;
+    ctx.lineCap = "round";
 
+    const glow = ctx.createLinearGradient(head.x, head.y, tailEndX, tailEndY);
+    glow.addColorStop(0, `rgba(255, 255, 255, ${0.5 * fade})`);
+    glow.addColorStop(0.1, `rgba(170, 232, 255, ${0.34 * fade})`);
+    glow.addColorStop(0.46, `rgba(74, 163, 255, ${0.12 * fade})`);
+    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+    ctx.strokeStyle = glow;
+    ctx.lineWidth = glowWidth;
     ctx.beginPath();
-    ctx.moveTo(head.x + px * tailWidth, head.y + py * tailWidth);
-    ctx.bezierCurveTo(
-      head.x + tx * tailLength * 0.3 + px * tailWidth * 1.45,
-      head.y + ty * tailLength * 0.3 + py * tailWidth * 1.45,
-      head.x + tx * tailLength * 0.72 + px * tailWidth * 0.5,
-      head.y + ty * tailLength * 0.72 + py * tailWidth * 0.5,
-      tailEndX,
-      tailEndY
-    );
-    ctx.bezierCurveTo(
-      head.x + tx * tailLength * 0.72 - px * tailWidth * 0.5,
-      head.y + ty * tailLength * 0.72 - py * tailWidth * 0.5,
-      head.x + tx * tailLength * 0.3 - px * tailWidth * 1.2,
-      head.y + ty * tailLength * 0.3 - py * tailWidth * 1.2,
-      head.x - px * tailWidth,
-      head.y - py * tailWidth
-    );
-    ctx.closePath();
-    ctx.fill();
+    ctx.moveTo(head.x, head.y);
+    ctx.lineTo(tailEndX, tailEndY);
+    ctx.stroke();
 
-    for (let i = 0; i < 5; i++) {
-      const k = i / 4;
-      const streamLength = tailLength * rand(0.38, 0.95);
-      const streamOffset = (i - 2) * tailWidth * rand(0.35, 0.65);
+    const core = ctx.createLinearGradient(head.x, head.y, tailEndX, tailEndY);
+    core.addColorStop(0, `rgba(255, 255, 255, ${0.95 * fade})`);
+    core.addColorStop(0.08, `rgba(222, 249, 255, ${0.7 * fade})`);
+    core.addColorStop(0.38, `rgba(126, 203, 255, ${0.28 * fade})`);
+    core.addColorStop(1, "rgba(0, 0, 0, 0)");
 
-      ctx.strokeStyle = `rgba(205, 237, 255, ${0.13 * fade * (1 - k * 0.12)})`;
-      ctx.lineWidth = Math.max(0.8, tailWidth * rand(0.06, 0.16));
+    ctx.strokeStyle = core;
+    ctx.lineWidth = Math.max(0.8, coreWidth);
+    ctx.beginPath();
+    ctx.moveTo(head.x, head.y);
+    ctx.lineTo(tailEndX, tailEndY);
+    ctx.stroke();
 
+    for (let i = 0; i < 4; i++) {
+      const k = i / 3;
+      const side = (i - 1.5) * coreWidth * rand(0.55, 0.9);
+      const streamLength = tailLength * rand(0.42, 0.88);
+      const streamFade = (0.12 - k * 0.018) * fade;
+
+      ctx.strokeStyle = `rgba(205, 238, 255, ${streamFade})`;
+      ctx.lineWidth = Math.max(0.45, coreWidth * rand(0.2, 0.38));
       ctx.beginPath();
-      ctx.moveTo(head.x + px * streamOffset, head.y + py * streamOffset);
-      ctx.quadraticCurveTo(
-        head.x + tx * streamLength * 0.48 + px * streamOffset * 1.8,
-        head.y + ty * streamLength * 0.48 + py * streamOffset * 1.8,
-        head.x + tx * streamLength,
-        head.y + ty * streamLength
+      ctx.moveTo(head.x + px * side, head.y + py * side);
+      ctx.lineTo(
+        head.x + tx * streamLength + px * side * 0.22,
+        head.y + ty * streamLength + py * side * 0.22
       );
       ctx.stroke();
     }
 
-    return { dx, dy, tx, ty, px, py, tailLength, tailWidth, tailEndX, tailEndY };
+    return { dx, dy, tx, ty, px, py, tailLength, tailWidth: glowWidth, coreWidth, tailEndX, tailEndY };
   }
 
   function drawFragments(c, head, dir, t, fade) {
@@ -203,107 +199,65 @@
       if (local <= 0 || local >= 1) continue;
 
       const back = dir.tailLength * f.offset * local;
-      const side = f.side * dir.tailWidth * f.drift * Math.sin(local * Math.PI);
-      const shake = Math.sin((local + f.offset) * Math.PI * 8) * 5;
+      const side = f.side * dir.coreWidth * f.drift * Math.sin(local * Math.PI);
 
-      const x = head.x + dir.tx * back + dir.px * (side + shake);
-      const y = head.y + dir.ty * back + dir.py * (side + shake);
+      const x = head.x + dir.tx * back + dir.px * side;
+      const y = head.y + dir.ty * back + dir.py * side;
 
       const a = f.alpha * fade * (1 - local);
-      const hue = f.warm ? rand(34, 48) : rand(195, 218);
+      const hue = f.warm ? rand(38, 48) : rand(196, 214);
 
-      const glow = ctx.createRadialGradient(x, y, 0, x, y, f.size * 7);
-      glow.addColorStop(0, `hsla(${hue}, 100%, 78%, ${0.5 * a})`);
-      glow.addColorStop(0.35, `hsla(${hue}, 90%, 58%, ${0.18 * a})`);
+      const glow = ctx.createRadialGradient(x, y, 0, x, y, f.size * 5);
+      glow.addColorStop(0, `hsla(${hue}, 100%, 82%, ${0.42 * a})`);
+      glow.addColorStop(0.5, `hsla(${hue}, 90%, 62%, ${0.12 * a})`);
       glow.addColorStop(1, "rgba(0,0,0,0)");
 
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(x, y, f.size * (1 + local), 0, Math.PI * 2);
+      ctx.arc(x, y, f.size, 0, Math.PI * 2);
       ctx.fill();
     }
   }
 
-  function drawComaAndCore(c, head, dir, t, fade, dt) {
-    const r = (16 + 11 * c.power) * (0.92 + Math.sin(t * Math.PI * 10) * 0.04);
-    const comaR = r * 3.4;
+  function drawComaAndCore(c, head, dir, t, fade) {
+    const coreR = (2.1 + 1.8 * c.power) * (0.94 + Math.sin(t * Math.PI * 9) * 0.05);
+    const glowR = coreR * 5.2;
 
     ctx.globalCompositeOperation = "lighter";
 
-    const coma = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, comaR);
-    coma.addColorStop(0, `rgba(255,255,255,${0.86 * fade})`);
-    coma.addColorStop(0.18, `rgba(190,235,255,${0.68 * fade})`);
-    coma.addColorStop(0.42, `rgba(95,180,255,${0.28 * fade})`);
-    coma.addColorStop(1, "rgba(0,0,0,0)");
+    const glow = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, glowR);
+    glow.addColorStop(0, `rgba(255,255,255,${0.78 * fade})`);
+    glow.addColorStop(0.2, `rgba(182,235,255,${0.42 * fade})`);
+    glow.addColorStop(0.62, `rgba(85,175,255,${0.13 * fade})`);
+    glow.addColorStop(1, "rgba(0,0,0,0)");
 
-    ctx.fillStyle = coma;
+    ctx.fillStyle = glow;
     ctx.beginPath();
-    ctx.arc(head.x, head.y, comaR, 0, Math.PI * 2);
+    ctx.arc(head.x, head.y, glowR, 0, Math.PI * 2);
     ctx.fill();
-
-    c.rotation += c.spin * dt;
 
     ctx.save();
     ctx.translate(head.x, head.y);
-    ctx.rotate(c.rotation);
+    ctx.rotate(Math.atan2(dir.dy, dir.dx));
 
-    const rockGrad = ctx.createRadialGradient(-r * 0.3, -r * 0.4, 0, 0, 0, r * 1.25);
-    rockGrad.addColorStop(0, "#fff7d2");
-    rockGrad.addColorStop(0.22, "#ffd884");
-    rockGrad.addColorStop(0.52, "#c8743a");
-    rockGrad.addColorStop(1, "#4d2c2a");
+    const spark = ctx.createLinearGradient(-coreR * 1.8, 0, coreR * 4.2, 0);
+    spark.addColorStop(0, `rgba(120,210,255,${0.08 * fade})`);
+    spark.addColorStop(0.42, `rgba(255,255,255,${0.95 * fade})`);
+    spark.addColorStop(1, `rgba(255,232,172,${0.34 * fade})`);
 
-    ctx.globalCompositeOperation = "source-over";
-    ctx.globalAlpha = 0.95 * fade;
-    ctx.fillStyle = rockGrad;
-    ctx.strokeStyle = `rgba(255,255,255,${0.32 * fade})`;
-    ctx.lineWidth = Math.max(1, r * 0.08);
-
+    ctx.fillStyle = spark;
     ctx.beginPath();
-    const points = 13;
-    for (let i = 0; i <= points; i++) {
-      const a = (i / points) * Math.PI * 2;
-      const wobble =
-        1 +
-        Math.sin(a * 3 + c.wobble) * 0.09 +
-        Math.cos(a * 5 - c.wobble) * 0.06;
-
-      const x = Math.cos(a) * r * wobble;
-      const y = Math.sin(a) * r * wobble * 0.9;
-
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-
-    ctx.closePath();
+    ctx.ellipse(0, 0, coreR * 3.2, coreR * 0.78, 0, 0, Math.PI * 2);
     ctx.fill();
+
+    ctx.strokeStyle = `rgba(255,255,255,${0.62 * fade})`;
+    ctx.lineWidth = Math.max(0.7, coreR * 0.26);
+    ctx.beginPath();
+    ctx.moveTo(-coreR * 4.5, 0);
+    ctx.lineTo(coreR * 5.8, 0);
     ctx.stroke();
-
-    ctx.globalAlpha = 0.35 * fade;
-    ctx.fillStyle = "#6f3a2e";
-
-    const craters = [
-      [-0.32, -0.12, 0.16],
-      [0.18, 0.2, 0.12],
-      [0.32, -0.28, 0.09]
-    ];
-
-    for (const [cx, cy, cr] of craters) {
-      ctx.beginPath();
-      ctx.arc(cx * r, cy * r, cr * r, 0, Math.PI * 2);
-      ctx.fill();
-    }
 
     ctx.restore();
-
-    ctx.globalCompositeOperation = "lighter";
-    ctx.strokeStyle = `rgba(255,255,255,${0.44 * fade})`;
-    ctx.lineWidth = 1.2;
-
-    ctx.beginPath();
-    ctx.moveTo(head.x - dir.px * r * 1.8, head.y - dir.py * r * 1.8);
-    ctx.lineTo(head.x + dir.px * r * 1.8, head.y + dir.py * r * 1.8);
-    ctx.stroke();
   }
 
   function explodeComet(c, x, y) {
@@ -337,7 +291,7 @@
       const headHit = Math.hypot(event.clientX - c.headX, event.clientY - c.headY);
       const tailHit = distanceToSegment(event.clientX, event.clientY, c.headX, c.headY, c.tailX, c.tailY);
 
-      if (headHit < c.hitRadius || tailHit < Math.max(34, c.hitRadius * 0.46)) {
+      if (headHit < c.hitRadius || tailHit < Math.max(18, c.hitRadius * 0.38)) {
         explodeComet(c, event.clientX, event.clientY);
         break;
       }
