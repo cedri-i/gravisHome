@@ -69,8 +69,8 @@ body.is-feeding-fish {
     width: 8px;
     height: 8px;
     border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.55);
-    box-shadow: 0 0 18px rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.34);
+    box-shadow: 0 0 14px rgba(255,255,255,.10);
     transform: translate(-50%, -50%);
     animation: pondRipple 1.5s ease-out forwards;
 }
@@ -88,10 +88,10 @@ body.is-feeding-fish {
     background:
         linear-gradient(90deg, transparent 48%, rgba(120,53,15,.55) 49% 51%, transparent 52%),
         radial-gradient(circle at 28% 34%, rgba(255,220,130,.35), transparent 22%),
-        linear-gradient(135deg, #b45309 0%, #92400e 46%, #5f2b0a 100%);
-    opacity: .72;
+        linear-gradient(135deg, #9f6840 0%, #7a5238 48%, #4f382b 100%);
+    opacity: .58;
     box-shadow:
-        inset 8px 4px 10px rgba(255,237,213,.22),
+        inset 8px 4px 10px rgba(255,237,213,.14),
         inset -10px -8px 12px rgba(60,25,8,.35),
         0 8px 18px rgba(20,70,85,.16);
 }
@@ -142,8 +142,8 @@ body.is-feeding-fish {
         radial-gradient(circle at 54% 58%, rgba(239,68,68,.85) 0 13%, transparent 14%),
         radial-gradient(circle at 68% 34%, rgba(249,115,22,.72) 0 16%, transparent 17%),
         linear-gradient(90deg, #fff7ed 0%, #fed7aa 34%, #fb923c 70%, #ea580c 100%);
-    opacity: .84;
-    filter: drop-shadow(0 8px 14px rgba(20,80,90,.2));
+    opacity: .72;
+    filter: saturate(.86) drop-shadow(0 7px 12px rgba(42,78,86,.14));
 }
 
 .pond-fish::before {

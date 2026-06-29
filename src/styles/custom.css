@@ -1779,7 +1779,7 @@ starlight-theme-select svg,
 }
 
 :root[data-theme="light"] body:has(#water-pond) .page {
-    background-color: #aee3ec;
+    background-color: #bfdde3;
 }
 
 :root[data-theme="light"] .hero,
