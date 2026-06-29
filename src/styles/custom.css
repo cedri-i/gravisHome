@@ -1525,9 +1525,10 @@ starlight-theme-select svg,
 .guestbook-entry-actions {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 14px;
+    height: 24px;
+    line-height: 1;
     margin-top: 0.35rem;
-    min-height: 1.4rem;
 }
 
 .guestbook-reply-button,
@@ -1535,43 +1536,40 @@ starlight-theme-select svg,
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
-    height: 1.4rem;
-    min-height: 1.4rem;
-
+    height: 24px;
     border: 0;
     background: transparent;
-
     color: color-mix(in srgb, var(--sl-color-text) 62%, transparent);
     cursor: pointer;
-
     font: inherit;
     font-size: 0.84rem;
-    line-height: 1.4rem;
-
+    line-height: 1;
     padding: 0;
 }
 
 .guestbook-like-button {
-    gap: 0.32rem;
+    gap: 4px;
 }
 
 .guestbook-like-button svg {
     display: block;
-    width: 1rem;
-    height: 1rem;
-    flex: 0 0 1rem;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
 }
 
 .guestbook-like-button span {
     display: inline-flex;
     align-items: center;
-    height: 1.4rem;
-    line-height: 1.4rem;
+    height: 24px;
+    line-height: 1;
 }
 
 .guestbook-reply-button {
-    line-height: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    line-height: 1;
 }
 /* Light theme Baiyun bookshelf */
 :root[data-theme="light"] .baiyun-bookshelf {
