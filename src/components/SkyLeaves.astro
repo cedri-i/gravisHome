@@ -59,7 +59,7 @@
   }
 
   function makeLeaf(initial = false) {
-    const depth = rand(0.45, 1.35);
+    const depth = rand(0.85, 1.15);
 
     const palettes = [
       ["#b65b1d", "#e09a36", "#6f3416"],
@@ -74,7 +74,7 @@
     return {
       x: rand(-w * 0.15, w * 1.15),
       y: initial ? rand(-h, h) : rand(-h * 0.25, -40),
-      size: rand(12, 28) * depth,
+      size: rand(18, 24) * depth,
       depth,
       vx: rand(-0.12, 0.28) * depth,
       vy: rand(0.45, 1.35) * depth,
