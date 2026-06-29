@@ -1300,3 +1300,57 @@ body.is-netting-fish {
         0 0 0 0.12rem rgba(255, 255, 255, 0.95),
         0 0.18rem 0.42rem rgba(5, 58, 95, 0.22);
 }
+/* Roomier abstract fish-food pouch: smaller, cleaner, no pasted-image detail. */
+#fish-food-bag {
+    width: 4.45rem;
+    height: 5.05rem;
+    border-radius: 0.78rem 0.78rem 0.5rem 0.5rem;
+    clip-path: polygon(9% 0, 91% 0, 99% 92%, 84% 100%, 16% 100%, 1% 92%);
+    background:
+        radial-gradient(ellipse at 54% 50%, rgba(255, 255, 255, 0.98) 0 25%, transparent 26%),
+        radial-gradient(ellipse at 68% 50%, #ff8a12 0 10%, transparent 11%),
+        radial-gradient(circle at 71% 47%, rgba(255, 255, 255, 0.96) 0 1.7%, transparent 2%),
+        linear-gradient(180deg, #075ca8 0 23%, transparent 23%),
+        linear-gradient(0deg, #05488f 0 18%, transparent 18%),
+        linear-gradient(180deg, #69d8d6 23%, #20adbf 67%, #0b7faf 83%);
+    box-shadow:
+        inset 0 0.18rem 0 rgba(255, 255, 255, 0.25),
+        inset 0 -0.24rem 0 rgba(3, 55, 118, 0.2),
+        0 0.32rem 0.72rem rgba(3, 72, 115, 0.16);
+}
+
+#fish-food-bag::before {
+    content: "";
+    left: 50%;
+    top: 47%;
+    width: 2.78rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    background:
+        radial-gradient(ellipse at 70% 50%, #ff8a12 0 24%, transparent 25%),
+        linear-gradient(180deg, transparent 0 56%, #0750a4 57% 67%, transparent 68%),
+        #fffaf0;
+    transform: translate(-50%, -50%) rotate(-3deg);
+    box-shadow:
+        0.18rem 0.16rem 0 rgba(255, 126, 10, 0.9),
+        0 0 0 0.12rem rgba(255, 255, 255, 0.78),
+        0 0.3rem 0.55rem rgba(0, 60, 120, 0.18);
+}
+
+#fish-food-bag::after {
+    left: 50%;
+    bottom: 0.54rem;
+    width: 2.9rem;
+    height: 0.66rem;
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 15% 50%, #9a5a1f 0 9%, transparent 10%),
+        radial-gradient(circle at 31% 46%, #db7a16 0 9%, transparent 10%),
+        radial-gradient(circle at 48% 55%, #667a2d 0 9%, transparent 10%),
+        radial-gradient(circle at 65% 48%, #b85f1d 0 9%, transparent 10%),
+        radial-gradient(circle at 82% 54%, #778238 0 9%, transparent 10%),
+        linear-gradient(180deg, #fff8e5, #efca83);
+    box-shadow:
+        0 0 0 0.1rem rgba(255, 255, 255, 0.95),
+        0 0.14rem 0.28rem rgba(5, 58, 95, 0.2);
+}
