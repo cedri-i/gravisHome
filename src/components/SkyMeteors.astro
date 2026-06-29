@@ -1,57 +1,396 @@
+<canvas id="sky-comets" aria-hidden="true"></canvas>
+
+<style>
+  #sky-comets {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: screen;
+  }
+
+  :root[data-theme="light"] #sky-comets {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #sky-comets {
+      display: none;
+    }
+  }
+</style>
+
 <script is:inline>
-  (() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const root = document.querySelector('.home-starsky');
-    if (!root || reduce.matches) return;
+(() => {
+  const canvas = document.getElementById("sky-comets");
+  if (!canvas || window.__SKY_COMETS__) return;
+  window.__SKY_COMETS__ = true;
 
-    const explode = (event) => {
-      const target = event.currentTarget;
-      const burst = document.createElement('span');
-      burst.className = 'sky-burst';
-      burst.style.left = event.clientX + 'px';
-      burst.style.top = event.clientY + 'px';
-      document.body.append(burst);
-      target.remove();
-      burst.addEventListener('animationend', () => burst.remove(), { once: true });
-    };
+  const ctx = canvas.getContext("2d", { alpha: true });
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (reduceMotion.matches) return;
 
-    const schedule = () => window.setTimeout(spawnSkyMeteor, 3600 + Math.random() * 7200);
+  let w = 0;
+  let h = 0;
+  let dpr = 1;
+  let lastTime = performance.now();
+  let nextCometTime = 900 + Math.random() * 1800;
 
-    function spawnSkyMeteor() {
-      if (document.documentElement.dataset.theme === 'light') {
-        schedule();
-        return;
-      }
+  const comets = [];
 
-      const meteor = document.createElement('button');
-      const roll = Math.random() * 1.25;
-      const isSuper = roll < 0.05;
-      const huge = !isSuper && roll < 0.25;
-      const startTop = -18 + Math.random() * 46;
-      const startLeft = 82 + Math.random() * 32;
-      const driftX = -(116 + Math.random() * 34);
-      const driftY = 60 + Math.random() * 34;
-      const angle = 147 + Math.random() * 14;
-      const speed = isSuper ? 9.5 + Math.random() * 3.5 : huge ? 5.8 + Math.random() * 2.4 : 3.4 + Math.random() * 3.2;
-      const length = isSuper ? 34 + Math.random() * 14 : huge ? 20 + Math.random() * 10 : 11 + Math.random() * 11;
+  function rand(min, max) {
+    return min + Math.random() * (max - min);
+  }
 
-      meteor.type = 'button';
-      meteor.className = isSuper ? 'sky-meteor is-super-meteorite' : huge ? 'sky-meteor is-meteorite' : 'sky-meteor';
-      meteor.style.setProperty('--meteor-top', startTop + 'vh');
-      meteor.style.setProperty('--meteor-left', startLeft + 'vw');
-      meteor.style.setProperty('--meteor-x', driftX + 'vw');
-      meteor.style.setProperty('--meteor-y', driftY + 'vh');
-      meteor.style.setProperty('--meteor-angle', angle + 'deg');
-      meteor.style.setProperty('--meteor-speed', speed + 's');
-      meteor.style.setProperty('--meteor-length', length + 'rem');
-      meteor.style.setProperty('--meteor-wobble', (Math.random() * 2 - 1).toFixed(2) + 'rem');
-      meteor.setAttribute('aria-label', isSuper ? 'Super meteorite' : huge ? 'Meteorite' : 'Meteor');
-      meteor.addEventListener('click', explode, { once: true });
-      meteor.addEventListener('animationend', () => meteor.remove(), { once: true });
-      document.body.append(meteor);
-      schedule();
+  function clamp(v, min, max) {
+    return Math.max(min, Math.min(max, v));
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function createComet() {
+    const startX = rand(w + 80, w * 1.35);
+    const startY = rand(-h * 0.1, h * 0.48);
+
+    const endX = rand(-w * 0.38, w * 0.24);
+    const endY = startY + rand(h * 0.22, h * 0.58);
+
+    const power = rand(0.85, 1.35);
+    const life = rand(4.2, 7.2);
+
+    const fragments = [];
+    const fragmentCount = Math.floor(rand(24, 46) * power);
+
+    for (let i = 0; i < fragmentCount; i++) {
+      fragments.push({
+        delay: rand(0.05, 0.85),
+        offset: rand(0.05, 0.9),
+        side: rand(-1, 1),
+        size: rand(0.8, 2.6) * power,
+        drift: rand(0.4, 1.8),
+        alpha: rand(0.35, 0.9),
+        warm: Math.random() > 0.55
+      });
     }
 
-    schedule();
-  })();
+    comets.push({
+      startX,
+      startY,
+      endX,
+      endY,
+      age: 0,
+      life,
+      power,
+      curve: rand(-90, 90),
+      wobble: rand(0, Math.PI * 2),
+      fragments,
+      spin: rand(-2.2, 2.2),
+      rotation: rand(0, Math.PI * 2),
+      headX: startX,
+      headY: startY,
+      tailX: startX,
+      tailY: startY,
+      hitRadius: 72 * power
+    });
+  }
+
+  function getCometPosition(c, t) {
+    const ease = 1 - Math.pow(1 - t, 2.25);
+
+    const x = c.startX + (c.endX - c.startX) * ease;
+    const y = c.startY + (c.endY - c.startY) * ease;
+
+    const arc = Math.sin(t * Math.PI) * c.curve;
+    const wobble = Math.sin(t * Math.PI * 6 + c.wobble) * 8 * c.power;
+
+    return {
+      x,
+      y: y + arc + wobble
+    };
+  }
+
+  function drawTail(c, head, prev, t, fade) {
+    const vx = head.x - prev.x;
+    const vy = head.y - prev.y;
+    const len = Math.hypot(vx, vy) || 1;
+
+    const dx = vx / len;
+    const dy = vy / len;
+
+    const tx = -dx;
+    const ty = -dy;
+
+    const px = -dy;
+    const py = dx;
+
+    const tailLength = (190 + 320 * c.power) * (0.75 + 0.25 * Math.sin(t * Math.PI));
+    const tailWidth = (18 + 20 * c.power) * fade;
+
+    const tailEndX = head.x + tx * tailLength;
+    const tailEndY = head.y + ty * tailLength;
+
+    const grad = ctx.createLinearGradient(head.x, head.y, tailEndX, tailEndY);
+    grad.addColorStop(0, `rgba(255, 255, 255, ${0.72 * fade})`);
+    grad.addColorStop(0.12, `rgba(150, 225, 255, ${0.5 * fade})`);
+    grad.addColorStop(0.42, `rgba(74, 160, 255, ${0.22 * fade})`);
+    grad.addColorStop(0.72, `rgba(255, 178, 95, ${0.09 * fade})`);
+    grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+    ctx.globalCompositeOperation = "lighter";
+    ctx.fillStyle = grad;
+
+    ctx.beginPath();
+    ctx.moveTo(head.x + px * tailWidth, head.y + py * tailWidth);
+    ctx.bezierCurveTo(
+      head.x + tx * tailLength * 0.3 + px * tailWidth * 1.45,
+      head.y + ty * tailLength * 0.3 + py * tailWidth * 1.45,
+      head.x + tx * tailLength * 0.72 + px * tailWidth * 0.5,
+      head.y + ty * tailLength * 0.72 + py * tailWidth * 0.5,
+      tailEndX,
+      tailEndY
+    );
+    ctx.bezierCurveTo(
+      head.x + tx * tailLength * 0.72 - px * tailWidth * 0.5,
+      head.y + ty * tailLength * 0.72 - py * tailWidth * 0.5,
+      head.x + tx * tailLength * 0.3 - px * tailWidth * 1.2,
+      head.y + ty * tailLength * 0.3 - py * tailWidth * 1.2,
+      head.x - px * tailWidth,
+      head.y - py * tailWidth
+    );
+    ctx.closePath();
+    ctx.fill();
+
+    for (let i = 0; i < 5; i++) {
+      const k = i / 4;
+      const streamLength = tailLength * rand(0.38, 0.95);
+      const streamOffset = (i - 2) * tailWidth * rand(0.35, 0.65);
+
+      ctx.strokeStyle = `rgba(205, 237, 255, ${0.13 * fade * (1 - k * 0.12)})`;
+      ctx.lineWidth = Math.max(0.8, tailWidth * rand(0.06, 0.16));
+
+      ctx.beginPath();
+      ctx.moveTo(head.x + px * streamOffset, head.y + py * streamOffset);
+      ctx.quadraticCurveTo(
+        head.x + tx * streamLength * 0.48 + px * streamOffset * 1.8,
+        head.y + ty * streamLength * 0.48 + py * streamOffset * 1.8,
+        head.x + tx * streamLength,
+        head.y + ty * streamLength
+      );
+      ctx.stroke();
+    }
+
+    return { dx, dy, tx, ty, px, py, tailLength, tailWidth, tailEndX, tailEndY };
+  }
+
+  function drawFragments(c, head, dir, t, fade) {
+    ctx.globalCompositeOperation = "lighter";
+
+    for (const f of c.fragments) {
+      const local = clamp((t - f.delay) / (1 - f.delay), 0, 1);
+      if (local <= 0 || local >= 1) continue;
+
+      const back = dir.tailLength * f.offset * local;
+      const side = f.side * dir.tailWidth * f.drift * Math.sin(local * Math.PI);
+      const shake = Math.sin((local + f.offset) * Math.PI * 8) * 5;
+
+      const x = head.x + dir.tx * back + dir.px * (side + shake);
+      const y = head.y + dir.ty * back + dir.py * (side + shake);
+
+      const a = f.alpha * fade * (1 - local);
+      const hue = f.warm ? rand(34, 48) : rand(195, 218);
+
+      const glow = ctx.createRadialGradient(x, y, 0, x, y, f.size * 7);
+      glow.addColorStop(0, `hsla(${hue}, 100%, 78%, ${0.5 * a})`);
+      glow.addColorStop(0.35, `hsla(${hue}, 90%, 58%, ${0.18 * a})`);
+      glow.addColorStop(1, "rgba(0,0,0,0)");
+
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(x, y, f.size * (1 + local), 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function drawComaAndCore(c, head, dir, t, fade, dt) {
+    const r = (16 + 11 * c.power) * (0.92 + Math.sin(t * Math.PI * 10) * 0.04);
+    const comaR = r * 3.4;
+
+    ctx.globalCompositeOperation = "lighter";
+
+    const coma = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, comaR);
+    coma.addColorStop(0, `rgba(255,255,255,${0.86 * fade})`);
+    coma.addColorStop(0.18, `rgba(190,235,255,${0.68 * fade})`);
+    coma.addColorStop(0.42, `rgba(95,180,255,${0.28 * fade})`);
+    coma.addColorStop(1, "rgba(0,0,0,0)");
+
+    ctx.fillStyle = coma;
+    ctx.beginPath();
+    ctx.arc(head.x, head.y, comaR, 0, Math.PI * 2);
+    ctx.fill();
+
+    c.rotation += c.spin * dt;
+
+    ctx.save();
+    ctx.translate(head.x, head.y);
+    ctx.rotate(c.rotation);
+
+    const rockGrad = ctx.createRadialGradient(-r * 0.3, -r * 0.4, 0, 0, 0, r * 1.25);
+    rockGrad.addColorStop(0, "#fff7d2");
+    rockGrad.addColorStop(0.22, "#ffd884");
+    rockGrad.addColorStop(0.52, "#c8743a");
+    rockGrad.addColorStop(1, "#4d2c2a");
+
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 0.95 * fade;
+    ctx.fillStyle = rockGrad;
+    ctx.strokeStyle = `rgba(255,255,255,${0.32 * fade})`;
+    ctx.lineWidth = Math.max(1, r * 0.08);
+
+    ctx.beginPath();
+    const points = 13;
+    for (let i = 0; i <= points; i++) {
+      const a = (i / points) * Math.PI * 2;
+      const wobble =
+        1 +
+        Math.sin(a * 3 + c.wobble) * 0.09 +
+        Math.cos(a * 5 - c.wobble) * 0.06;
+
+      const x = Math.cos(a) * r * wobble;
+      const y = Math.sin(a) * r * wobble * 0.9;
+
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.globalAlpha = 0.35 * fade;
+    ctx.fillStyle = "#6f3a2e";
+
+    const craters = [
+      [-0.32, -0.12, 0.16],
+      [0.18, 0.2, 0.12],
+      [0.32, -0.28, 0.09]
+    ];
+
+    for (const [cx, cy, cr] of craters) {
+      ctx.beginPath();
+      ctx.arc(cx * r, cy * r, cr * r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+
+    ctx.globalCompositeOperation = "lighter";
+    ctx.strokeStyle = `rgba(255,255,255,${0.44 * fade})`;
+    ctx.lineWidth = 1.2;
+
+    ctx.beginPath();
+    ctx.moveTo(head.x - dir.px * r * 1.8, head.y - dir.py * r * 1.8);
+    ctx.lineTo(head.x + dir.px * r * 1.8, head.y + dir.py * r * 1.8);
+    ctx.stroke();
+  }
+
+  function explodeComet(c, x, y) {
+    const burst = document.createElement("span");
+    burst.className = "sky-burst";
+    burst.style.left = x + "px";
+    burst.style.top = y + "px";
+    document.body.append(burst);
+    burst.addEventListener("animationend", () => burst.remove(), { once: true });
+    const index = comets.indexOf(c);
+    if (index >= 0) comets.splice(index, 1);
+  }
+
+  function distanceToSegment(px, py, ax, ay, bx, by) {
+    const vx = bx - ax;
+    const vy = by - ay;
+    const wx = px - ax;
+    const wy = py - ay;
+    const len2 = vx * vx + vy * vy || 1;
+    const t = clamp((wx * vx + wy * vy) / len2, 0, 1);
+    const x = ax + vx * t;
+    const y = ay + vy * t;
+    return Math.hypot(px - x, py - y);
+  }
+
+  function handleClick(event) {
+    if (document.documentElement.dataset.theme === "light") return;
+
+    for (let i = comets.length - 1; i >= 0; i--) {
+      const c = comets[i];
+      const headHit = Math.hypot(event.clientX - c.headX, event.clientY - c.headY);
+      const tailHit = distanceToSegment(event.clientX, event.clientY, c.headX, c.headY, c.tailX, c.tailY);
+
+      if (headHit < c.hitRadius || tailHit < Math.max(34, c.hitRadius * 0.46)) {
+        explodeComet(c, event.clientX, event.clientY);
+        break;
+      }
+    }
+  }
+
+  function frame(now) {
+    const dt = Math.min((now - lastTime) / 1000, 0.033);
+    lastTime = now;
+
+    ctx.clearRect(0, 0, w, h);
+
+    nextCometTime -= dt * 1000;
+    if (nextCometTime <= 0) {
+      createComet();
+      nextCometTime = rand(8500, 18000);
+    }
+
+    for (let i = comets.length - 1; i >= 0; i--) {
+      const c = comets[i];
+      c.age += dt;
+
+      const t = c.age / c.life;
+      if (t >= 1) {
+        comets.splice(i, 1);
+        continue;
+      }
+
+      const fadeIn = clamp(t / 0.12, 0, 1);
+      const fadeOut = clamp((1 - t) / 0.22, 0, 1);
+      const fade = fadeIn * fadeOut;
+
+      const head = getCometPosition(c, t);
+      const prev = getCometPosition(c, Math.max(0, t - 0.012));
+
+      const dir = drawTail(c, head, prev, t, fade);
+      c.headX = head.x;
+      c.headY = head.y;
+      c.tailX = dir.tailEndX;
+      c.tailY = dir.tailEndY;
+      drawFragments(c, head, dir, t, fade);
+      drawComaAndCore(c, head, dir, t, fade, dt);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  resize();
+  window.addEventListener("resize", resize, { passive: true });
+
+  window.addEventListener("click", handleClick, { passive: true });
+
+  setTimeout(createComet, 900);
+  requestAnimationFrame(frame);
+})();
 </script>
