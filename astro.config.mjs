@@ -69,6 +69,31 @@ if (document.readyState === 'loading') {
                 {
                     tag: 'script',
                     attrs: { type: 'module' },
+                    content: `const bindDarkModeAction = () => {
+  const links = document.querySelectorAll('a[href="/#dark"], a[href="#dark"]');
+
+  links.forEach((link) => {
+    if (link.dataset.darkModeBound === 'true') return;
+    link.dataset.darkModeBound = 'true';
+
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('starlight-theme', 'dark');
+      window.StarlightThemeProvider?.updatePickers?.('dark');
+    });
+  });
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindDarkModeAction, { once: true });
+} else {
+  bindDarkModeAction();
+}`,
+                },
+                {
+                    tag: 'script',
+                    attrs: { type: 'module' },
                     content: String.raw`const visitorKey = 'gravis-home-visitor-id';
 const formatVisitorNumber = (value) => new Intl.NumberFormat('zh-CN').format(Number(value) || 0);
 const getVisitorId = () => {
