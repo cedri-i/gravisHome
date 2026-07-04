@@ -1374,3 +1374,37 @@ body.is-netting-fish {
 #fish-food-bag::after {
     content: none;
 }
+/* Final fish-food button: use the generated cartoon PNG and no focus frame. */
+#fish-food-bag {
+    width: 3.9rem;
+    height: 4.6rem;
+    padding: 0;
+    border: 0 !important;
+    outline: 0 !important;
+    border-radius: 0;
+    clip-path: none;
+    overflow: visible;
+    background-color: transparent !important;
+    background-image: url("../assets/fish-food-bag-cartoon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#fish-food-bag::before,
+#fish-food-bag::after {
+    content: none !important;
+}
+
+#fish-food-bag:hover,
+#fish-food-bag:focus,
+#fish-food-bag:focus-visible,
+#fish-food-bag:active,
+#fish-food-bag.is-active {
+    border: 0 !important;
+    outline: 0 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
