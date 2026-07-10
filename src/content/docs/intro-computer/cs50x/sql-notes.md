@@ -105,7 +105,6 @@ WHERE 成绩 IS NOT NULL
 ORDER BY 成绩;
 ```
 - 但须注意，`DISTINCT`~={yellow}不会自动排除`NULL`=~
-- 
 ### `ROUND`语法
 ```SQL
 SELECT ROUND(AVG(成绩), 1)
