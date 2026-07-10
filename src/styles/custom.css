@@ -89,6 +89,11 @@ body:not(:has(.home-starsky)) .content-panel {
 
 :root {
     --obsidian-red: #d64545;
+    /* Keep Markdown headings distinct without overpowering the body copy. */
+    --sl-text-h1: clamp(2rem, 3vw, 2.25rem);
+    --sl-text-h2: clamp(1.6rem, 2.4vw, 1.875rem);
+    --sl-text-h3: clamp(1.35rem, 2vw, 1.5rem);
+    --sl-text-h4: clamp(1.125rem, 1.6vw, 1.25rem);
     --obsidian-orange: #c76f1d;
     --obsidian-yellow: #a97900;
     --obsidian-green: #2f8f46;
