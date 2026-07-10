@@ -474,6 +474,9 @@ import '../styles/waterpond.css';
       if (document.documentElement.dataset.theme !== 'light') return;
 
       if (fishNet?.classList.contains('is-active')) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation?.();
         tryCatchFish(event.clientX, event.clientY);
         return;
       }
@@ -499,7 +502,7 @@ import '../styles/waterpond.css';
       }
 
       createRipple(event.clientX, event.clientY, 1.5);
-    });
+    }, { capture: true });
 
     window.addEventListener('scroll', wakeRestingTurtle, { passive: true });
     window.addEventListener('wheel', wakeRestingTurtle, { passive: true });
