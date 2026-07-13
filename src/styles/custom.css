@@ -1,5 +1,11 @@
-@import "@fontsource-variable/inter/wght.css";
-@import "@fontsource-variable/inter/wght-italic.css";
+@import "@fontsource-variable/source-sans-3/wght.css";
+@import "@fontsource-variable/source-sans-3/wght-italic.css";
+@import "@fontsource-variable/newsreader/wght.css";
+@import "@fontsource-variable/newsreader/wght-italic.css";
+@import "@fontsource/noto-sans-sc/400.css";
+@import "@fontsource/noto-sans-sc/500.css";
+@import "@fontsource/noto-sans-sc/600.css";
+@import "@fontsource/noto-sans-sc/700.css";
 @import "katex/dist/katex.min.css";
 @import "./starsky.css";
 @import "./sky-toggle.css";
@@ -11,8 +17,9 @@
 }
 
 .hero h1 {
-  font-family: "LiuGongQuan", serif;
-  font-weight: 400;
+  font-family: "Newsreader Variable", "Noto Sans SC", "Songti SC", serif;
+  font-weight: 560;
+  letter-spacing: -0.025em;
 }
 
 button[aria-label*="theme"],
@@ -90,7 +97,11 @@ body:not(:has(.home-starsky)) .content-panel {
 }
 
 :root {
-    --sl-font: "Inter Variable", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --font-body: "Source Sans 3 Variable", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --font-display: "Newsreader Variable", "Noto Sans SC", "Songti SC", serif;
+    --font-ui: "Source Sans 3 Variable", "Noto Sans SC", "PingFang SC", sans-serif;
+    --sl-font: var(--font-body);
+    --sl-font-mono: "Cascadia Code", "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
     --obsidian-red: #d64545;
     /* Keep Markdown headings distinct without overpowering the body copy. */
     --sl-text-h1: clamp(2rem, 3vw, 2.25rem);
@@ -104,6 +115,53 @@ body:not(:has(.home-starsky)) .content-panel {
     --obsidian-blue: #3b6fd8;
     --obsidian-purple: #8756c5;
     --obsidian-pink: #c24f86;
+}
+
+body {
+    font-family: var(--font-body);
+    font-optical-sizing: auto;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+}
+
+/* Keep article headings editorial, but lighter than interface labels. */
+.sl-markdown-content :is(h1, h2, h3),
+.content-panel > .sl-container > header h1 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    letter-spacing: -0.008em;
+}
+
+.sl-markdown-content h1,
+.content-panel > .sl-container > header h1 {
+    font-weight: 480;
+}
+
+.sl-markdown-content h2 {
+    font-weight: 520;
+}
+
+.sl-markdown-content h3 {
+    font-weight: 560;
+}
+
+.sl-markdown-content h4,
+.site-title,
+.sidebar-content,
+.right-sidebar,
+nav,
+button,
+input {
+    font-family: var(--font-ui);
+}
+
+.sl-markdown-content p,
+.sl-markdown-content li {
+    line-height: 1.82;
+}
+
+.sl-markdown-content strong {
+    font-weight: 650;
 }
 
 :root[data-theme='dark'] {
@@ -200,7 +258,7 @@ mark {
     color: var(--note-html-ink) !important;
     box-shadow: none !important;
     font-family:
-        "Inter Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Source Sans 3 Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
 }
 
@@ -208,7 +266,7 @@ mark {
 .sl-markdown-content > table[style] :not(pre):not(code) {
     color: var(--note-html-ink) !important;
     font-family:
-        "Inter Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Source Sans 3 Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
 }
 
@@ -295,10 +353,247 @@ mark {
 .sl-markdown-content > div[style] svg text {
     fill: var(--note-html-ink) !important;
     font-family:
-        "Inter Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Source Sans 3 Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
 }
 
+.stack-map {
+    --stack-map-line: color-mix(in srgb, var(--sl-color-accent) 42%, var(--sl-color-hairline));
+    --stack-map-soft: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+    margin: 1.75rem 0;
+    overflow: hidden;
+    border: 1px solid var(--stack-map-line);
+    border-radius: 1rem;
+    background:
+        linear-gradient(135deg, var(--stack-map-soft), transparent 48%),
+        color-mix(in srgb, var(--sl-color-bg) 86%, transparent);
+    color: var(--sl-color-text);
+    box-shadow: 0 1rem 3rem color-mix(in srgb, #020617 18%, transparent);
+}
+
+.stack-map__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.35rem;
+    border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+.stack-map__header > div {
+    display: grid;
+    gap: 0.15rem;
+}
+
+.stack-map__eyebrow,
+.stack-map__cell small,
+.stack-map__axis span,
+.stack-map__next span:first-child {
+    color: var(--sl-color-gray-3);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.stack-map__header strong {
+    color: var(--sl-color-white);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 560;
+}
+
+.stack-map code {
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 48%, transparent);
+    border-radius: 0.42rem;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-accent-high);
+    font-weight: 700;
+}
+
+.stack-map__header > code {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.88rem;
+}
+
+.stack-map__canvas {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 0.7fr) minmax(12rem, 1.35fr) minmax(9rem, 0.9fr);
+    gap: clamp(1rem, 4vw, 2.5rem);
+    align-items: stretch;
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 4vw, 2.5rem) 1.5rem;
+}
+
+.stack-map__axis {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    justify-items: end;
+    min-height: 20rem;
+    padding-block: 0.2rem 3.25rem;
+}
+
+.stack-map__axis i {
+    position: relative;
+    width: 1px;
+    margin: 0.65rem 0.6rem;
+    background: linear-gradient(var(--sl-color-accent), var(--stack-map-line));
+}
+
+.stack-map__axis i::before,
+.stack-map__axis i::after {
+    position: absolute;
+    left: 50%;
+    color: var(--sl-color-accent);
+    font-style: normal;
+    transform: translateX(-50%);
+}
+
+.stack-map__axis i::before {
+    top: -0.5rem;
+    content: "↑";
+}
+
+.stack-map__axis i::after {
+    bottom: -0.5rem;
+    content: "↓";
+}
+
+.stack-map__memory {
+    display: grid;
+    grid-template-rows: repeat(3, minmax(4.2rem, auto)) 3.2rem;
+    border-inline: 1px solid var(--stack-map-line);
+}
+
+.stack-map__cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.85rem 1rem;
+    border-top: 1px solid var(--stack-map-line);
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 68%, transparent);
+}
+
+.stack-map__cell span,
+.stack-map__cell strong {
+    color: var(--sl-color-white);
+    font-size: 0.93rem;
+    font-weight: 540;
+}
+
+.stack-map__cell--bottom {
+    border-radius: 0.7rem 0.7rem 0 0;
+}
+
+.stack-map__cell--top {
+    position: relative;
+    border-color: var(--sl-color-accent);
+    background: color-mix(in srgb, var(--sl-color-accent-low) 78%, var(--sl-color-bg));
+}
+
+.stack-map__cell--top::after {
+    position: absolute;
+    right: -0.42rem;
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 50%;
+    background: var(--sl-color-accent);
+    box-shadow: 0 0 0 0.28rem color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
+    content: "";
+}
+
+.stack-map__next {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    border: 1px dashed var(--stack-map-line);
+    border-top: 0;
+    border-radius: 0 0 0.7rem 0.7rem;
+    background: color-mix(in srgb, var(--sl-color-accent) 4%, transparent);
+}
+
+.stack-map__next span:last-child {
+    color: var(--sl-color-accent);
+    font-size: 1.15rem;
+}
+
+.stack-map__pointer {
+    position: relative;
+    align-self: end;
+    display: grid;
+    gap: 0.45rem;
+    margin-bottom: 3.7rem;
+    padding-left: 1.25rem;
+}
+
+.stack-map__pointer::before {
+    position: absolute;
+    top: 0.8rem;
+    right: 100%;
+    width: clamp(1rem, 4vw, 2.5rem);
+    height: 1px;
+    background: var(--sl-color-accent);
+    content: "";
+}
+
+.stack-map__pointer::after {
+    position: absolute;
+    top: 0.52rem;
+    right: calc(100% - 0.05rem);
+    border-block: 0.3rem solid transparent;
+    border-right: 0;
+    border-left: 0.42rem solid var(--sl-color-accent);
+    content: "";
+}
+
+.stack-map__pointer code {
+    justify-self: start;
+    padding: 0.22rem 0.5rem;
+}
+
+.stack-map__pointer span {
+    max-width: 12rem;
+    color: var(--sl-color-gray-2);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.stack-map figcaption {
+    padding: 0.85rem 1.35rem 1rem;
+    border-top: 1px solid var(--sl-color-hairline);
+    color: var(--sl-color-gray-3);
+    font-size: 0.78rem;
+    line-height: 1.55;
+}
+
+.stack-map figcaption code {
+    padding: 0.08rem 0.25rem;
+}
+
+@media (max-width: 34rem) {
+    .stack-map__header {
+        align-items: flex-start;
+    }
+
+    .stack-map__canvas {
+        grid-template-columns: 4.5rem minmax(0, 1fr);
+        gap: 0.8rem;
+        padding-inline: 0.85rem;
+    }
+
+    .stack-map__pointer {
+        grid-column: 2;
+        margin: 0;
+        padding: 0.85rem 0 0.25rem;
+    }
+
+    .stack-map__pointer::before,
+    .stack-map__pointer::after {
+        display: none;
+    }
+}
 .notes-card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
@@ -377,7 +672,8 @@ mark {
     margin-top: 0.55rem;
     color: var(--sl-color-gray-2);
     font-size: 1rem;
-    font-weight: 400;
+    font-weight: 560;
+  letter-spacing: -0.025em;
     line-height: 1.6;
 }
 
@@ -1029,7 +1325,8 @@ button[aria-label*="theme"] {
 }
 
 .sl-markdown-content .card .description {
-    font-weight: 400;
+    font-weight: 560;
+  letter-spacing: -0.025em;
 }
 
 .update-history {
@@ -1193,7 +1490,8 @@ main:has(.baiyun-meta) h1 {
         "STZhongsong", "华文中宋", "FZZhongSong-Z07", "FZYaSongS-R-GB",
         "Songti SC", SimSun, "Noto Serif SC", "Source Han Serif SC", serif;
     font-size: clamp(2.6rem, 4vw, 4rem);
-    font-weight: 400;
+    font-weight: 560;
+  letter-spacing: -0.025em;
     letter-spacing: 0.04em;
     text-shadow: 0 10px 36px color-mix(in srgb, #000000 32%, transparent);
 }

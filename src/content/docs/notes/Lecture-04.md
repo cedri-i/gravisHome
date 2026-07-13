@@ -100,7 +100,7 @@ $间隔 = \frac{2^{1-bias}}{2^{23}}$
 ### Condition: `exp = 111...1`
 
 - Case: `exp = 111...1, frac = 000...0`
-	- Represents value $\infty$ 
+	- Represents value $\infty$
 	- Operation that overflows
 	- Both positive and negative
 	- E.g., 1.0/0.0 = -1.0/-0.0 = $+\infty$, 1.0/-0.0 = $-\infty$
@@ -182,17 +182,28 @@ Exact Result: $(-1)^{s}\cdot M\cdot2^{E}$
 ### `int` → `float`
 - Will round according to rounding mode
 # Quiz
-`int x == (int)(float)x`❌<br>
-`float` 会对整数进行舍入，导致**高位/低位**丢失，再转回 `int` 就和原值不一样了<br>
-`int x == (int)(double)x`👍<br>
-`double` 确有足够的位数<br>
-`float f == (float)(double)f`👍<br>
-`double d == (double)(float)d`❌<br>
-`f == -(-f)`👍<br>
-`2/3 == 2/3.0`❌<br>
-`d < 0.0 -> d * 2 < 0.0`👍<br>
-`d > f -> -f > -d`👍<br>
-`d * d >= 0.0`👍<br>
+`int x == (int)(float)x`❌
+
+`float` 会对整数进行舍入，导致**高位/低位**丢失，再转回 `int` 就和原值不一样了
+
+`int x == (int)(double)x`👍
+
+`double` 确有足够的位数
+
+`float f == (float)(double)f`👍
+
+`double d == (double)(float)d`❌
+
+`f == -(-f)`👍
+
+`2/3 == 2/3.0`❌
+
+`d < 0.0 -> d * 2 < 0.0`👍
+
+`d > f -> -f > -d`👍
+
+`d * d >= 0.0`👍
+
 `(d + f) - f == d`❌
 
 > 浮点数不是真实的值，但它们（运算结果）的可预测性很强

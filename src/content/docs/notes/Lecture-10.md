@@ -256,59 +256,13 @@ for (i = 0; i < limit; i += 2) {
 ```
 - Combine 2 elements at a time
 
-<table style="border-collapse: collapse; width: max-content; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 1em 0;">
-  <thead>
-    <tr>
-      <th rowspan="2" style="border: 1px solid #ddd; padding: 8px 12px; background-color: #f5f5f5;">Method</th>
-      <th colspan="2" style="border: 1px solid #ddd; padding: 8px 12px; background-color: #f5f5f5; text-align: center;">Integer</th>
-      <th colspan="2" style="border: 1px solid #ddd; padding: 8px 12px; background-color: #f5f5f5; text-align: center;">Double FP</th>
-    </tr>
-    <tr>
-      <!-- 第二行表头：由于第一列已被 rowspan 占用，此处直接定义具体运算列 -->
-      <th style="border: 1px solid #ddd; padding: 8px 12px; background-color: #fafafa;">Add</th>
-      <th style="border: 1px solid #ddd; padding: 8px 12px; background-color: #fafafa;">Mult</th>
-      <th style="border: 1px solid #ddd; padding: 8px 12px; background-color: #fafafa;">Add</th>
-      <th style="border: 1px solid #ddd; padding: 8px 12px; background-color: #fafafa;">Mult</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 8px 12px;"><strong>Combine4</strong></td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">1.27</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">3.01</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">3.01</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">5.01</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 8px 12px;"><strong>Unroll 2x1</strong></td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">1.01</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">3.01</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">3.01</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">5.01</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 8px 12px;"><strong>Unroll 2x1a</strong></td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">1.01</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">1.51</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">1.51</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">2.51</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 8px 12px;"><strong>Latency Bound</strong></td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">1.00</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">3.00</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">3.00</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">5.00</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #ddd; padding: 8px 12px;"><strong>Throughput Bound</strong></td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">0.50</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">1.00</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">1.00</td>
-      <td style="border: 1px solid #ddd; padding: 8px 12px; text-align: right;">0.50</td>
-    </tr>
-  </tbody>
-</table>
+| Method | Integer add | Integer multiply | Double add | Double multiply |
+| --- | ---: | ---: | ---: | ---: |
+| **Combine4** | 1.27 | 3.01 | 3.01 | 5.01 |
+| **Unroll 2x1** | 1.01 | 3.01 | 3.01 | 5.01 |
+| **Unroll 2x1a** | 1.01 | 1.51 | 1.51 | 2.51 |
+| **Latency bound** | 1.00 | 3.00 | 3.00 | 5.00 |
+| **Throughput bound** | 0.50 | 1.00 | 1.00 | 0.50 |
 - 加法延迟只有 1
 	- 这使得任何试图用 `x + (a+b)` 来重叠计算的想法，都会撞上“每周期最多吐出一个结果”的物理极限。要想突破 1.00 到达 0.50，必须用 **2x2 展开**（两个独立累加器），因为只有打破对 `x` 的依赖链，才能让两个加法单元同时开工
 

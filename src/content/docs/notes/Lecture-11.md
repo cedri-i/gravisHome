@@ -269,61 +269,16 @@ for (i = 0; i < M; i++)
 - 在各种缓存中都有某种~={cyan}**传输单元**=~
 	- 在层级之间来回拷贝
 
-<div style="background-color: #ffffff; padding: 40px; border-radius: 12px; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #1e293b; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);">
-    <div style="margin-bottom: 30px; text-align: center;">
-        <h2 style="margin: 0; color: #0f172a; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.025em;">存储器缓存分层演示</h2>
-        <p style="margin-top: 4px; color: #64748b; font-size: 0.875rem;">Memory Hierarchy & Data Blocks</p>
-    </div>
-    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-        <div style="width: 100%; max-width: 450px; position: relative; background: #f8fafc; border: 2px solid #3b82f6; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);">
-            <div style="position: absolute; left: -90px; top: 50%; transform: translateY(-50%); font-weight: 900; color: #3b82f6; font-size: 1.2rem; transform: rotate(-90deg);">CACHE</div>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-                <div style="background: #ffffff; border: 1px solid #3b82f6; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1e3a8a; border-radius: 4px; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">8</div>
-                <div style="background: #ffffff; border: 1px solid #3b82f6; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1e3a8a; border-radius: 4px; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">9</div>
-                <div style="background: #ffffff; border: 1px solid #3b82f6; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1e3a8a; border-radius: 4px; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">14</div>
-                <div style="background: #ffffff; border: 1px solid #3b82f6; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1e3a8a; border-radius: 4px; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">3</div>
-            </div>
-            <div style="position: absolute; right: -240px; top: 50%; transform: translateY(-50%); width: 210px; font-size: 0.8rem; color: #475569; line-height: 1.4;">
-                <strong style="color: #2563eb;">更小、更快、更贵</strong><br>
-                缓存中存放的是底层数据块的子集。
-            </div>
-        </div>
-    </div>
-    <div style="text-align: center; margin: 15px 0;">
-        <div style="font-size: 2rem; color: #cbd5e1; font-weight: 300; display: inline-block; transform: scaleY(1.5);">↕</div>
-    </div>
-    <div style="display: flex; align-items: center; justify-content: center;">
-        <div style="width: 100%; max-width: 600px; position: relative; background: #f1f5f9; border: 2px solid #64748b; border-radius: 8px; padding: 25px;">
-            <div style="position: absolute; left: -100px; top: 50%; transform: translateY(-50%); font-weight: 900; color: #64748b; font-size: 1.2rem; transform: rotate(-90deg);">MEMORY</div>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">0</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">1</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">2</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">3</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">4</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">5</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">6</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">7</div>
-                <div style="background: #dbeafe; border: 2px solid #3b82f6; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 2px;">8</div>
-                <div style="background: #dbeafe; border: 2px solid #3b82f6; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 2px;">9</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">10</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">11</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">12</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">13</div>
-                <div style="background: #dbeafe; border: 2px solid #3b82f6; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 2px;">14</div>
-                <div style="background: #fff; border: 1px solid #94a3b8; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border-radius: 2px;">15</div>
-            </div>
-            <div style="text-align: center; margin-top: 12px; letter-spacing: 4px; color: #94a3b8; font-weight: bold;">● ● ●</div>
-            <div style="position: absolute; right: -240px; top: 50%; transform: translateY(-50%); width: 210px; font-size: 0.8rem; color: #475569; line-height: 1.4;">
-                <strong style="color: #475569;">更大、更慢、更便宜</strong><br>
-                主存被逻辑上划分为固定大小的“块（Blocks）”。
-            </div>
-        </div>
-    </div>
-</div>
-（右上角的 3 也应该标注为蓝色）
+```mermaid
+flowchart BT
+    memory[Main memory - blocks 0 through 15]
+    cache[Cache - currently holds blocks 3, 8, 9, and 14]
+    cpu[CPU]
+    memory -->|copy one complete block on a miss| cache
+    cache -->|serve requested data on a hit| cpu
+```
 
-- 以这张图为例，数据将以~={yellow}**块**=~大小为传输单位在内存和高速缓存之间传输
+The cache is smaller, faster, and more expensive per bit. It stores only a subset of the fixed-size blocks in the larger, slower memory; transfers between the two levels happen one complete block at a time.
 
 ### Hit: 命中
 

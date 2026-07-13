@@ -209,10 +209,18 @@ import '../styles/waterpond.css';
       }
     }
 
-    function showCatchResult(x, y) {
+    function showCatchResult(caught) {
       pond.querySelector('.pond-catch-result')?.remove();
 
       const result = document.createElement('div');
+      const x = caught.x;
+      const y = caught.y;
+      const caughtFish = caught.el.cloneNode(true);
+
+      caughtFish.removeAttribute('style');
+      caughtFish.classList.add('pond-caught-swimmer', `caught-${caught.kind}`);
+      caughtFish.setAttribute('aria-hidden', 'true');
+
       result.className = 'pond-catch-result';
       result.setAttribute('role', 'dialog');
       result.setAttribute('aria-label', '捞到鱼之后的选择');
@@ -223,15 +231,15 @@ import '../styles/waterpond.css';
           '<span class="pond-caught-handle"></span>',
           '<span class="pond-caught-rim"></span>',
           '<span class="pond-caught-mesh"></span>',
-          '<span class="pond-caught-fish fish-a"></span>',
-          '<span class="pond-caught-fish fish-b"></span>',
-          '<span class="pond-caught-fish fish-c"></span>',
+          '<span class="pond-caught-fish-slot"></span>',
         '</div>',
         '<div class="pond-catch-actions" aria-label="捞到的鱼怎么办">',
           '<button type="button">带走</button>',
           '<button type="button">放生</button>',
         '</div>',
       ].join('');
+
+      result.querySelector('.pond-caught-fish-slot')?.replaceWith(caughtFish);
 
       result.querySelectorAll('button').forEach((button) => {
         button.addEventListener('click', (event) => {
@@ -266,7 +274,7 @@ import '../styles/waterpond.css';
       if (!target) return;
 
       setNetMode(false);
-      showCatchResult(target.x, target.y);
+      showCatchResult(target);
 
       const dx = target.x - x || (Math.random() - 0.5);
       const dy = target.y - y || (Math.random() - 0.5);
@@ -466,6 +474,9 @@ import '../styles/waterpond.css';
       if (document.documentElement.dataset.theme !== 'light') return;
 
       if (fishNet?.classList.contains('is-active')) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation?.();
         tryCatchFish(event.clientX, event.clientY);
         return;
       }
@@ -491,7 +502,7 @@ import '../styles/waterpond.css';
       }
 
       createRipple(event.clientX, event.clientY, 1.5);
-    });
+    }, { capture: true });
 
     window.addEventListener('scroll', wakeRestingTurtle, { passive: true });
     window.addEventListener('wheel', wakeRestingTurtle, { passive: true });

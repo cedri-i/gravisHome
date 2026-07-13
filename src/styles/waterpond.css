@@ -1408,3 +1408,46 @@ body.is-netting-fish {
     background-color: transparent !important;
     box-shadow: none !important;
 }
+/* Catch dialog: show the exact caught fish and keep action buttons level. */
+.pond-caught-swimmer {
+    position: absolute !important;
+    left: 3.1rem !important;
+    top: 3.34rem !important;
+    z-index: 3;
+    opacity: .92;
+    filter: saturate(.96) drop-shadow(0 .2rem .22rem rgba(40, 65, 70, .16));
+    transform: translate(-50%, -50%) rotate(-8deg) scale(.72) !important;
+    animation: pondCaughtSpecificFish 1.35s ease-in-out infinite;
+}
+
+.pond-caught-swimmer.caught-mini {
+    left: 3.38rem !important;
+    top: 3.44rem !important;
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1.08) !important;
+}
+
+.pond-caught-swimmer .fish-tail,
+.pond-caught-swimmer::after {
+    animation-duration: .52s;
+}
+
+.pond-catch-actions {
+    align-items: stretch;
+}
+
+.pond-catch-actions button {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.14rem;
+    min-height: 2.14rem;
+    padding: 0 .86rem;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+@keyframes pondCaughtSpecificFish {
+    0%, 100% { margin-left: -.1rem; margin-top: .02rem; }
+    50% { margin-left: .16rem; margin-top: -.08rem; }
+}
