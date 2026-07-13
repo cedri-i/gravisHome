@@ -28,36 +28,23 @@ title: "Lecture 08"
 	- `C`==没有边界检查==
 
 
-<div style="font-family: 'Source Code Pro', monospace; padding: 20px; background-color: #fff; color: #000; border: 1px solid #ddd; border-radius: 4px;">
-  <h2 style="margin-top: 0; font-weight: bold; font-size: 24px;">Array Example</h2>
-  <div style="background-color: #fffde7; border: 1px solid #ffe082; padding: 10px; margin-bottom: 30px; line-height: 1.4;">
-    <span style="color: #008000;">#define ZLEN 5</span><br>
-    typedef int zip_dig[ZLEN];<br><br>
-    zip_dig cmu = { 1, 5, 2, 1, 3 };<br>
-    zip_dig mit = { 0, 2, 1, 3, 9 };<br>
-    zip_dig ucb = { 9, 4, 7, 2, 0 };
-  </div>
-  <div style="display: flex; align-items: center; margin-bottom: 40px;">
-    <div style="width: 150px; font-weight: bold;">zip_dig cmu;</div>
-    <div style="display: flex; border: 2px solid black; background-color: #e0e0e0;">
-      <div style="width: 60px; height: 35px; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; position: relative;">1<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">16</span></div>
-      <div style="width: 60px; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; position: relative;">5<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">20</span></div>
-      <div style="width: 60px; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; position: relative;">2<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">24</span></div>
-      <div style="width: 60px; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; position: relative;">1<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">28</span></div>
-      <div style="width: 60px; display: flex; align-items: center; justify-content: center; position: relative;">3<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">32</span><span style="position: absolute; bottom: -25px; right: -2px; font-size: 13px;">36</span></div>
-    </div>
-  </div>
-  <div style="display: flex; align-items: center; margin-bottom: 40px;">
-    <div style="width: 150px; font-weight: bold;">zip_dig mit;</div>
-    <div style="display: flex; border: 2px solid black; background-color: #e0e0e0;">
-      <div style="width: 60px; height: 35px; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; position: relative;">0<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">36</span></div>
-      <div style="width: 60px; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; position: relative;">2<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">40</span></div>
-      <div style="width: 60px; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; position: relative;">1<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">44</span></div>
-      <div style="width: 60px; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; position: relative;">3<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">48</span></div>
-      <div style="width: 60px; display: flex; align-items: center; justify-content: center; position: relative;">9<span style="position: absolute; bottom: -25px; left: -2px; font-size: 13px;">52</span><span style="position: absolute; bottom: -25px; right: -2px; font-size: 13px;">56</span></div>
-    </div>
-  </div>
-</div>
+```c
+#define ZLEN 5
+typedef int zip_dig[ZLEN];
+
+zip_dig cmu = { 1, 5, 2, 1, 3 };
+zip_dig mit = { 0, 2, 1, 3, 9 };
+zip_dig ucb = { 9, 4, 7, 2, 0 };
+```
+
+Assuming `sizeof(int) == 4`:
+
+| Array | Base address | Elements at successive addresses |
+| --- | ---: | --- |
+| `cmu` | 16 | `1@16`, `5@20`, `2@24`, `1@28`, `3@32` |
+| `mit` | 36 | `0@36`, `2@40`, `1@44`, `3@48`, `9@52` |
+
+Each array occupies $5 \times 4 = 20$ contiguous bytes.
 
 - 这时 `cmu`、`mit` 同样会~={yellow}退化=~为指向其第一个元素的指针
 
@@ -214,63 +201,14 @@ int get_univ_digit(size_t index, size_t digit) {
 	- 确切地说，是“**可以**”不连续，且在实际应用中“**通常**”不连续
 ## Understanding Pointers & Arrays
 
-<div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 20px auto; max-width: 1000px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid #000000;">
-  <table style="width: 100%; border-collapse: collapse; background-color: #ffffff; text-align: left; table-layout: auto;">
-    <thead>
-      <tr style="background: #000000; color: #ffffff;">
-        <th style="padding: 18px 15px; border-bottom: 2px solid #334155; font-size: 1.1em; width: 25%;">C 语言声明</th>
-        <th style="padding: 18px 15px; border-bottom: 2px solid #334155; font-size: 1.1em; width: 15%;">本质</th>
-        <th style="padding: 18px 15px; border-bottom: 2px solid #334155; font-size: 1.1em;">内存布局简述 (64位环境)</th>
-        <th style="padding: 18px 15px; border-bottom: 2px solid #334155; font-size: 1.1em; width: 15%;">sizeof</th>
-      </tr>
-    </thead>
-    <tbody style="color: #000000; font-weight: 500;">
-      <tr style="background-color: #f8fafc;">
-        <td style="padding: 15px; border-bottom: 1px solid #000000;">
-            <code style="font-family: 'Cascadia Code', 'JetBrains Mono', 'Courier New', monospace; background: #e2e8f0; color: #000000; padding: 6px 12px; border-radius: 4px; font-weight: 700; font-size: 1.05em; white-space: nowrap;">int A1[3]</code>
-        </td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000;">
-            <span style="background: #064e3b; color: #ffffff; padding: 4px 12px; border-radius: 6px; font-size: 0.9em; font-weight: 700;">数组</span>
-        </td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000; line-height: 1.5;">直接分配 3 个连续 <b style="color:#dc2626;">int</b>。变量名 A1 代表这块内存的起始位置。</td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000; font-family: monospace; font-weight: 900; font-size: 1.2em;">12 字节</td>
-      </tr>
-      <tr>
-        <td style="padding: 15px; border-bottom: 1px solid #000000;">
-            <code style="font-family: 'Cascadia Code', 'JetBrains Mono', 'Courier New', monospace; background: #e2e8f0; color: #000000; padding: 6px 12px; border-radius: 4px; font-weight: 700; font-size: 1.05em; white-space: nowrap;">int *A2</code>
-        </td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000;">
-            <span style="background: #78350f; color: #ffffff; padding: 4px 12px; border-radius: 6px; font-size: 0.9em; font-weight: 700;">指针</span>
-        </td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000; line-height: 1.5;">分配 8 字节存储一个地址。该地址可以指向内存中某个 <b style="color:#dc2626;">int</b>。</td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000; font-family: monospace; font-weight: 900; font-size: 1.2em;">8 字节</td>
-      </tr>
-      <tr style="background-color: #f8fafc;">
-        <td style="padding: 15px; border-bottom: 1px solid #000000;">
-            <code style="font-family: 'Cascadia Code', 'JetBrains Mono', 'Courier New', monospace; background: #e2e8f0; color: #000000; padding: 6px 12px; border-radius: 4px; font-weight: 700; font-size: 1.05em; white-space: nowrap;">int *A2[3]</code>
-        </td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000;">
-            <span style="background: #064e3b; color: #ffffff; padding: 4px 12px; border-radius: 6px; font-size: 0.9em; font-weight: 700;">指针数组</span>
-        </td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000; line-height: 1.5;">连续分配 3 个 <b style="color:#2563eb;">指针</b> 空间（3×8字节）。每个槽位存一个地址。</td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000; font-family: monospace; font-weight: 900; font-size: 1.2em;">24 字节</td>
-      </tr>
-      <tr>
-        <td style="padding: 15px; border-bottom: 1px solid #000000;">
-            <code style="font-family: 'Cascadia Code', 'JetBrains Mono', 'Courier New', monospace; background: #e2e8f0; color: #000000; padding: 6px 12px; border-radius: 4px; font-weight: 700; font-size: 1.05em; white-space: nowrap;">int (*A3)[3]</code>
-        </td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000;">
-            <span style="background: #78350f; color: #ffffff; padding: 4px 12px; border-radius: 6px; font-size: 0.9em; font-weight: 700;">数组指针</span>
-        </td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000; line-height: 1.5;">分配 8 字节存储一个地址。该地址指向一个 <b style="color:#4f46e5;">包含3个int的整体数组</b>。</td>
-        <td style="padding: 15px; border-bottom: 1px solid #000000; font-family: monospace; font-weight: 900; font-size: 1.2em;">8 字节</td>
-      </tr>
-    </tbody>
-  </table>
-  <div style="padding: 12px; background-color: #000000; font-size: 0.85em; color: #cbd5e1; text-align: center;">
-    核心结论：本质为“数组”时看整体容量；本质为“指针”时固定为 8 字节（64-bit）。文字已最大化加深。
-  </div>
-</div>
+| C declaration | Meaning | Memory layout on x86-64 | `sizeof` |
+| --- | --- | --- | ---: |
+| `int A1[3]` | array | three contiguous `int` objects | 12 bytes |
+| `int *A2` | pointer | one address that may point to an `int` | 8 bytes |
+| `int *A2[3]` | array of pointers | three contiguous pointer objects | 24 bytes |
+| `int (*A3)[3]` | pointer to array | one address pointing to an array of three `int` objects | 8 bytes |
+
+> Arrays are sized by their complete contents; pointers have the fixed pointer size of the target architecture.
 
 - 在 `C` 语言中，`[]` 的优先级比 `*` 高
 - 若没有括号：`int *A2[3]`，`A2` 先和 `[3]` 结合，它是数组，里面存的是 `int*`
@@ -289,34 +227,13 @@ struct rec {
 };
 ```
 
-<div style="font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Courier, monospace; background-color: #ffffff; padding: 40px; border-radius: 8px; width: fit-content; margin: auto;">
-    <div style="margin-left: 0px; color: #000000; font-weight: 900; font-size: 22px; line-height: 1.1; margin-bottom: 4px;">
-        r<br>↓
-    </div>
-    <div style="display: flex; height: 70px; border: 4px solid #000000; background: #ffffff; box-sizing: border-box; min-width: 600px;">
-        <div style="flex: 16; background: #dbeafe; border-right: 4px solid #000000; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #000000;">
-            a
-        </div>
-        <div style="flex: 8; background: #ffe4e6; border-right: 4px solid #000000; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #000000;">
-            i
-        </div>
-        <div style="flex: 8; background: #dcfce7; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #000000;">
-            next
-        </div>
-    </div>
-    <div style="display: flex; margin-top: 12px; font-weight: 900; font-size: 20px; color: #000000; letter-spacing: -0.5px;">
-        <div style="flex: 16; display: flex; justify-content: space-between;">
-            <span>0</span>
-            <span style="margin-right: -10px;">16</span>
-        </div>
-        <div style="flex: 8; text-align: right; padding-right: 0px;">
-            24
-        </div>
-        <div style="flex: 8; text-align: right;">
-            32
-        </div>
-    </div>
-</div>
+For the version with `size_t i`, the 32-byte object is laid out as:
+
+| Byte offsets | Size | Field |
+| --- | ---: | --- |
+| 0–15 | 16 bytes | `a[4]` |
+| 16–23 | 8 bytes | `i` |
+| 24–31 | 8 bytes | `next` |
 
 - Structure represented as block memory
 	- Big enough to hold all of the ~={yellow}**fields**=~
@@ -349,37 +266,14 @@ x86-64 汇编实现
 ```
 
 
-<div style="font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; background-color: #ffffff; padding: 40px; width: fit-content; margin: auto;">
-    <div style="margin-left: 0px; color: #000000; font-weight: 900; font-size: 22px; line-height: 1.1; margin-bottom: 4px;">
-        r<br>↓
-    </div>
-    <div style="display: flex; height: 70px; border: 4px solid #000000; background: #ffffff; box-sizing: border-box; min-width: 640px;">
-        <div style="flex: 16; background: #dbeafe; border-right: 4px solid #000000; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 26px; color: #000000;">
-            a[0-3]
-        </div>
-        <div style="flex: 8; background: #ffe4e6; border-right: 4px solid #000000; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 26px; color: #000000;">
-            i
-        </div>
-        <div style="flex: 8; background: #dcfce7; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 26px; color: #000000;">
-            next
-        </div>
-    </div>
-    <div style="display: flex; margin-top: 12px; font-weight: 900; font-size: 20px; color: #000000;">
-        <div style="flex: 16; display: flex; justify-content: space-between;">
-            <span>0</span>
-            <span style="margin-right: -10px;">16</span>
-        </div>
-        <div style="flex: 8; text-align: right;">
-            24
-        </div>
-        <div style="flex: 8; text-align: right;">
-            32
-        </div>
-    </div>
-</div>
+For the later version with `int i`, alignment inserts four bytes before the pointer:
 
-
-
+| Byte offsets | Size | Field |
+| --- | ---: | --- |
+| 0–15 | 16 bytes | `a[4]` |
+| 16–19 | 4 bytes | `i` |
+| 20–23 | 4 bytes | padding |
+| 24–31 | 8 bytes | `next` |
 
 |**指令**|**操作**|**是否改变目标值**|**常用场景**|
 |---|---|---|---|
@@ -402,33 +296,18 @@ struct S1 {
 } *p;
 ```
 
-<div style="background-color: #ffffff; padding: 20px; color: #000000; font-family: 'JetBrains Mono', 'Courier New', monospace; width: fit-content; border: 1px solid #000000;">
-    <div style="font-weight: bold; margin-bottom: 10px;">[ Unaligned Data ]</div>
-    <div style="display: block; border: 4px solid #000000; height: 50px; white-space: nowrap; overflow: hidden;">
-        <div style="display: inline-block; width: 30px;  height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; font-weight: bold;">c</div><div style="display: inline-block; width: 120px; height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; font-weight: bold;">i[0]</div><div style="display: inline-block; width: 120px; height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; font-weight: bold;">i[1]</div><div style="display: inline-block; width: 240px; height: 50px; line-height: 50px; text-align: center; font-weight: bold;">v</div>
-    </div>
-    <div style="position: relative; height: 20px; margin-top: 5px; font-weight: bold; font-size: 14px;">
-        <div style="position: absolute; left: 0px;">p</div>
-        <div style="position: absolute; left: 30px;">p+1</div>
-        <div style="position: absolute; left: 150px;">p+5</div>
-        <div style="position: absolute; left: 270px;">p+9</div>
-        <div style="position: absolute; left: 510px; transform: translateX(-100%);">p+17</div>
-    </div>
-</div>
+Without alignment, the fields would be packed at offsets `0`, `1`, `5`, and `9`, causing multi-byte fields to start at unsuitable addresses.
 
-<div style="background-color: #ffffff; padding: 20px; color: #000000; font-family: 'JetBrains Mono', 'Courier New', monospace; width: fit-content; border: 1px solid #000000;">
-    <div style="font-weight: bold; margin-bottom: 10px;">[ Aligned Data ]</div>
-    <div style="display: block; border: 4px solid #000000; height: 50px; white-space: nowrap; overflow: hidden;">
-        <div style="display: inline-block; width: 20px;  height: 50px; line-height: 50px; text-align: center; border-right: 1px solid #000000; box-sizing: border-box; font-weight: bold;">c</div><div style="display: inline-block; width: 60px;  height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; background: #eeeeee; font-size: 12px;">pad</div><div style="display: inline-block; width: 80px;  height: 50px; line-height: 50px; text-align: center; border-right: 1px solid #000000; box-sizing: border-box; font-weight: bold;">i[0]</div><div style="display: inline-block; width: 80px;  height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; font-weight: bold;">i[1]</div><div style="display: inline-block; width: 80px;  height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; background: #eeeeee; font-size: 12px;">pad</div><div style="display: inline-block; width: 160px; height: 50px; line-height: 50px; text-align: center; font-weight: bold;">v</div>
-    </div>
-    <div style="position: relative; height: 20px; margin-top: 5px; font-weight: bold; font-size: 14px;">
-        <div style="position: absolute; left: 0px;">p+0</div>
-        <div style="position: absolute; left: 80px;">p+4</div>
-        <div style="position: absolute; left: 160px;">p+8</div>
-        <div style="position: absolute; left: 320px;">p+16</div>
-        <div style="position: absolute; left: 480px; transform: translateX(-100%);">p+24</div>
-    </div>
-</div>
+The compiler instead produces this 24-byte layout:
+
+| Byte offsets | Size | Contents |
+| --- | ---: | --- |
+| 0 | 1 byte | `c` |
+| 1–3 | 3 bytes | padding for 4-byte alignment |
+| 4–7 | 4 bytes | `i[0]` |
+| 8–11 | 4 bytes | `i[1]` |
+| 12–15 | 4 bytes | padding for 8-byte alignment |
+| 16–23 | 8 bytes | `v` |
 
 ### Alignment Principles
 
@@ -444,18 +323,15 @@ struct S1 {
 
 #### Compiler
 - Inserts gaps in structure to ensure correct alignment of fields
-<div style="background-color: #ffffff; padding: 20px; color: #000000; font-family: 'JetBrains Mono', monospace; width: fit-content; border: 2px solid #000000;">
-    <div style="font-weight: bold; margin-bottom: 10px;">[ 编译器插入 Gap 的过程 ]</div>
-    <div style="display: block; border: 4px solid #000000; height: 50px; white-space: nowrap;">
-        <div style="display: inline-block; width: 40px; height: 50px; line-height: 50px; text-align: center; border-right: 1px solid #000000; box-sizing: border-box; font-weight: bold;">c</div><div style="display: inline-block; width: 120px; height: 50px; line-height: 50px; text-align: center; border-right: 4px solid #000000; box-sizing: border-box; background: #eeeeee; font-size: 12px; color: #666;">gap (3 bytes)</div><div style="display: inline-block; width: 160px; height: 50px; line-height: 50px; text-align: center; font-weight: bold;">int i</div>
-    </div>
-    <div style="position: relative; height: 20px; margin-top: 5px; font-weight: bold; font-size: 14px;">
-        <div style="position: absolute; left: 0px;">0</div>
-        <div style="position: absolute; left: 40px; color: #999;">1</div>
-        <div style="position: absolute; left: 160px;">4 (对齐点)</div>
-        <div style="position: absolute; left: 320px;">8</div>
-    </div>
-</div>
+For a simpler `char` followed by `int` example:
+
+| Byte offsets | Contents |
+| --- | --- |
+| 0 | `char c` |
+| 1–3 | compiler-inserted padding |
+| 4–7 | `int i` |
+
+The three-byte gap moves `i` to offset 4, which satisfies its alignment requirement.
 
 # Floating Point
 

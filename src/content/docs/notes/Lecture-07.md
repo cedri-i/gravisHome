@@ -96,57 +96,14 @@ Application Binary Interface*应用二进制接口*
 	- Pop address from stack
 	- Jump to address
 
-<div style="font-family: 'Consolas', 'Monaco', monospace; background: #1e1e1e; color: #d4d4d4; padding: 30px; border-radius: 15px; display: flex; gap: 40px; width: fit-content; margin: auto; border: 2px solid #444;">
-    <div style="flex: 1;">
-        <h3 style="color: #569cd6; border-bottom: 1px solid #444; padding-bottom: 5px;">Code Segment (Read-Only)</h3>
-        <div style="margin-bottom: 20px; border-left: 3px solid #ce9178; padding-left: 10px;">
-            <div style="color: #6a9955;">&lt;multstore&gt; : 0x400540</div>
-            <div style="padding: 5px 0; opacity: 0.5;">... (previous instructions)</div>
-            <div style="background: #333; padding: 2px 5px; color: #dcdcaa;">
-                <span style="color: #858585;">400544:</span> callq 400550 
-                <span style="color: #6a9955; font-size: 11px;">; 占用 5 字节</span>
-            </div>
-            <div style="padding: 2px 5px; border: 1px dashed #569cd6;">
-                <span style="color: #858585;">400549:</span> mov %rax, (%rbx)
-                <span style="color: #569cd6; font-size: 11px;"> &lt;-- Return Address</span>
-            </div>
-        </div>
-        <div style="border-left: 3px solid #b5cea8; padding-left: 10px;">
-            <div style="color: #6a9955; background: #2d2d2d;">&lt;mult2&gt; : 0x400550</div>
-            <div style="padding: 2px 5px; color: #dcdcaa;">
-                <span style="color: #858585;">400550:</span> mov %rdi, %rax
-            </div>
-            <div style="padding: 5px 0; opacity: 0.5;">... (function body)</div>
-        </div>
-    </div>
-    <div style="width: 220px; display: flex; flex-direction: column; justify-content: center; gap: 20px;">
-        <div style="border: 2px solid #c586c0; padding: 10px; border-radius: 8px; text-align: center;">
-            <div style="font-size: 12px; color: #c586c0;">Program Counter (%rip)</div>
-            <div style="font-size: 18px; font-weight: bold; color: #fff;">0x400550</div>
-            <div style="font-size: 10px; color: #858585; margin-top: 5px;">指向 mult2 第一行</div>
-        </div>
-        <div style="text-align: center; color: #569cd6; font-size: 24px;">跳转 ──▶</div>
-        <div style="text-align: center; color: #ce9178; font-size: 24px;">◀── 压栈</div>
-        <div style="border: 2px solid #4ec9b0; padding: 10px; border-radius: 8px; text-align: center;">
-            <div style="font-size: 12px; color: #4ec9b0;">Stack Pointer (%rsp)</div>
-            <div style="font-size: 18px; font-weight: bold; color: #fff;">0x118</div>
-        </div>
-    </div>
-    <div style="width: 200px;">
-        <h3 style="color: #4ec9b0; border-bottom: 1px solid #444; padding-bottom: 5px;">Stack (Memory)</h3>
-        <div style="border: 2px solid #444; background: #252526; height: 260px; display: flex; flex-direction: column; justify-content: flex-end;">
-            <div style="height: 40px; border-bottom: 1px solid #444; display: flex; align-items: center; justify-content: center; font-size: 12px; opacity: 0.3;">0x130</div>
-            <div style="height: 40px; border-bottom: 1px solid #444; display: flex; align-items: center; justify-content: center; font-size: 12px; opacity: 0.3;">0x128</div>
-            <div style="height: 40px; border-bottom: 2px solid #569cd6; display: flex; align-items: center; justify-content: center; font-size: 12px; opacity: 0.3;">0x120</div>
-            <div style="height: 60px; background: #264f78; border: 1px solid #569cd6; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <div style="font-size: 10px; color: #9cdcfe;">Address: 0x118</div>
-                <div style="font-weight: bold; color: #fff;">0x400549</div>
-                <div style="font-size: 9px; color: #858585;">(Saved Return Addr)</div>
-            </div>
-        </div>
-        <div style="text-align: center; margin-top: 10px; color: #4ec9b0; font-weight: bold;">Stack Top ▲</div>
-    </div>
-</div>
+```mermaid
+flowchart LR
+    call[5-byte callq at 0x400544] -->|push return address 0x400549| stack[stack top at 0x118]
+    call -->|set %rip = 0x400550| callee[mult2 begins]
+    callee -->|ret pops 0x400549| resume[resume at address 0x400549]
+```
+
+The `call` instruction performs two state changes: it saves the address of the following instruction on the stack and transfers control to the callee. `ret` reverses those changes by popping that saved address into `%rip`.
 
 - 可以说，`ret` 的目的是逆转 `call` 的效果
 - 它假定栈顶有一个你想要跳转的地址
@@ -249,24 +206,29 @@ $$\text{\%rbp} = \text{\%rsp} + \text{局部变量空间大小} + \text{被保�
 #### Can register be used for temporary storage?
 
 
-<div style="display: flex; gap: 20px; font-family: 'Consolas', 'Courier New', monospace; background-color: #eeeeee; padding: 30px; justify-content: center;">
-    <div style="background-color: #fff9c4; border: 2.5px solid #000000; box-shadow: 6px 6px 0px #666666; padding: 15px 25px; min-width: 260px; color: #000000;">
-        <div style="font-weight: bold; font-size: 1.3em; margin-bottom: 8px;">yoo:</div>
-        <div style="margin: 5px 0; letter-spacing: 5px; font-weight: bold; color: #333;">. . .</div>
-        <div style="margin: 4px 0; white-space: pre; font-weight: 500;">  movq  &#36;15213, <span style="color: #b71c1c; font-weight: 800;">%rdx</span></div>
-        <div style="margin: 4px 0; white-space: pre; font-weight: 500;">  call  who</div>
-        <div style="margin: 4px 0; white-space: pre; font-weight: 500;">  addq  <span style="color: #b71c1c; font-weight: 800;">%rdx</span>, %rax</div>
-        <div style="margin: 5px 0; letter-spacing: 5px; font-weight: bold; color: #333;">. . .</div>
-        <div style="margin: 4px 0; white-space: pre; font-weight: 500;">  ret</div>
-    </div>
-    <div style="background-color: #e8f5e9; border: 2.5px solid #000000; box-shadow: 6px 6px 0px #666666; padding: 15px 25px; min-width: 260px; color: #000000;">
-        <div style="font-weight: bold; font-size: 1.3em; margin-bottom: 8px;">who:</div>
-        <div style="margin: 5px 0; letter-spacing: 5px; font-weight: bold; color: #333;">. . .</div>
-        <div style="margin: 4px 0; white-space: pre; font-weight: 500;">  subq  &#36;18213, <span style="color: #b71c1c; font-weight: 800;">%rdx</span></div>
-        <div style="margin: 5px 0; letter-spacing: 5px; font-weight: bold; color: #333;">. . .</div>
-        <div style="margin: 4px 0; white-space: pre; font-weight: 500;">  ret</div>
-    </div>
-</div>
+**Caller `yoo`**
+
+```asm
+yoo:
+    ...
+    movq  $15213, %rdx
+    call  who
+    addq  %rdx, %rax
+    ...
+    ret
+```
+
+**Callee `who`**
+
+```asm
+who:
+    ...
+    subq  $18213, %rdx
+    ...
+    ret
+```
+
+Because `who` changes `%rdx`, `yoo` cannot assume its temporary value survives the call unless the calling convention requires preservation or `yoo` saves it explicitly.
 
 - 如果我们真的想要某个值在返回时保持不变，则应该首先存储它，不应假设寄存器的值会一直不变，==应假设它会被改变==
 
@@ -280,77 +242,14 @@ $$\text{\%rbp} = \text{\%rsp} + \text{局部变量空间大小} + \text{被保�
 
 - 在递归调用中，caller-saved~={red}更容易导致栈溢出=~
 
-<div style="font-family: 'Segoe UI', Arial, sans-serif; margin: 20px 0; color: #000000;">
-    <table style="border-collapse: collapse; width: 100%; background-color: #ffffff; border: 3px solid #000000; box-shadow: 8px 8px 0px #333333;">
-        <thead>
-            <tr style="background-color: #1a1a1a; color: #ffffff; text-align: left;">
-                <th style="padding: 15px; border: 2px solid #000000; font-size: 1.1em;">保存类别 (Type)</th>
-                <th style="padding: 15px; border: 2px solid #000000; font-size: 1.1em;">寄存器 (Registers)</th>
-                <th style="padding: 15px; border: 2px solid #000000; font-size: 1.1em;">详细用途 (Usage)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr style="background-color: #fff59d;">
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 900; color: #000000;">
-                    Caller-Saved<br><span style="font-size: 0.85em;">(调用者保存)</span>
-                </td>
-                <td style="padding: 12px; border: 2px solid #000000; font-family: 'Consolas', monospace; font-weight: 900; color: #8b0000;">
-                    %rax
-                </td>
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 700; color: #000000;">
-                    <b>返回值</b>。存放函数执行后的结果。
-                </td>
-            </tr>
-            <tr style="background-color: #fff59d;">
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 900; color: #000000;">Caller-Saved</td>
-                <td style="padding: 12px; border: 2px solid #000000; font-family: 'Consolas', monospace; font-weight: 900; color: #8b0000;">
-                    %rdi, %rsi, %rdx, %rcx, %r8, %r9
-                </td>
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 700; color: #000000;">
-                    <b>传递参数</b>。分别对应第 1 到 第 6 个函数参数。
-                </td>
-            </tr>
-            <tr style="background-color: #fff59d;">
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 900; color: #000000;">Caller-Saved</td>
-                <td style="padding: 12px; border: 2px solid #000000; font-family: 'Consolas', monospace; font-weight: 900; color: #8b0000;">
-                    %r10, %r11
-                </td>
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 700; color: #000000;">
-                    <b>临时寄存器</b>。调用者需自行保护，否则会被子函数覆盖。
-                </td>
-            </tr>
-            <tr style="background-color: #81c784;">
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 900; color: #000000;">
-                    Callee-Saved<br><span style="font-size: 0.85em;">(被调用者保存)</span>
-                </td>
-                <td style="padding: 12px; border: 2px solid #000000; font-family: 'Consolas', monospace; font-weight: 900; color: #8b0000;">
-                    %rbx, %r12, %r13, %r14
-                </td>
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 700; color: #000000;">
-                    <b>长期存储</b>。子函数若使用必须先备份（push），返回前还原。
-                </td>
-            </tr>
-            <tr style="background-color: #81c784;">
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 900; color: #000000;">Callee-Saved</td>
-                <td style="padding: 12px; border: 2px solid #000000; font-family: 'Consolas', monospace; font-weight: 900; color: #8b0000;">
-                    %rbp
-                </td>
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 700; color: #000000;">
-                    <b>帧指针</b>。锚定栈帧（可选），必须跨调用保持一致。
-                </td>
-            </tr>
-            <tr style="background-color: #e0e0e0;">
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 900; color: #000000;">Special</td>
-                <td style="padding: 12px; border: 2px solid #000000; font-family: 'Consolas', monospace; font-weight: 900; color: #8b0000;">
-                    %rsp
-                </td>
-                <td style="padding: 12px; border: 2px solid #000000; font-weight: 700; color: #000000;">
-                    <b>栈指针</b>。指向当前栈顶，由硬件和指令自动管理。
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+| Class | Registers | Purpose |
+| --- | --- | --- |
+| Caller-saved | `%rax` | return value |
+| Caller-saved | `%rdi`, `%rsi`, `%rdx`, `%rcx`, `%r8`, `%r9` | arguments 1 through 6 |
+| Caller-saved | `%r10`, `%r11` | temporary values; caller preserves them if needed |
+| Callee-saved | `%rbx`, `%r12`, `%r13`, `%r14` | long-lived values; callee must restore them before return |
+| Callee-saved | `%rbp` | optional frame pointer |
+| Special | `%rsp` | stack pointer; points to the current stack top |
 
 #### Callee-Saved Example \#1
 ```C

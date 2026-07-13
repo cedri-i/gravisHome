@@ -256,74 +256,59 @@ pcount_goto:
 	- `-Og` 是这门课用到的优化
 	- `-O1` 是下一个级别
 
-<div style="display: flex; align-items: stretch; gap: 10px; font-family: 'Fira Code', 'Consolas', monospace; color: #1a1a1a;">
-    <div style="flex: 1; background-color: #fff9c4; padding: 15px; border-radius: 4px; border: 1px solid #f0e68c;">
-        <div style="font-weight: bold; margin-bottom: 20px; font-family: sans-serif; color: #888;">While version</div>
-        <div style="line-height: 1.5; color: #000;">
-            <span style="color: #0033cc;">while</span> (Test)<br>
-            &nbsp;&nbsp;Body
-        </div>
-    </div>
-    <div style="display: flex; align-items: center; justify-content: center; font-size: 24px; color: #448aff;">➡</div>
-    <div style="flex: 1; background-color: #e8f5e9; padding: 15px; border-radius: 4px; border: 1px solid #c8e6c9;">
-        <div style="font-weight: bold; margin-bottom: 20px; font-family: sans-serif; color: #333;">Goto Version</div>
-        <div style="line-height: 1.5; color: #000;">
-            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0033cc;">goto</span> test;<br>
-            <span style="font-weight: bold;">loop:</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;Body<br>
-            <span style="font-weight: bold;">test:</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0033cc;">if</span> (Test)<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0033cc;">goto</span> loop;<br>
-            <span style="font-weight: bold;">done:</span>
-        </div>
-    </div>
-</div>
+**Source `while` loop**
+
+```c
+while (Test)
+    Body
+```
+
+**Jump-to-middle translation**
+
+```c
+goto test;
+loop:
+    Body
+test:
+    if (Test)
+        goto loop;
+done:
+```
 
 ### General "While" Translation \#2
 -~={cyan} "Guarded Do-While"=~
 
-<div style="display: flex; flex-direction: column; gap: 20px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: white; padding: 20px; color: #000;">
-    <div style="display: flex; align-items: flex-start; gap: 40px;">
-        <div style="flex: 0 0 250px;">
-            <div style="font-weight: bold; margin-bottom: 5px;">While version</div>
-            <div style="background-color: #fff9c4; border: 1px solid #999; padding: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); font-family: Consolas, monospace;">
-                while (Test)<br>
-                &nbsp;&nbsp;Body
-            </div>
-        </div>
-        <div style="padding-top: 20px; font-size: 0.9em;">
-            <p><span style="color: brown;">■</span> "Do-while" conversion</p>
-            <p><span style="color: brown;">■</span> Used with <b>-O1</b></p>
-        </div>
-    </div>
-    <div style="margin-left: 100px; color: #c00; font-size: 30px; line-height: 1;">⬇</div>
-    <div style="display: flex; align-items: center; gap: 30px;">
-        <div style="flex: 0 0 280px;">
-            <div style="font-weight: bold; margin-bottom: 5px;">Do-While Version</div>
-            <div style="background-color: #fff9c4; border: 1px solid #999; padding: 15px; font-family: Consolas, monospace; line-height: 1.4;">
-                if (!Test)<br>
-                &nbsp;&nbsp;goto done;<br>
-                do<br>
-                &nbsp;&nbsp;Body<br>
-                &nbsp;&nbsp;while(Test);<br>
-                done:
-            </div>
-        </div>
-        <div style="color: #c00; font-size: 40px;">➡</div>
-        <div style="flex: 0 0 280px;">
-            <div style="font-weight: bold; margin-bottom: 5px;">Goto Version</div>
-            <div style="background-color: #e8f5e9; border: 1px solid #999; padding: 15px; font-family: Consolas, monospace; line-height: 1.4;">
-                if (!Test)<br>
-                &nbsp;&nbsp;goto done;<br>
-                loop:<br>
-                &nbsp;&nbsp;Body<br>
-                &nbsp;&nbsp;if (Test)<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;goto loop;<br>
-                done:
-            </div>
-        </div>
-    </div>
-</div>
+This form is used by `-O1`: the initial guard converts the loop to a `do-while`, which then maps directly to a conditional backward jump.
+
+**Source `while` loop**
+
+```c
+while (Test)
+    Body
+```
+
+**Guarded `do-while`**
+
+```c
+if (!Test)
+    goto done;
+do {
+    Body
+} while (Test);
+done:
+```
+
+**Equivalent `goto` form**
+
+```c
+if (!Test)
+    goto done;
+loop:
+    Body
+    if (Test)
+        goto loop;
+done:
+```
 
 ## "For" Loop Form
 可以将 `for` 循环转化为 `while` 循环
@@ -364,65 +349,26 @@ long switch_eg(long x, long y, long z)
 ## Jump Table Structure
 
 
-<div style="background-color: white; padding: 30px; font-family: 'Segoe UI', Arial, sans-serif; color: #000; display: flex; gap: 40px;">
-    <div style="flex: 1; display: flex; flex-direction: column; gap: 40px;">
-        <div>
-            <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.2em;">Switch Form</div>
-            <div style="background-color: #fff9c4; border: 1.5px solid #555; padding: 15px; box-shadow: 3px 3px 0px #888; font-family: Consolas, monospace; line-height: 1.3;">
-                switch(x) {<br>
-                &nbsp;&nbsp;case val_0:<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<b>Block 0</b><br>
-                &nbsp;&nbsp;case val_1:<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<b>Block 1</b><br>
-                &nbsp;&nbsp;• • •<br>
-                &nbsp;&nbsp;case val_n-1:<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<b>Block n-1</b><br>
-                }
-            </div>
-        </div>
-        <div>
-            <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1em;">Translation (Extended C)</div>
-            <div style="background-color: #fff9c4; border: 1.5px solid #555; padding: 15px; box-shadow: 3px 3px 0px #888; font-family: Consolas, monospace;">
-                goto *JTab[x];
-            </div>
-        </div>
-    </div>
-    <div style="flex: 0.7; text-align: center;">
-        <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.2em;">Jump Table</div>
-        <div style="display: flex; align-items: flex-start; justify-content: center;">
-            <span style="font-family: Consolas, monospace; margin-right: 10px; padding-top: 5px;">jtab:</span>
-            <div style="border: 2px solid #000; background-color: #e8eaf6; width: 110px;">
-                <div style="border-bottom: 1px solid #000; padding: 8px;">Targ0</div>
-                <div style="border-bottom: 1px solid #000; padding: 8px;">Targ1</div>
-                <div style="border-bottom: 1px solid #000; padding: 8px;">Targ2</div>
-                <div style="padding: 15px; font-weight: bold;">• • •</div>
-                <div style="border-top: 2px solid #000; padding: 8px;">Targn-1</div>
-            </div>
-        </div>
-    </div>
-    <div style="flex: 1.2;">
-        <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.2em; text-align: left;">Jump Targets</div>
-        <div style="display: flex; flex-direction: column; gap: 15px;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-family: Consolas, monospace; width: 60px;">Targ0:</span>
-                <div style="background-color: #e8f5e9; border: 2px solid #2e7d32; padding: 10px; width: 120px; text-align: center;">Code Block 0</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-family: Consolas, monospace; width: 60px;">Targ1:</span>
-                <div style="background-color: #e8f5e9; border: 2px solid #2e7d32; padding: 10px; width: 120px; text-align: center;">Code Block 1</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-family: Consolas, monospace; width: 60px;">Targ2:</span>
-                <div style="background-color: #e8f5e9; border: 2px solid #2e7d32; padding: 10px; width: 120px; text-align: center;">Code Block 2</div>
-            </div>
-            <div style="padding-left: 100px; line-height: 1; font-size: 1.5em;">•<br>•<br>•</div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-family: Consolas, monospace; width: 60px;">Targn-1:</span>
-                <div style="background-color: #e8f5e9; border: 2px solid #2e7d32; padding: 10px; width: 120px; text-align: center;">Code Block n-1</div>
-            </div>
-        </div>
-    </div>
-</div>
+```c
+switch (x) {
+    case val_0: Block0;
+    case val_1: Block1;
+    /* ... */
+    case val_n_1: BlockN1;
+}
+
+/* Extended C notation used to explain the compiled form: */
+goto *JTab[x];
+```
+
+```mermaid
+flowchart LR
+    x[case value x] --> table[Jump table JTab]
+    table --> t0[Targ0] --> b0[Code block 0]
+    table --> t1[Targ1] --> b1[Code block 1]
+    table --> t2[Targ2] --> b2[Code block 2]
+    table -.-> tn[Targ n-1] --> bn[Code block n-1]
+```
 
 ## Switch Statement Example
 ```C

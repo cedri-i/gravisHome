@@ -239,30 +239,15 @@ call_echo:
 
 ### Code Injection Attacks
 
-<div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; color: #333; font-family: sans-serif; max-width: 500px; margin: 10px auto; border: 1px solid #ddd;">
-    <div style="text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 16px;">
-        Stack after call to <code style="background: #eee; padding: 2px 4px; border-radius: 4px;">gets()</code>
-    </div>
-    <div style="display: flex; align-items: stretch; justify-content: center;">
-        <div style="display: flex; flex-direction: column; justify-content: flex-end; padding-right: 10px; text-align: right; font-size: 13px; min-width: 100px;">
-            <div style="margin-bottom: 60px;">data written<br>by <code>gets()</code></div>
-            <div style="font-weight: bold; height: 30px; display: flex; align-items: center; justify-content: flex-end;">B →</div>
-            <div style="height: 60px;"></div>
-        </div>
-        <div style="width: 140px; border: 2px solid #000; background: #fff; display: flex; flex-direction: column;">
-            <div style="height: 80px; border-bottom: 2px solid #000; display: flex; align-items: center; justify-content: center;">P frame</div>
-            <div style="height: 35px; border-bottom: 2px solid #000; padding-left: 8px; display: flex; align-items: center; background: #fff; font-weight: bold;">B</div>
-            <div style="height: 70px; border-bottom: 2px solid #000; padding-left: 8px; display: flex; align-items: center; background: #c5cae9;">pad</div>
-            <div style="height: 60px; border-bottom: 2px solid #000; padding-left: 8px; display: flex; align-items: center; background: #9fa8da;">exploit<br>code</div>
-            <div style="height: 50px; background: #e8eaf6;"></div>
-        </div>
-        <div style="display: flex; flex-direction: column; padding-left: 10px; font-size: 13px;">
-            <div style="height: 80px; display: flex; align-items: center; font-weight: bold;"> P stack frame</div>
-            <div style="height: 165px; display: flex; align-items: center; font-weight: bold;"> Q stack frame</div>
-        </div>
-    </div>
-</div>
+```mermaid
+flowchart BT
+    exploit[Exploit code placed in buffer] --> padding[Padding fills the rest of Q stack frame]
+    padding --> overwritten[Saved return address overwritten with B]
+    overwritten --> caller[P stack frame]
+    entry[B points back to exploit code] -.-> exploit
+```
 
+The input written by `gets()` starts at buffer address `B`, crosses the buffer and padding, then overwrites the saved return address with `B`. When the function returns, control is redirected into the injected bytes.
 
 - `gets()` 函数~={red}**非常危险**=~，因为不检查输入字符串的长度
 - **攻击发生：** 攻击者构造了一个特殊的输入字符串：
@@ -332,50 +317,26 @@ echo:
 
 #### Setting Up Canary
 
-<div style="background-color: white; padding: 30px; font-family: 'Segoe UI', Arial, sans-serif; color: black; line-height: 1.2;">
-    <div style="color: #A52A2A; font-style: italic; font-weight: bold; font-size: 18px; margin-bottom: 20px;">Before call to gets</div>
-    <div style="display: flex; align-items: flex-start; gap: 40px;">
-        <div style="display: flex; flex-direction: column; align-items: flex-start;">
-            <div style="width: 180px; border: 2.5px solid black; border-bottom: none; background-color: white;">
-                <div style="height: 90px; border-bottom: 2.5px solid black; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-weight: bold; font-size: 18px;">
-                    <div>Stack Frame</div>
-                    <div>for <span style="font-family: monospace;">call_echo</span></div>
-                </div>
-                <div style="height: 70px; border-bottom: 2.5px solid black; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 17px;">
-                    <div>Return Address</div>
-                    <div>(8 bytes)</div>
-                </div>
-                <div style="height: 50px; background-color: #E8E8FF; border-bottom: 2.5px solid black;"></div>
-                <div style="height: 70px; background-color: #C0C0FF; border-bottom: 2.5px solid black; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 17px;">
-                    <div>Canary</div>
-                    <div>(8 bytes)</div>
-                </div>
-                <div style="height: 40px; display: flex; border-bottom: 2.5px solid black;">
-                    <div style="flex: 1; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; font-family: monospace; font-weight: bold;">[3]</div>
-                    <div style="flex: 1; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; font-family: monospace; font-weight: bold;">[2]</div>
-                    <div style="flex: 1; border-right: 1px solid black; display: flex; align-items: center; justify-content: center; font-family: monospace; font-weight: bold;">[1]</div>
-                    <div style="flex: 1; display: flex; align-items: center; justify-content: center; font-family: monospace; font-weight: bold;">[0]</div>
-                </div>
-            </div>
-            <div style="display: flex; align-items: center; margin-top: 8px; font-family: monospace; font-size: 18px; font-weight: bold;">
-                <span>buf</span>
-                <span style="margin: 0 15px; font-size: 24px;">&larr;</span>
-                <span>%rsp</span>
-            </div>
-        </div>
-        <div style="background-color: #FFF9D6; border: 1px solid #999; padding: 20px; min-width: 450px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); border-radius: 2px;">
-            <pre style="margin: 0; font-family: 'Courier New', Courier, monospace; font-size: 19px; line-height: 1.4; color: black; background: transparent; border: none;">
-<span style="color: #A52A2A; font-style: italic; font-weight: bold;">/* Echo Line */</span>
-<span style="font-weight: bold;">void echo()</span>
-{
-    <span style="font-weight: bold;">char buf[4];  </span><span style="color: #A52A2A; font-style: italic; font-weight: bold;">/* Way too small! */</span>
-    <span style="font-weight: bold;">gets(buf);</span>
-    <span style="font-weight: bold;">puts(buf);</span>
-}</pre>
-        </div>
-    </div>
-</div>
+Before the call to `gets`, the protected stack frame is arranged as follows (higher addresses at the top):
 
+| Stack-frame region | Size / role |
+| --- | --- |
+| caller frame | state belonging to `call_echo` |
+| saved return address | 8 bytes |
+| alignment / reserved space | compiler-selected padding |
+| stack canary | 8 bytes checked before `ret` |
+| `buf[4]` | starts at `%rsp`; unsafe destination for unbounded `gets` |
+
+```c
+void echo(void)
+{
+    char buf[4]; /* far too small for unbounded input */
+    gets(buf);
+    puts(buf);
+}
+```
+
+An overflow must cross the canary before it can reach the return address, so the epilogue detects the corruption and calls `__stack_chk_fail`.
 
 # Unions
 
