@@ -96,12 +96,10 @@ Application Binary Interface*应用二进制接口*
 	- Pop address from stack
 	- Jump to address
 
-```mermaid
-flowchart LR
-    call[5-byte callq at 0x400544] -->|push return address 0x400549| stack[stack top at 0x118]
-    call -->|set %rip = 0x400550| callee[mult2 begins]
-    callee -->|ret pops 0x400549| resume[resume at address 0x400549]
-```
+| Instruction / state | Stack action | Control flow |
+| --- | --- | --- |
+| `callq` at `0x400544` (5 bytes) | push return address `0x400549` at stack top `0x118` | jump to `mult2` at `0x400550` |
+| `ret` in `mult2` | pop saved address `0x400549` | resume at `0x400549` |
 
 The `call` instruction performs two state changes: it saves the address of the following instruction on the stack and transfers control to the callee. `ret` reverses those changes by popping that saved address into `%rip`.
 

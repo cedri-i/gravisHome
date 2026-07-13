@@ -83,9 +83,9 @@ Each set contains two interchangeable cache lines:
 
 | Set | Way 0 | Way 1 |
 | --- | --- | --- |
-| Set 0 | `v | tag | byte[0..7]` | `v | tag | byte[0..7]` |
+| Set 0 | `v \| tag \| byte[0..7]` | `v \| tag \| byte[0..7]` |
 | $\vdots$ | $\vdots$ | $\vdots$ |
-| Set $S-1$ | `v | tag | byte[0..7]` | `v | tag | byte[0..7]` |
+| Set $S-1$ | `v \| tag \| byte[0..7]` | `v \| tag \| byte[0..7]` |
 
 - $v$ 位是整行（也即该数据块）共用的
   - 从内存加载数据到缓存时，会~={green}一次性填满=~这 8 个字节
