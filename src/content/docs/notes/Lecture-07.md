@@ -26,48 +26,47 @@ Application Binary Interface*应用二进制接口*
 	- Register `%rsp` contains~={cyan} lowest stack address=~（栈顶）
 - 调用返回的思想与栈的后进先出的原则相通
 
-<div style="font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; padding: 40px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; width: fit-content; margin: auto;">
-    <div style="text-align: center; margin-bottom: 15px;">
-        <div style="color: #2e3192; font-weight: 800; font-size: 18px; margin-bottom: 5px;">Stack "Bottom"</div>
-        <div style="color: #c1272d; font-size: 20px; line-height: 1;">▼</div>
-    </div>
-    <div style="display: flex; align-items: stretch; gap: 0;">
-        <div style="width: 160px; display: flex; flex-direction: column;">
-            <div style="height: 200px;"></div>
-            <div style="display: flex; align-items: flex-start; justify-content: flex-end; margin-top: -12px;">
-                <div style="text-align: right; margin-right: 10px;">
-                    <div style="background: #2e3192; color: #fff; padding: 4px 10px; border-radius: 4px; font-weight: 800; font-size: 14px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
-                        %rsp
-                    </div>
-                    <div style="color: #666; font-size: 11px; margin-top: 2px;">(Stack Pointer)</div>
-                </div>
-                <span style="color: #2e3192; font-size: 24px; font-weight: bold; line-height: 1;">──▶</span>
+<figure class="stack-map" aria-labelledby="stack-map-title">
+    <header class="stack-map__header">
+        <div>
+            <span class="stack-map__eyebrow">x86-64 memory model</span>
+            <strong id="stack-map-title">The stack grows toward lower addresses</strong>
+        </div>
+        <code>%rsp</code>
+    </header>
+    <div class="stack-map__canvas">
+        <div class="stack-map__axis" aria-label="Memory addresses increase upward">
+            <span>high address</span>
+            <i aria-hidden="true"></i>
+            <span>low address</span>
+        </div>
+        <div class="stack-map__memory" aria-label="Stack memory">
+            <div class="stack-map__cell stack-map__cell--bottom">
+                <small>stack bottom</small>
+                <span>older stack data</span>
+            </div>
+            <div class="stack-map__cell">
+                <small>current frame</small>
+                <span>saved values · local data</span>
+            </div>
+            <div class="stack-map__cell stack-map__cell--top">
+                <small>stack top</small>
+                <strong>top element</strong>
+            </div>
+            <div class="stack-map__next">
+                <span>next push / call</span>
+                <span aria-hidden="true">↓</span>
             </div>
         </div>
-        <div style="width: 140px; border: 2.5px solid #000; background-color: #f0f1ff; display: flex; flex-direction: column; box-shadow: 4px 4px 10px rgba(0,0,0,0.05);">
-            <div style="height: 200px;"></div>
-            <div style="height: 80px; background-color: #d1d3ff; border-top: 2.5px solid #000; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #2e3192;">
-                Top Element
-            </div>
-        </div>
-        <div style="width: 150px; margin-left: 30px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 0;">
-            <div style="border-left: 3px solid #444; padding-left: 12px; height: 100px; position: relative; display: flex; align-items: center; font-weight: 700; color: #444; font-size: 13px;">
-                <div style="position: absolute; top: -10px; left: -8px;">▲</div>
-                Increasing<br>Addresses
-            </div>
-            <div style="border-left: 3px solid #444; padding-left: 12px; height: 100px; position: relative; display: flex; align-items: center; font-weight: 700; color: #444; font-size: 13px;">
-                <div style="position: absolute; bottom: -10px; left: -8px;">▼</div>
-                Stack<br>Grows<br>Down
-            </div>
+        <div class="stack-map__pointer">
+            <code>%rsp</code>
+            <span>points to the lowest address currently in use</span>
         </div>
     </div>
-    <div style="text-align: center; margin-top: 15px;">
-        <div style="color: #c1272d; font-size: 20px; line-height: 1;">▲</div>
-        <div style="color: #2e3192; font-weight: 800; font-size: 18px; margin-top: 5px;">Stack "Top"</div>
-    </div>
-</div>
-
-*（这个图画得有点不准确）*
+    <figcaption>
+        Addresses increase upward; pushing data moves <code>%rsp</code> downward to a lower address.
+    </figcaption>
+</figure>
 #### Push
 - `pushq` Src
 	- Fetch oprand at src

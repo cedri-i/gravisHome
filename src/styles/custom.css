@@ -357,6 +357,243 @@ mark {
         "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
 }
 
+.stack-map {
+    --stack-map-line: color-mix(in srgb, var(--sl-color-accent) 42%, var(--sl-color-hairline));
+    --stack-map-soft: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+    margin: 1.75rem 0;
+    overflow: hidden;
+    border: 1px solid var(--stack-map-line);
+    border-radius: 1rem;
+    background:
+        linear-gradient(135deg, var(--stack-map-soft), transparent 48%),
+        color-mix(in srgb, var(--sl-color-bg) 86%, transparent);
+    color: var(--sl-color-text);
+    box-shadow: 0 1rem 3rem color-mix(in srgb, #020617 18%, transparent);
+}
+
+.stack-map__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.35rem;
+    border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+.stack-map__header > div {
+    display: grid;
+    gap: 0.15rem;
+}
+
+.stack-map__eyebrow,
+.stack-map__cell small,
+.stack-map__axis span,
+.stack-map__next span:first-child {
+    color: var(--sl-color-gray-3);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.stack-map__header strong {
+    color: var(--sl-color-white);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 560;
+}
+
+.stack-map code {
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 48%, transparent);
+    border-radius: 0.42rem;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-accent-high);
+    font-weight: 700;
+}
+
+.stack-map__header > code {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.88rem;
+}
+
+.stack-map__canvas {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 0.7fr) minmax(12rem, 1.35fr) minmax(9rem, 0.9fr);
+    gap: clamp(1rem, 4vw, 2.5rem);
+    align-items: stretch;
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 4vw, 2.5rem) 1.5rem;
+}
+
+.stack-map__axis {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    justify-items: end;
+    min-height: 20rem;
+    padding-block: 0.2rem 3.25rem;
+}
+
+.stack-map__axis i {
+    position: relative;
+    width: 1px;
+    margin: 0.65rem 0.6rem;
+    background: linear-gradient(var(--sl-color-accent), var(--stack-map-line));
+}
+
+.stack-map__axis i::before,
+.stack-map__axis i::after {
+    position: absolute;
+    left: 50%;
+    color: var(--sl-color-accent);
+    font-style: normal;
+    transform: translateX(-50%);
+}
+
+.stack-map__axis i::before {
+    top: -0.5rem;
+    content: "↑";
+}
+
+.stack-map__axis i::after {
+    bottom: -0.5rem;
+    content: "↓";
+}
+
+.stack-map__memory {
+    display: grid;
+    grid-template-rows: repeat(3, minmax(4.2rem, auto)) 3.2rem;
+    border-inline: 1px solid var(--stack-map-line);
+}
+
+.stack-map__cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.85rem 1rem;
+    border-top: 1px solid var(--stack-map-line);
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 68%, transparent);
+}
+
+.stack-map__cell span,
+.stack-map__cell strong {
+    color: var(--sl-color-white);
+    font-size: 0.93rem;
+    font-weight: 540;
+}
+
+.stack-map__cell--bottom {
+    border-radius: 0.7rem 0.7rem 0 0;
+}
+
+.stack-map__cell--top {
+    position: relative;
+    border-color: var(--sl-color-accent);
+    background: color-mix(in srgb, var(--sl-color-accent-low) 78%, var(--sl-color-bg));
+}
+
+.stack-map__cell--top::after {
+    position: absolute;
+    right: -0.42rem;
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 50%;
+    background: var(--sl-color-accent);
+    box-shadow: 0 0 0 0.28rem color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
+    content: "";
+}
+
+.stack-map__next {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    border: 1px dashed var(--stack-map-line);
+    border-top: 0;
+    border-radius: 0 0 0.7rem 0.7rem;
+    background: color-mix(in srgb, var(--sl-color-accent) 4%, transparent);
+}
+
+.stack-map__next span:last-child {
+    color: var(--sl-color-accent);
+    font-size: 1.15rem;
+}
+
+.stack-map__pointer {
+    position: relative;
+    align-self: end;
+    display: grid;
+    gap: 0.45rem;
+    margin-bottom: 3.7rem;
+    padding-left: 1.25rem;
+}
+
+.stack-map__pointer::before {
+    position: absolute;
+    top: 0.8rem;
+    right: 100%;
+    width: clamp(1rem, 4vw, 2.5rem);
+    height: 1px;
+    background: var(--sl-color-accent);
+    content: "";
+}
+
+.stack-map__pointer::after {
+    position: absolute;
+    top: 0.52rem;
+    right: calc(100% - 0.05rem);
+    border-block: 0.3rem solid transparent;
+    border-right: 0;
+    border-left: 0.42rem solid var(--sl-color-accent);
+    content: "";
+}
+
+.stack-map__pointer code {
+    justify-self: start;
+    padding: 0.22rem 0.5rem;
+}
+
+.stack-map__pointer span {
+    max-width: 12rem;
+    color: var(--sl-color-gray-2);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.stack-map figcaption {
+    padding: 0.85rem 1.35rem 1rem;
+    border-top: 1px solid var(--sl-color-hairline);
+    color: var(--sl-color-gray-3);
+    font-size: 0.78rem;
+    line-height: 1.55;
+}
+
+.stack-map figcaption code {
+    padding: 0.08rem 0.25rem;
+}
+
+@media (max-width: 34rem) {
+    .stack-map__header {
+        align-items: flex-start;
+    }
+
+    .stack-map__canvas {
+        grid-template-columns: 4.5rem minmax(0, 1fr);
+        gap: 0.8rem;
+        padding-inline: 0.85rem;
+    }
+
+    .stack-map__pointer {
+        grid-column: 2;
+        margin: 0;
+        padding: 0.85rem 0 0.25rem;
+    }
+
+    .stack-map__pointer::before,
+    .stack-map__pointer::after {
+        display: none;
+    }
+}
 .notes-card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
