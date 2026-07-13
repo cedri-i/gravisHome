@@ -1,0 +1,133 @@
+<div id="sky-galaxy" aria-hidden="true">
+  <svg viewBox="0 0 1100 680" focusable="false">
+    <defs>
+      <radialGradient id="galaxy-halo" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#fff2c9" stop-opacity=".34" />
+        <stop offset=".14" stop-color="#ffb780" stop-opacity=".25" />
+        <stop offset=".34" stop-color="#aa91ff" stop-opacity=".22" />
+        <stop offset=".62" stop-color="#5cb9ff" stop-opacity=".13" />
+        <stop offset="1" stop-color="#4f7cff" stop-opacity="0" />
+      </radialGradient>
+
+      <radialGradient id="galaxy-core" cx="46%" cy="45%" r="56%">
+        <stop offset="0" stop-color="#fffbea" stop-opacity=".96" />
+        <stop offset=".13" stop-color="#ffe2a7" stop-opacity=".88" />
+        <stop offset=".34" stop-color="#ffb080" stop-opacity=".58" />
+        <stop offset=".58" stop-color="#b58fff" stop-opacity=".34" />
+        <stop offset=".82" stop-color="#67bfff" stop-opacity=".13" />
+        <stop offset="1" stop-color="#67bfff" stop-opacity="0" />
+      </radialGradient>
+
+      <linearGradient id="galaxy-arm" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ffe4b0" />
+        <stop offset=".24" stop-color="#d5b5ff" />
+        <stop offset=".58" stop-color="#83caff" />
+        <stop offset=".82" stop-color="#73e0dc" />
+        <stop offset="1" stop-color="#5d7dff" />
+      </linearGradient>
+
+      <linearGradient id="galaxy-dust" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#261c3d" stop-opacity=".22" />
+        <stop offset=".38" stop-color="#071020" stop-opacity=".86" />
+        <stop offset=".72" stop-color="#09172b" stop-opacity=".68" />
+        <stop offset="1" stop-color="#13243d" stop-opacity="0" />
+      </linearGradient>
+
+      <filter id="galaxy-blur-xl" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="28" />
+      </filter>
+      <filter id="galaxy-blur-md" x="-35%" y="-35%" width="170%" height="170%">
+        <feGaussianBlur stdDeviation="10" />
+      </filter>
+      <filter id="galaxy-blur-sm" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="3.2" />
+      </filter>
+
+      <radialGradient id="galaxy-fade" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="white" />
+        <stop offset=".7" stop-color="white" stop-opacity=".92" />
+        <stop offset="1" stop-color="black" />
+      </radialGradient>
+      <mask id="galaxy-arm-mask">
+        <circle cx="0" cy="0" r="430" fill="url(#galaxy-fade)" />
+      </mask>
+
+      <path
+        id="galaxy-spiral-arm"
+        d="M 0 -8 C 52 -55 126 -42 151 10 C 181 73 125 136 48 152 C -54 174 -151 105 -172 17 C -201 -101 -104 -213 31 -238 C 183 -266 330 -185 391 -74"
+      />
+    </defs>
+
+    <g transform="translate(560 342) rotate(-11)">
+      <g transform="scale(1 .47)">
+        <circle
+          cx="0"
+          cy="0"
+          r="438"
+          fill="url(#galaxy-halo)"
+          filter="url(#galaxy-blur-xl)"
+          opacity=".76"
+        />
+
+        <g fill="none" stroke-linecap="round" mask="url(#galaxy-arm-mask)">
+          <g class="galaxy-light" stroke="url(#galaxy-arm)" stroke-width="118" opacity=".22" filter="url(#galaxy-blur-xl)">
+            <use href="#galaxy-spiral-arm" />
+            <use href="#galaxy-spiral-arm" transform="rotate(180)" />
+          </g>
+
+          <g class="galaxy-light" stroke="url(#galaxy-arm)" stroke-width="58" opacity=".34" filter="url(#galaxy-blur-md)">
+            <use href="#galaxy-spiral-arm" />
+            <use href="#galaxy-spiral-arm" transform="rotate(180)" />
+          </g>
+
+          <g class="galaxy-light" stroke="url(#galaxy-arm)" stroke-width="31" opacity=".2" filter="url(#galaxy-blur-md)">
+            <use href="#galaxy-spiral-arm" transform="rotate(38) scale(.78)" />
+            <use href="#galaxy-spiral-arm" transform="rotate(218) scale(.78)" />
+          </g>
+
+          <g stroke="url(#galaxy-dust)" stroke-width="11" opacity=".58" filter="url(#galaxy-blur-sm)">
+            <use href="#galaxy-spiral-arm" transform="rotate(3)" />
+            <use href="#galaxy-spiral-arm" transform="rotate(183)" />
+          </g>
+
+          <g class="galaxy-light" stroke="url(#galaxy-arm)" stroke-width="6" opacity=".34" filter="url(#galaxy-blur-sm)">
+            <use href="#galaxy-spiral-arm" transform="rotate(-2)" />
+            <use href="#galaxy-spiral-arm" transform="rotate(178)" />
+          </g>
+
+          <g
+            class="galaxy-light galaxy-star-streams"
+            stroke="#e8f6ff"
+            stroke-width="2.2"
+            stroke-dasharray="1 19 1.5 41 .8 13 2 57"
+            opacity=".52"
+          >
+            <use href="#galaxy-spiral-arm" />
+            <use href="#galaxy-spiral-arm" transform="rotate(180)" />
+          </g>
+        </g>
+
+        <ellipse
+          cx="0"
+          cy="0"
+          rx="168"
+          ry="135"
+          fill="url(#galaxy-core)"
+          filter="url(#galaxy-blur-md)"
+          opacity=".86"
+        />
+        <ellipse cx="0" cy="0" rx="78" ry="61" fill="url(#galaxy-core)" opacity=".94" />
+
+        <g class="galaxy-light galaxy-core-stars" fill="#fff8df">
+          <circle cx="-18" cy="-8" r="3.2" />
+          <circle cx="23" cy="11" r="2.5" />
+          <circle cx="47" cy="-18" r="1.8" />
+          <circle cx="-51" cy="19" r="1.9" />
+          <circle cx="12" cy="-43" r="1.7" />
+          <circle cx="-6" cy="38" r="1.4" />
+        </g>
+      </g>
+
+    </g>
+  </svg>
+</div>

@@ -1,6 +1,7 @@
 /* ===== Whole homepage starsky background ===== */
 
 body:has(.home-starsky) {
+    isolation: isolate;
     background:
         radial-gradient(ellipse at 34% 42%, rgba(255,255,255,.09), transparent 18%),
         radial-gradient(ellipse at 38% 44%, rgba(150,190,255,.12), transparent 32%),
@@ -25,9 +26,6 @@ body:has(.home-starsky)::before {
     pointer-events: none;
 
     background-image:
-        radial-gradient(ellipse at 13% 31%, rgba(235,245,255,.28) 0 1px, rgba(180,200,255,.16) 2px 14px, transparent 15px),
-        radial-gradient(ellipse at 83% 58%, rgba(255,245,235,.23) 0 1px, rgba(255,190,150,.11) 2px 12px, transparent 13px),
-        radial-gradient(ellipse at 62% 18%, rgba(220,235,255,.2) 0 1px, rgba(130,180,255,.1) 2px 10px, transparent 11px),
         radial-gradient(circle at 8% 16%, rgba(255,255,255,.9) 0 1px, transparent 1.8px),
         radial-gradient(circle at 18% 72%, rgba(255,255,255,.45) 0 1px, transparent 1.8px),
         radial-gradient(circle at 27% 38%, rgba(255,255,255,.65) 0 1.2px, transparent 2px),
@@ -38,9 +36,6 @@ body:has(.home-starsky)::before {
         radial-gradient(circle at 91% 43%, rgba(255,255,255,.6) 0 1px, transparent 1.8px);
 
     background-size:
-        1180px 820px,
-        1420px 980px,
-        1560px 1120px,
         420px 360px,
         520px 460px,
         680px 520px,
@@ -599,39 +594,86 @@ body:has(.home-starsky) .page {
 :root[data-theme="light"] #sky-stars {
     display: none;
 }
-/* More natural galaxies, nebulae, and stellar explosions */
-body:has(.home-starsky)::after {
-    content: "";
+/* The homepage signature: one large, structured spiral galaxy. */
+#sky-galaxy {
     position: fixed;
-    inset: -10vh -8vw;
+    inset: 0;
     z-index: -1;
+    overflow: hidden;
     pointer-events: none;
-    background-image:
-        radial-gradient(ellipse at 50% 50%, rgba(255, 247, 221, .42) 0 1.2%, rgba(151, 190, 255, .18) 2.8%, transparent 7.2%),
-        radial-gradient(ellipse at 24% 32%, rgba(156, 198, 255, .12), transparent 16%),
-        radial-gradient(ellipse at 76% 22%, rgba(255, 238, 204, .22) 0 1%, rgba(108, 154, 255, .10) 2.4%, transparent 6.4%),
-        radial-gradient(ellipse at 74% 21%, rgba(126, 194, 255, .09), transparent 15%),
-        radial-gradient(ellipse at 18% 70%, rgba(236, 72, 153, .10), transparent 20%),
-        radial-gradient(ellipse at 56% 78%, rgba(45, 212, 191, .08), transparent 19%);
-    background-size:
-        48vw 32vw,
-        50vw 34vw,
-        38vw 25vw,
-        40vw 27vw,
-        62vw 38vw,
-        54vw 34vw;
-    background-position:
-        0 5vh,
-        -1vw 4vh,
-        54vw 1vh,
-        53vw 0,
-        -22vw 53vh,
-        37vw 61vh;
-    background-repeat: no-repeat;
-    filter: blur(.35px) saturate(1.12);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+}
+
+#sky-galaxy svg {
+    position: absolute;
+    top: clamp(-8rem, -6vh, -2rem);
+    right: clamp(-9rem, -6vw, -3rem);
+    width: clamp(48rem, 64vw, 72rem);
+    max-width: none;
+    height: auto;
+    overflow: visible;
+    opacity: .94;
+    filter: saturate(1.16) contrast(1.06);
+    transform-origin: 50% 50%;
+    animation: skyGalaxyDrift 38s ease-in-out infinite alternate;
+}
+
+#sky-galaxy .galaxy-light {
     mix-blend-mode: screen;
-    opacity: .78;
-    animation: galaxyBreath 28s ease-in-out infinite alternate;
+}
+
+#sky-galaxy .galaxy-star-streams {
+    filter: drop-shadow(0 0 1.5px rgba(179, 220, 255, .58));
+}
+
+#sky-galaxy .galaxy-core-stars {
+    filter:
+        drop-shadow(0 0 4px rgba(255, 244, 205, .92))
+        drop-shadow(0 0 12px rgba(129, 190, 255, .7));
+}
+
+@keyframes skyGalaxyDrift {
+    from {
+        transform: translate3d(0, 0, 0) scale(.995);
+    }
+
+    to {
+        transform: translate3d(-.7vw, .4vh, 0) scale(1.018);
+    }
+}
+
+@media (max-height: 38rem) and (min-width: 52.01rem) {
+    #sky-galaxy svg {
+        top: -6rem;
+        right: -2rem;
+        width: clamp(50rem, 58vw, 64rem);
+    }
+}
+
+@media (max-width: 52rem) {
+    #sky-galaxy {
+        -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 80%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 0%, #000 80%, transparent 100%);
+    }
+
+    #sky-galaxy svg {
+        top: 7rem;
+        right: -25rem;
+        width: 52rem;
+        opacity: .72;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #sky-galaxy svg {
+        animation: none;
+        transform: none;
+    }
+}
+
+:root[data-theme="light"] #sky-galaxy {
+    display: none;
 }
 
 .sky-star.is-supernova {
@@ -717,10 +759,6 @@ body:has(.home-starsky)::after {
     animation: burstSpikes 1.25s ease-out forwards;
 }
 
-@keyframes galaxyBreath {
-    from { opacity: .58; transform: translate3d(0, 0, 0) scale(1); }
-    to { opacity: .86; transform: translate3d(.5vw, -.35vh, 0) scale(1.018); }
-}
 
 @keyframes supernova {
     0% { opacity: .2; transform: scale(.72); box-shadow: 0 0 8px rgba(255,255,255,.52); }
@@ -760,8 +798,4 @@ body:has(.home-starsky)::after {
     0% { opacity: 0; transform: translate(-50%, -50%) scale(.2) rotate(0deg); }
     16% { opacity: .78; transform: translate(-50%, -50%) scale(.52) rotate(18deg); }
     100% { opacity: 0; transform: translate(-50%, -50%) scale(1.25) rotate(54deg); }
-}
-
-:root[data-theme="light"] body:has(.home-starsky)::after {
-    display: none;
 }
