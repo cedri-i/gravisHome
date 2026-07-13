@@ -1,5 +1,11 @@
-@import "@fontsource-variable/inter/wght.css";
-@import "@fontsource-variable/inter/wght-italic.css";
+@import "@fontsource-variable/source-sans-3/wght.css";
+@import "@fontsource-variable/source-sans-3/wght-italic.css";
+@import "@fontsource-variable/newsreader/wght.css";
+@import "@fontsource-variable/newsreader/wght-italic.css";
+@import "@fontsource/noto-sans-sc/400.css";
+@import "@fontsource/noto-sans-sc/500.css";
+@import "@fontsource/noto-sans-sc/600.css";
+@import "@fontsource/noto-sans-sc/700.css";
 @import "katex/dist/katex.min.css";
 @import "./starsky.css";
 @import "./sky-toggle.css";
@@ -11,8 +17,9 @@
 }
 
 .hero h1 {
-  font-family: "LiuGongQuan", serif;
-  font-weight: 400;
+  font-family: "Newsreader Variable", "Noto Sans SC", "Songti SC", serif;
+  font-weight: 560;
+  letter-spacing: -0.025em;
 }
 
 button[aria-label*="theme"],
@@ -90,8 +97,17 @@ body:not(:has(.home-starsky)) .content-panel {
 }
 
 :root {
-    --sl-font: "Inter Variable", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --font-body: "Source Sans 3 Variable", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --font-display: "Newsreader Variable", "Noto Sans SC", "Songti SC", serif;
+    --font-ui: "Source Sans 3 Variable", "Noto Sans SC", "PingFang SC", sans-serif;
+    --sl-font: var(--font-body);
+    --sl-font-mono: "Cascadia Code", "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
     --obsidian-red: #d64545;
+    /* Keep Markdown headings distinct without overpowering the body copy. */
+    --sl-text-h1: clamp(2rem, 3vw, 2.25rem);
+    --sl-text-h2: clamp(1.6rem, 2.4vw, 1.875rem);
+    --sl-text-h3: clamp(1.35rem, 2vw, 1.5rem);
+    --sl-text-h4: clamp(1.125rem, 1.6vw, 1.25rem);
     --obsidian-orange: #c76f1d;
     --obsidian-yellow: #a97900;
     --obsidian-green: #2f8f46;
@@ -99,6 +115,41 @@ body:not(:has(.home-starsky)) .content-panel {
     --obsidian-blue: #3b6fd8;
     --obsidian-purple: #8756c5;
     --obsidian-pink: #c24f86;
+}
+
+body {
+    font-family: var(--font-body);
+    font-optical-sizing: auto;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+}
+
+/* Give headings a distinct editorial voice without sacrificing Chinese clarity. */
+.sl-markdown-content :is(h1, h2, h3),
+.content-panel > .sl-container > header h1 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 600;
+    letter-spacing: -0.018em;
+}
+
+.sl-markdown-content h4,
+.site-title,
+.sidebar-content,
+.right-sidebar,
+nav,
+button,
+input {
+    font-family: var(--font-ui);
+}
+
+.sl-markdown-content p,
+.sl-markdown-content li {
+    line-height: 1.82;
+}
+
+.sl-markdown-content strong {
+    font-weight: 650;
 }
 
 :root[data-theme='dark'] {
@@ -195,7 +246,7 @@ mark {
     color: var(--note-html-ink) !important;
     box-shadow: none !important;
     font-family:
-        "Inter Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Source Sans 3 Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
 }
 
@@ -203,7 +254,7 @@ mark {
 .sl-markdown-content > table[style] :not(pre):not(code) {
     color: var(--note-html-ink) !important;
     font-family:
-        "Inter Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Source Sans 3 Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
 }
 
@@ -290,7 +341,7 @@ mark {
 .sl-markdown-content > div[style] svg text {
     fill: var(--note-html-ink) !important;
     font-family:
-        "Inter Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Source Sans 3 Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         "Noto Sans SC", "Microsoft YaHei", sans-serif !important;
 }
 
@@ -372,7 +423,8 @@ mark {
     margin-top: 0.55rem;
     color: var(--sl-color-gray-2);
     font-size: 1rem;
-    font-weight: 400;
+    font-weight: 560;
+  letter-spacing: -0.025em;
     line-height: 1.6;
 }
 
@@ -1024,7 +1076,8 @@ button[aria-label*="theme"] {
 }
 
 .sl-markdown-content .card .description {
-    font-weight: 400;
+    font-weight: 560;
+  letter-spacing: -0.025em;
 }
 
 .update-history {
@@ -1188,7 +1241,8 @@ main:has(.baiyun-meta) h1 {
         "STZhongsong", "华文中宋", "FZZhongSong-Z07", "FZYaSongS-R-GB",
         "Songti SC", SimSun, "Noto Serif SC", "Source Han Serif SC", serif;
     font-size: clamp(2.6rem, 4vw, 4rem);
-    font-weight: 400;
+    font-weight: 560;
+  letter-spacing: -0.025em;
     letter-spacing: 0.04em;
     text-shadow: 0 10px 36px color-mix(in srgb, #000000 32%, transparent);
 }
