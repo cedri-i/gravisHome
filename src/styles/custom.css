@@ -124,13 +124,25 @@ body {
     text-rendering: optimizeLegibility;
 }
 
-/* Give headings a distinct editorial voice without sacrificing Chinese clarity. */
+/* Keep article headings editorial, but lighter than interface labels. */
 .sl-markdown-content :is(h1, h2, h3),
 .content-panel > .sl-container > header h1 {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    font-weight: 600;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.008em;
+}
+
+.sl-markdown-content h1,
+.content-panel > .sl-container > header h1 {
+    font-weight: 480;
+}
+
+.sl-markdown-content h2 {
+    font-weight: 520;
+}
+
+.sl-markdown-content h3 {
+    font-weight: 560;
 }
 
 .sl-markdown-content h4,
