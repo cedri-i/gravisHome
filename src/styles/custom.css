@@ -125,31 +125,20 @@ body {
     text-rendering: optimizeLegibility;
 }
 
-/* Keep article headings editorial, but lighter than interface labels. */
-.sl-markdown-content :is(h1, h2, h3),
-.content-panel > .sl-container > header h1 {
-    font-family: var(--font-display);
+/* Keep Markdown headings editorial: Newsreader for Latin, Source Han Serif for CJK. */
+.sl-markdown-content :is(h1, h2, h3) {
+    font-family: "Newsreader Variable", "Noto Serif SC Variable", "Source Han Serif SC", "Songti SC", serif;
     font-optical-sizing: auto;
     letter-spacing: -0.008em;
-}
-
-.sl-markdown-content h1 {
-    font-family: "Newsreader Variable", "Noto Serif SC Variable", "Source Han Serif SC", "Songti SC", serif;
     font-weight: 400;
 }
 
 .content-panel > .sl-container > header h1 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    letter-spacing: -0.008em;
     font-weight: 480;
 }
-
-.sl-markdown-content h2 {
-    font-weight: 520;
-}
-
-.sl-markdown-content h3 {
-    font-weight: 560;
-}
-
 .sl-markdown-content h4,
 .site-title,
 .sidebar-content,
