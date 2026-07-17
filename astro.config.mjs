@@ -308,6 +308,26 @@ if (document.readyState === 'loading') {
                                     label: '逢秋满陇',
                                     link: '/baiyun/feng-qiu-man-long/',
                                 },
+                                {
+                                    label: '写给海宁站的短文',
+                                    link: '/baiyun/xie-gei-haining-zhan/',
+                                },
+                                {
+                                    label: '我的2025｜我的2025½',
+                                    link: '/baiyun/wo-de-2025/',
+                                },
+                                {
+                                    label: '东西南北风',
+                                    link: '/baiyun/dong-xi-nan-bei-feng/',
+                                },
+                                {
+                                    label: '填海',
+                                    link: '/baiyun/tian-hai/',
+                                },
+                                {
+                                    label: '大学无聊',
+                                    link: '/baiyun/da-xue-wu-liao/',
+                                },
                             ],
                         },
                     ],
