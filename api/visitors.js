@@ -1,5 +1,13 @@
 const start = '<!-- gravis-visitors:v1 -->';
 const end = '<!-- /gravis-visitors -->';
+const maxVisitorIds = 4000;
+let mutationQueue = Promise.resolve();
+
+const serializeMutation = (mutation) => {
+  const result = mutationQueue.then(mutation, mutation);
+  mutationQueue = result.catch(() => {});
+  return result;
+};
 
 const send = (res, code, data) => {
   res.statusCode = code;
@@ -49,15 +57,24 @@ const parse = (text = '') => {
   try { return JSON.parse(text.slice(a + start.length, b).trim()); } catch { return null; }
 };
 
-const clean = (raw) => ({
-  totalViews: Math.max(0, Math.floor(Number(raw?.totalViews) || 0)),
-  visitorIds: [...new Set(Array.isArray(raw?.visitorIds) ? raw.visitorIds.map(String).filter(Boolean) : [])],
-  updatedAt: raw?.updatedAt || null,
-});
+const clean = (raw) => {
+  const visitorIds = [
+    ...new Set(Array.isArray(raw?.visitorIds) ? raw.visitorIds.map(String).filter(Boolean) : []),
+  ].slice(-maxVisitorIds);
+  return {
+    totalViews: Math.max(0, Math.floor(Number(raw?.totalViews) || 0)),
+    uniqueVisitors: Math.max(
+      visitorIds.length,
+      Math.floor(Number(raw?.uniqueVisitors) || visitorIds.length)
+    ),
+    visitorIds,
+    updatedAt: raw?.updatedAt || null,
+  };
+};
 
 const publicStats = (stats) => ({
   totalViews: stats.totalViews + (Number.parseInt(process.env.VISITOR_STATS_BASE_VIEWS || '0', 10) || 0),
-  uniqueVisitors: stats.visitorIds.length + (Number.parseInt(process.env.VISITOR_STATS_BASE_UNIQUE || '0', 10) || 0),
+  uniqueVisitors: stats.uniqueVisitors + (Number.parseInt(process.env.VISITOR_STATS_BASE_UNIQUE || '0', 10) || 0),
   updatedAt: stats.updatedAt,
 });
 
@@ -83,16 +100,23 @@ export default async function handler(req, res) {
       const id = String((await body(req)).visitorId || '').slice(0, 80);
       if (!/^[A-Za-z0-9_-]{12,80}$/.test(id)) return send(res, 400, { error: 'Valid visitor id is required.' });
 
-      const { comment, stats } = await load(cfg);
-      stats.totalViews += 1;
-      if (!stats.visitorIds.includes(id)) stats.visitorIds.push(id);
-      stats.updatedAt = new Date().toISOString();
+      const stats = await serializeMutation(async () => {
+        const { comment, stats: current } = await load(cfg);
+        current.totalViews += 1;
+        if (!current.visitorIds.includes(id)) {
+          current.uniqueVisitors += 1;
+          current.visitorIds.push(id);
+          current.visitorIds = current.visitorIds.slice(-maxVisitorIds);
+        }
+        current.updatedAt = new Date().toISOString();
 
-      if (comment) {
-        await gh(cfg, '/repos/' + cfg.repo + '/issues/comments/' + comment.id, { method: 'PATCH', body: JSON.stringify({ body: storedBody(stats) }) });
-      } else {
-        await gh(cfg, '/repos/' + cfg.repo + '/issues/' + cfg.issue + '/comments', { method: 'POST', body: JSON.stringify({ body: storedBody(stats) }) });
-      }
+        if (comment) {
+          await gh(cfg, '/repos/' + cfg.repo + '/issues/comments/' + comment.id, { method: 'PATCH', body: JSON.stringify({ body: storedBody(current) }) });
+        } else {
+          await gh(cfg, '/repos/' + cfg.repo + '/issues/' + cfg.issue + '/comments', { method: 'POST', body: JSON.stringify({ body: storedBody(current) }) });
+        }
+        return current;
+      });
       return send(res, 200, publicStats(stats));
     }
 

@@ -2,6 +2,13 @@ import { getGitHubSession } from './_session.js';
 
 const markerStart = '<!-- gravis-guestbook:v1 -->';
 const markerEnd = '<!-- /gravis-guestbook -->';
+let mutationQueue = Promise.resolve();
+
+const serializeMutation = (mutation) => {
+  const result = mutationQueue.then(mutation, mutation);
+  mutationQueue = result.catch(() => {});
+  return result;
+};
 
 const legacyAuthors = {
   karlwang: {
@@ -211,7 +218,7 @@ export default async function handler(request, response) {
       const body = await readRequestBody(request);
       const message = normalizeMessage(body.message);
       const parentId = normalizeParentId(body.parentId);
-      const createdAt = body.createdAt || new Date().toISOString();
+      const createdAt = new Date().toISOString();
 
       if (!message) {
         return jsonResponse(response, 400, { error: 'Message is required.' });
@@ -234,6 +241,7 @@ export default async function handler(request, response) {
     }
 
     if (request.method === 'PATCH') {
+      return serializeMutation(async () => {
       const body = await readRequestBody(request);
       const commentId = String(body.id || '').replace(/^github-/, '').trim();
 
@@ -251,44 +259,8 @@ export default async function handler(request, response) {
       }
 
       if (body.action === 'claim') {
-        const session = getGitHubSession(request);
-        if (!session) {
-          return jsonResponse(response, 401, { error: 'GitHub login is required.' });
-        }
-
-        const proofMatches =
-          !parsed.payload.githubLogin &&
-          normalizeMessage(body.message) === normalizeMessage(parsed.payload.message) &&
-          normalizeParentId(body.parentId) === normalizeParentId(parsed.payload.parentId) &&
-          String(body.createdAt || '') === String(parsed.payload.createdAt || comment.created_at);
-
-        if (!proofMatches) {
-          return jsonResponse(response, 403, { error: 'Comment ownership proof did not match.' });
-        }
-
-        const nextPayload = {
-          ...parsed.payload,
-          name: normalizeName(session.user.name || session.user.login) || 'GitHub user',
-          githubLogin: normalizeLogin(session.user.login),
-          avatarUrl: session.user.avatarUrl,
-          profileUrl: session.user.profileUrl,
-          claimedAt: new Date().toISOString(),
-        };
-        const nextBody = `${comment.body.slice(0, parsed.markerStartIndex + markerStart.length)}
-${JSON.stringify(nextPayload)}
-${comment.body.slice(parsed.markerEndIndex)}`;
-
-        const updatedComment = await githubRequest(
-          config,
-          `/repos/${config.repository}/issues/comments/${commentId}`,
-          {
-            method: 'PATCH',
-            body: JSON.stringify({ body: nextBody }),
-          }
-        );
-
-        return jsonResponse(response, 200, {
-          message: parseComment(updatedComment),
+        return jsonResponse(response, 410, {
+          error: 'Legacy comment claiming is no longer supported.',
         });
       }
 
@@ -352,6 +324,7 @@ ${comment.body.slice(parsed.markerEndIndex)}`;
 
       return jsonResponse(response, 200, {
         message: parseComment(updatedComment),
+      });
       });
     }
 

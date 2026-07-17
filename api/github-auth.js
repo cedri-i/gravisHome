@@ -35,6 +35,15 @@ const redirect = (response, location) => {
   response.end();
 };
 
+const safeReturnTo = (value) => {
+  const returnTo = String(value || '');
+  return returnTo.startsWith('/') &&
+    !returnTo.startsWith('//') &&
+    !/[\u0000-\u001f\u007f]/.test(returnTo)
+    ? returnTo
+    : '/';
+};
+
 const exchangeCode = async ({ clientId, clientSecret, code, origin }) => {
   const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
     method: 'POST',
@@ -92,7 +101,7 @@ export default async function handler(request, response) {
 
   if (action === 'logout') {
     appendSetCookie(response, clearCookie(sessionCookieName));
-    return redirect(response, url.searchParams.get('returnTo') || '/');
+    return redirect(response, safeReturnTo(url.searchParams.get('returnTo')));
   }
 
   const config = getAuthConfig();
@@ -106,7 +115,7 @@ export default async function handler(request, response) {
     const state = url.searchParams.get('state');
 
     if (!code) {
-      const oauthState = createOAuthState(url.searchParams.get('returnTo') || '/');
+      const oauthState = createOAuthState(safeReturnTo(url.searchParams.get('returnTo')));
       appendSetCookie(
         response,
         createCookie(stateCookieName, createSignedValue(oauthState), { maxAge: 600 })
@@ -130,7 +139,7 @@ export default async function handler(request, response) {
 
     appendSetCookie(response, clearCookie(stateCookieName));
     appendSetCookie(response, createCookie(sessionCookieName, createSession(user), { maxAge: 1209600 }));
-    return redirect(response, oauthState.returnTo || '/');
+    return redirect(response, safeReturnTo(oauthState.returnTo));
   } catch (error) {
     return jsonResponse(response, 500, {
       error: error instanceof Error ? error.message : 'GitHub login failed.',

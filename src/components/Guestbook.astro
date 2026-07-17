@@ -122,19 +122,6 @@
     writeMessages(messages);
   };
 
-  const markClaimed = (messagesToMark) => {
-    const claimedKeys = new Set(
-      messagesToMark.map(
-        (item) => `${item.createdAt}:${item.name || ''}:${item.message}:${item.parentId || ''}`
-      )
-    );
-    const messages = readMessages().map((item) => {
-      const key = `${item.createdAt}:${item.name || ''}:${item.message}:${item.parentId || ''}`;
-      return claimedKeys.has(key) ? { ...item, claimedAt: new Date().toISOString() } : item;
-    });
-    writeMessages(messages);
-  };
-
   const formatDate = (value) => {
     return new Intl.DateTimeFormat('zh-CN', {
       month: 'short',
@@ -457,60 +444,6 @@
     return response.json();
   };
 
-  const claimRemoteMessage = async (remoteItem, localItem) => {
-    const response = await fetch(endpoint, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        action: 'claim',
-        id: remoteItem.id,
-        message: localItem.message,
-        createdAt: localItem.createdAt,
-        parentId: localItem.parentId || '',
-      }),
-    });
-
-    if (!response.ok) throw new Error('Claim request failed.');
-    return response.json();
-  };
-
-  const migrateLocalAuthors = async (remoteMessages) => {
-    if (!currentUser) return remoteMessages;
-
-    const localMessages = readMessages().filter((item) => !item.claimedAt);
-    if (localMessages.length === 0) return remoteMessages;
-
-    const claimed = [];
-    for (const remoteItem of remoteMessages) {
-      if (remoteItem.githubLogin) continue;
-
-      const localItem = localMessages.find((item) => {
-        return (
-          item.message === remoteItem.message &&
-          item.createdAt === remoteItem.createdAt &&
-          (item.parentId || '') === (remoteItem.parentId || '')
-        );
-      });
-
-      if (!localItem) continue;
-
-      try {
-        await claimRemoteMessage(remoteItem, localItem);
-        claimed.push(localItem);
-      } catch {
-        // Keep going: one old message may fail if it was made on another device.
-      }
-    }
-
-    if (claimed.length === 0) return remoteMessages;
-
-    markClaimed(claimed);
-    setStatus(`已为 ${claimed.length} 条旧留言补上 GitHub 身份。`);
-    return fetchRemoteMessages();
-  };
-
   const saveMessage = async (item, successStatus) => {
     try {
       const result = await postRemoteMessage(item);
@@ -717,8 +650,7 @@
     fetchRemoteMessages()
       .then(async (messages) => {
         await fetchSession();
-        const nextMessages = await migrateLocalAuthors(messages);
-        renderMessages(nextMessages);
+        renderMessages(messages);
         setStatus('Public guestbook connected.');
         return syncLocalMessages();
       })
