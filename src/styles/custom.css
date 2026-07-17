@@ -2481,3 +2481,58 @@ starlight-theme-select svg,
 .baiyun-spine:focus-visible {
     transform: translateY(-.85rem) rotate(var(--spine-tilt, 0deg));
 }
+
+
+/* Compact tactile Baiyun bookcase */
+.baiyun-bookshelf {
+    margin-top: 1.2rem;
+    padding: .85rem .75rem 1.62rem;
+    border: 1px solid rgba(112, 70, 34, .5);
+    border-radius: 7px;
+    background:
+        repeating-linear-gradient(3deg, rgba(142, 91, 49, .09) 0 1px, transparent 1px 7px),
+        linear-gradient(180deg, #39261a, #21150f 72%, #160e0a);
+    box-shadow: inset 0 -18px 28px rgba(0, 0, 0, .28), 0 12px 24px rgba(0, 0, 0, .14);
+}
+.baiyun-bookshelf::after {
+    left: .38rem;
+    right: .38rem;
+    bottom: .58rem;
+    height: .7rem;
+    border-radius: 2px;
+    background:
+        repeating-linear-gradient(2deg, rgba(255, 229, 190, .08) 0 1px, transparent 1px 5px),
+        linear-gradient(180deg, #916039 0 18%, #603b22 20% 65%, #382116);
+    box-shadow: inset 0 1px rgba(255, 236, 206, .22), inset 0 -2px rgba(30, 17, 10, .45), 0 7px 10px rgba(0, 0, 0, .32);
+}
+.baiyun-spines {
+    gap: .2rem;
+    min-height: 14.9rem;
+    padding: .1rem .18rem .84rem;
+}
+.baiyun-spine {
+    width: clamp(2.24rem, 3.75vw, 2.92rem);
+    height: calc(var(--spine-height, 15.5rem) - 1.5rem);
+    padding: .58rem .3rem .66rem;
+    border-radius: 3px 5px 4px 3px;
+    box-shadow: inset 4px 0 rgba(255,255,255,.08), inset -2px 0 rgba(0,0,0,.14), 1px 4px 5px rgba(0,0,0,.34);
+}
+.baiyun-spine-title { margin-top: .62rem; font-size: clamp(.94rem, 1.35vw, 1.14rem); }
+.baiyun-spine:hover,
+.baiyun-spine:focus-visible { transform: translateY(-.5rem) rotate(var(--spine-tilt, 0deg)); }
+.baiyun-spine:nth-child(5) { --spine-height: 15.7rem; --spine-top:#a96f62; --spine-mid:#74463e; --spine-bottom:#452720; }
+.baiyun-spine:nth-child(6) { --spine-height: 14.4rem; --spine-top:#8e8a68; --spine-mid:#615d43; --spine-bottom:#363423; }
+.baiyun-spine:nth-child(7) { --spine-height: 16.2rem; --spine-top:#6f8e9e; --spine-mid:#405f70; --spine-bottom:#213746; }
+.baiyun-spine:nth-child(8) { --spine-height: 13.5rem; --spine-top:#9e6f78; --spine-mid:#704750; --spine-bottom:#40262d; }
+.baiyun-spine:nth-child(9) { --spine-height: 15rem; --spine-top:#b28b56; --spine-mid:#7d5b31; --spine-bottom:#493218; }
+:root[data-theme="light"] .baiyun-bookshelf {
+    background:
+        repeating-linear-gradient(3deg, rgba(112,70,34,.1) 0 1px, transparent 1px 7px),
+        linear-gradient(180deg, #c99b6b, #a36d3e 72%, #754622);
+}
+@media (max-width: 48rem) {
+    .baiyun-bookshelf { padding: .68rem .48rem 1.48rem; }
+    .baiyun-spines { min-height: 12.4rem; gap: .14rem; overflow-x: auto; }
+    .baiyun-spine { width: 2.18rem; height: calc(var(--spine-height, 14rem) - 2.8rem); padding: .5rem .24rem .58rem; }
+    .baiyun-spine-title { font-size: .88rem; }
+}
