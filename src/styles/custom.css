@@ -99,7 +99,7 @@ body:not(:has(.home-starsky)) .content-panel {
 
 :root {
     --font-body: "Source Sans 3 Variable", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-    --font-display: "Newsreader Variable", "Noto Sans SC", "Songti SC", serif;
+    --font-display: "Newsreader Variable", "LiuGongQuan", "Noto Serif SC Variable", "Source Han Serif SC", "Songti SC", serif;
     --font-ui: "Source Sans 3 Variable", "Noto Sans SC", "PingFang SC", sans-serif;
     --sl-font: var(--font-body);
     --sl-font-mono: "Cascadia Code", "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
@@ -125,9 +125,9 @@ body {
     text-rendering: optimizeLegibility;
 }
 
-/* Keep Markdown headings editorial: Newsreader for Latin, Source Han Serif for CJK. */
+/* Use one display face across Markdown heading levels for a coherent hierarchy. */
 .sl-markdown-content :is(h1, h2, h3) {
-    font-family: "Newsreader Variable", "Noto Serif SC Variable", "Source Han Serif SC", "Songti SC", serif;
+    font-family: var(--font-display);
     font-optical-sizing: auto;
     letter-spacing: -0.008em;
     font-weight: 400;
