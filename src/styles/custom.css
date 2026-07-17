@@ -2550,6 +2550,7 @@ starlight-theme-select svg,
 body:has(.baiyun-meta) .sl-markdown-content > h1:first-of-type,
 body:has(.baiyun-meta) .content-panel h1:first-of-type {
     font-family:
+        "LiuGongQuan",
         "FZLiuGongQuanKaiShu",
         "方正柳公权楷书",
         "Liu Gong Quan Kai",
