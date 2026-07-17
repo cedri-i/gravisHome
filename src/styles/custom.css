@@ -2544,3 +2544,56 @@ starlight-theme-select svg,
     font-family: inherit;
     font-style: normal;
 }
+
+
+/* Unified Baiyun display title and image captions */
+body:has(.baiyun-meta) .sl-markdown-content > h1:first-of-type,
+body:has(.baiyun-meta) .content-panel h1:first-of-type {
+    font-family:
+        "FZLiuGongQuanKaiShu",
+        "方正柳公权楷书",
+        "Liu Gong Quan Kai",
+        "STKaiti",
+        "KaiTi",
+        "楷体",
+        serif;
+    font-weight: 600;
+    letter-spacing: .055em;
+}
+
+body:has(.baiyun-meta) figcaption.baiyun-caption-note,
+body:has(.baiyun-meta) p.baiyun-caption-note,
+body:has(.baiyun-meta) .baiyun-caption.baiyun-caption-note {
+    box-sizing: border-box;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: .72rem auto 0 !important;
+    padding: .34rem .68rem !important;
+    font-family: "Songti SC", SimSun, "Noto Serif SC", serif !important;
+    font-size: .82rem !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 1.75 !important;
+    letter-spacing: 0 !important;
+    text-align: center !important;
+    text-indent: 0 !important;
+}
+
+
+/* Unified Baiyun article body typography */
+body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun-signoff),
+body:has(.baiyun-meta) .sl-markdown-content > ul,
+body:has(.baiyun-meta) .sl-markdown-content > ol,
+body:has(.baiyun-meta) .sl-markdown-content blockquote {
+    color: color-mix(in srgb, var(--sl-color-text) 92%, var(--sl-color-white) 8%);
+    font-family: "Songti SC", SimSun, "Noto Serif SC", "Source Han Serif SC", serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 2.05;
+    letter-spacing: .01em;
+}
+body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun-caption-note):not(.baiyun-signoff):not(.baiyun-preface) {
+    text-align: justify;
+    text-indent: 2em !important;
+}
