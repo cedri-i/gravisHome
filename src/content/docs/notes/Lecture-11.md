@@ -20,10 +20,10 @@ graph TD
 
     %% 金字塔层级定义
     Reg(<b>寄存器 Registers</b><br/>速度: 极快 &lt;1ns / 容量: 字节级)
-    L1(<b>高速缓存 L1/L2/L3 Cache</b><br/>速度: 1-10ns / 容量: KB-MB级)
-    RAM(<b>主存 Main Memory / RAM</b><br/>速度: ~100ns / 容量: GB级)
-    Disk(<b>本地磁盘 SSD/HDD</b><br/>速度: 10us-10ms / 容量: TB级)
-    Remote(<b>分布式/远程存储</b><br/>速度: &gt;10ms / 容量: PB级)
+    L1(<b>高速缓存 L1/L2/L3 Cache</b><br/>速度: 1-10ns / 容量: KB-MB 级)
+    RAM(<b>主存 Main Memory / RAM</b><br/>速度: ~100ns / 容量: GB 级)
+    Disk(<b>本地磁盘 SSD/HDD</b><br/>速度: 10us-10ms / 容量: TB 级)
+    Remote(<b>分布式/远程存储</b><br/>速度: &gt;10ms / 容量: PB 级)
 
     %% 连接关系
     Reg --- L1 --- RAM --- Disk --- Remote
@@ -135,7 +135,7 @@ graph LR
 
 ### I/O Bridge
 所谓 I/O 桥：
-- 它的存在就是为了让 CPU、内存和各种外部设备（如硬盘、显卡、键盘）能~={purple}**互相通信**=~
+- 它的存在就是为了让 CPU 、内存和各种外部设备（如硬盘、显卡、键盘）能~={purple}**互相通信**=~
 - 而本来这些组件在速度、电压、协议等方面迥然不同
 	- I/O 桥即负责~={yellow}**协议转换、速度缓冲、路由转发**=~
 - 早期主板上 I/O 桥通常由~={yellow}两块大芯片=~组成：

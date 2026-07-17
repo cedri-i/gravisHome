@@ -183,7 +183,7 @@ int row1[5] = {1, 5, 2, 1, 3};
 int row2[5] = {1, 5, 2, 2, 1};
 
 // univ 是一个指针数组，存放的是上面三个数组的地址
-// 内存布局：univ 存了 [row0的地址, row1的地址, row2的地址]
+// 内存布局：univ 存了 [row0 的地址, row1 的地址, row2 的地址]
 int *univ[3] = {row0, row1, row2};
 
 int get_univ_digit(size_t index, size_t digit) {
