@@ -251,10 +251,10 @@ void swap(long *xp, long *yp) {
 - 经典的值交换函数
 ```Assembly source
 swap:
-    movq    (%rdi), %rax    # t0 = *xp (从内存xp处读出值，存入临时柜子rax)
-    movq    (%rsi), %rdx    # t1 = *yp (从内存yp处读出值，存入临时柜子rdx)
-    movq    %rdx, (%rdi)    # *xp = t1 (将rdx的值写回内存xp处)
-    movq    %rax, (%rsi)    # *yp = t0 (将rax的值写回内存yp处)
+    movq    (%rdi), %rax    # t0 = *xp (从内存 xp 处读出值，存入临时柜子 rax)
+    movq    (%rsi), %rdx    # t1 = *yp (从内存 yp 处读出值，存入临时柜子 rdx)
+    movq    %rdx, (%rdi)    # *xp = t1 (将 rdx 的值写回内存 xp 处)
+    movq    %rax, (%rsi)    # *yp = t0 (将 rax 的值写回内存 yp 处)
     ret                     # 返回
 ```
 ~={red}**源（Source）和目的（Dest）不能同时为内存地址=~**

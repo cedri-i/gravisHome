@@ -76,7 +76,7 @@ for (i = 0; i < n; i++) {
 void lower(char *s)
 {
 	size_t i;
-	for (i = 0; i < strlen(s); i++) // strlen()隐藏了n的复杂度！
+	for (i = 0; i < strlen(s); i++) // strlen()隐藏了 n 的复杂度！
 		if (s[i] >= 'A' && s[i] <= 'Z')
 			s[i] -= ('A' - 'a');
 }
@@ -140,7 +140,7 @@ void sum_rows1(double *a, double *b, long n) {
 .L4:
     movsd   (%rsi,%rax,8), %xmm0  # FP Load: 从内存读取 b[i] 到寄存器 %xmm0
     addsd   (%rdi), %xmm0         # FP Add:  将 a[i*n + j] 加到 %xmm0 上
-    movsd   %xmm0, (%rsi,%rax,8)  # FP Store: 把结果从寄存器写回内存b[i](这就是慢的原因)
+    movsd   %xmm0, (%rsi,%rax,8)  # FP Store: 把结果从寄存器写回内存 b[i](这就是慢的原因)
     addq    $8, %rdi              # 指针移动，指向 a 的下一个元素
     cmpq    %rcx, %rdi            # 检查循环是否结束
     jne     .L4                   # 如果没结束，跳回 .L4
