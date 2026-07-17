@@ -2536,3 +2536,11 @@ starlight-theme-select svg,
     .baiyun-spine { width: 2.18rem; height: calc(var(--spine-height, 14rem) - 2.8rem); padding: .5rem .24rem .58rem; }
     .baiyun-spine-title { font-size: .88rem; }
 }
+
+
+/* Keep article quotations typographically continuous */
+.sl-markdown-content blockquote,
+.sl-markdown-content blockquote p {
+    font-family: inherit;
+    font-style: normal;
+}
