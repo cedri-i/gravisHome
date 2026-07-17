@@ -10,6 +10,7 @@ import {
   sessionCookieName,
   stateCookieName,
 } from './_session.js';
+import { applySecurityHeaders, consumeRateLimit } from './_security.js';
 
 const jsonResponse = (response, status, payload) => {
   response.statusCode = status;
@@ -90,6 +91,12 @@ const fetchGitHubUser = async (accessToken) => {
 };
 
 export default async function handler(request, response) {
+  applySecurityHeaders(response);
+  const rate = consumeRateLimit(request, 'github-auth', { limit: 30 });
+  if (!rate.allowed) {
+    response.setHeader('retry-after', String(rate.retryAfter));
+    return jsonResponse(response, 429, { error: 'Too many requests.' });
+  }
   const url = new URL(request.url, getOrigin(request));
   const action = url.searchParams.get('action');
 
@@ -141,6 +148,9 @@ export default async function handler(request, response) {
     appendSetCookie(response, createCookie(sessionCookieName, createSession(user), { maxAge: 1209600 }));
     return redirect(response, safeReturnTo(oauthState.returnTo));
   } catch (error) {
+    if (error instanceof Error && error.message === 'PAYLOAD_TOO_LARGE') {
+      return jsonResponse(response, 413, { error: 'Request body is too large.' });
+    }
     return jsonResponse(response, 500, {
       error: error instanceof Error ? error.message : 'GitHub login failed.',
     });

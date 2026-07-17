@@ -1,4 +1,5 @@
 import { getGitHubSession } from './_session.js';
+import { applySecurityHeaders, consumeRateLimit, isSameOrigin, readJsonBody } from './_security.js';
 
 const markerStart = '<!-- gravis-guestbook:v1 -->';
 const markerEnd = '<!-- /gravis-guestbook -->';
@@ -188,6 +189,15 @@ ${payload.message}`;
 };
 
 export default async function handler(request, response) {
+  applySecurityHeaders(response);
+  const rate = consumeRateLimit(request, 'guestbook', { limit: request.method === 'GET' ? 60 : 15 });
+  if (!rate.allowed) {
+    response.setHeader('retry-after', String(rate.retryAfter));
+    return jsonResponse(response, 429, { error: 'Too many requests.' });
+  }
+  if (request.method !== 'GET' && !isSameOrigin(request)) {
+    return jsonResponse(response, 403, { error: 'Cross-origin request rejected.' });
+  }
   const config = getConfig();
   if (!config) {
     return jsonResponse(response, 503, {
@@ -215,7 +225,7 @@ export default async function handler(request, response) {
         return jsonResponse(response, 401, { error: 'GitHub login is required.' });
       }
 
-      const body = await readRequestBody(request);
+      const body = await readJsonBody(request, 4096);
       const message = normalizeMessage(body.message);
       const parentId = normalizeParentId(body.parentId);
       const createdAt = new Date().toISOString();
@@ -242,7 +252,7 @@ export default async function handler(request, response) {
 
     if (request.method === 'PATCH') {
       return serializeMutation(async () => {
-      const body = await readRequestBody(request);
+      const body = await readJsonBody(request, 4096);
       const commentId = String(body.id || '').replace(/^github-/, '').trim();
 
       if (!/^\d+$/.test(commentId)) {
@@ -331,6 +341,9 @@ ${comment.body.slice(parsed.markerEndIndex)}`;
     response.setHeader('allow', 'GET, POST, PATCH');
     return jsonResponse(response, 405, { error: 'Method not allowed.' });
   } catch (error) {
+    if (error instanceof Error && error.message === 'PAYLOAD_TOO_LARGE') {
+      return jsonResponse(response, 413, { error: 'Request body is too large.' });
+    }
     return jsonResponse(response, 500, {
       error: error instanceof Error ? error.message : 'Guestbook request failed.',
     });

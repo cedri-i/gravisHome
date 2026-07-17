@@ -6,6 +6,7 @@ import rehypeKatex from 'rehype-katex';
 import { remarkObsidianColor } from './remark-obsidian-color.mjs';
 import { remarkObsidianHighlight } from './remark-obsidian-highlight.mjs';
 import { remarkCodeLanguageAliases } from './remark-code-language-aliases.mjs';
+import { remarkCjkSpacing } from './remark-cjk-spacing.mjs';
 import { rehypeMermaid } from './rehype-mermaid.mjs';
 
 function mermaidClient() {
@@ -29,8 +30,9 @@ export default defineConfig({
     integrations: [
         starlight({
             title: 'My Docs',
-            customCss: ['./src/styles/custom.css', './src/styles/home-entry.css'],
+            customCss: ['./src/styles/custom.css', './src/styles/home-entry.css', './src/styles/collapsible-headings.css'],
             head: [
+                { tag: 'script', attrs: { type: 'module', src: '/collapsible-headings.js' } },
                 {
                     tag: 'script',
                     attrs: { type: 'module' },
@@ -322,6 +324,7 @@ if (document.readyState === 'loading') {
             remarkObsidianColor,
             remarkObsidianHighlight,
             remarkCodeLanguageAliases,
+            remarkCjkSpacing,
         ],
         rehypePlugins: [rehypeKatex, rehypeMermaid],
     },

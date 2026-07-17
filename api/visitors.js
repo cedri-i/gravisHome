@@ -1,3 +1,5 @@
+import { applySecurityHeaders, consumeRateLimit, isSameOrigin, readJsonBody } from './_security.js';
+
 const start = '<!-- gravis-visitors:v1 -->';
 const end = '<!-- /gravis-visitors -->';
 const maxVisitorIds = 4000;
@@ -87,6 +89,15 @@ const load = async (cfg) => {
 };
 
 export default async function handler(req, res) {
+  applySecurityHeaders(res);
+  const rate = consumeRateLimit(req, 'visitors', { limit: req.method === 'GET' ? 60 : 20 });
+  if (!rate.allowed) {
+    res.setHeader('retry-after', String(rate.retryAfter));
+    return send(res, 429, { error: 'Too many requests.' });
+  }
+  if (req.method === 'POST' && !isSameOrigin(req)) {
+    return send(res, 403, { error: 'Cross-origin request rejected.' });
+  }
   const cfg = config();
   if (!cfg) return send(res, 503, { error: 'Visitor counter backend is not configured.' });
 
@@ -97,7 +108,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const id = String((await body(req)).visitorId || '').slice(0, 80);
+      const id = String((await readJsonBody(req, 1024)).visitorId || '').slice(0, 80);
       if (!/^[A-Za-z0-9_-]{12,80}$/.test(id)) return send(res, 400, { error: 'Valid visitor id is required.' });
 
       const stats = await serializeMutation(async () => {
@@ -123,6 +134,9 @@ export default async function handler(req, res) {
     res.setHeader('allow', 'GET, POST');
     return send(res, 405, { error: 'Method not allowed.' });
   } catch (error) {
+    if (error instanceof Error && error.message === 'PAYLOAD_TOO_LARGE') {
+      return send(res, 413, { error: 'Request body is too large.' });
+    }
     return send(res, 500, { error: error instanceof Error ? error.message : 'Visitor counter request failed.' });
   }
 }
