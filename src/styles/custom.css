@@ -2599,3 +2599,20 @@ body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun
     text-align: justify;
     text-indent: 2em !important;
 }
+
+/* Temporary review notice requested by the site owner. */
+.change-review-notice {
+    position: relative;
+    z-index: 25;
+    margin: 1rem auto 1.6rem;
+    padding: .85rem 1rem;
+    border: 3px solid currentColor;
+    background: #fff;
+    color: #050505 !important;
+    font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    font-size: clamp(1.15rem, 2.4vw, 1.65rem);
+    font-weight: 900;
+    line-height: 1.45;
+    text-align: center;
+    box-shadow: 6px 6px 0 currentColor;
+}
