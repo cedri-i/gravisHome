@@ -16,7 +16,7 @@ function mermaidClient() {
             'astro:config:setup': ({ injectScript }) => {
                 injectScript(
                     'page',
-                    `import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+                    `import mermaid from 'mermaid';
 mermaid.initialize({ startOnLoad: false, theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default' });
 await mermaid.run({ querySelector: '.mermaid' });`
                 );
@@ -32,6 +32,7 @@ export default defineConfig({
             title: 'My Docs',
             customCss: ['./src/styles/custom.css', './src/styles/home-entry.css', './src/styles/collapsible-headings.css'],
             head: [
+                { tag: 'script', attrs: { type: 'module', src: '/seasonal-world.js' } },
                 { tag: 'script', attrs: { type: 'module', src: '/collapsible-headings.js' } },
                 {
                     tag: 'script',
