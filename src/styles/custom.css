@@ -2526,6 +2526,7 @@ starlight-theme-select svg,
 .baiyun-spine:nth-child(7) { --spine-height: 16.2rem; --spine-top:#6f8e9e; --spine-mid:#405f70; --spine-bottom:#213746; }
 .baiyun-spine:nth-child(8) { --spine-height: 13.5rem; --spine-top:#9e6f78; --spine-mid:#704750; --spine-bottom:#40262d; }
 .baiyun-spine:nth-child(9) { --spine-height: 15rem; --spine-top:#b28b56; --spine-mid:#7d5b31; --spine-bottom:#493218; }
+.baiyun-spine:nth-child(10) { --spine-height: 14.1rem; --spine-top:#738f79; --spine-mid:#48624e; --spine-bottom:#293c2d; }
 :root[data-theme="light"] .baiyun-bookshelf {
     background:
         repeating-linear-gradient(3deg, rgba(112,70,34,.1) 0 1px, transparent 1px 7px),

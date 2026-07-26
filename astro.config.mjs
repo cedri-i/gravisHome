@@ -329,6 +329,10 @@ if (document.readyState === 'loading') {
                                     label: '大学无聊',
                                     link: '/baiyun/da-xue-wu-liao/',
                                 },
+                                {
+                                    label: '如何在火车上度过一天',
+                                    link: '/baiyun/ru-he-zai-huo-che-shang-du-guo-yi-tian/',
+                                },
                             ],
                         },
                     ],
