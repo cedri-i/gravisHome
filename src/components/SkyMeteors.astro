@@ -35,8 +35,7 @@
   let w = 0;
   let h = 0;
   let dpr = 1;
-  let lastTime = performance.now();
-  let nextCometTime = 900 + Math.random() * 1800;
+  let nextCometAt = performance.now() + 2400 + Math.random() * 1800;
 
   const comets = [];
 
@@ -48,10 +47,34 @@
     return Math.max(min, Math.min(max, v));
   }
 
+  function smoothstep(min, max, value) {
+    const t = clamp((value - min) / (max - min), 0, 1);
+    return t * t * (3 - 2 * t);
+  }
+
   function resize() {
+    const nextW = window.innerWidth;
+    const nextH = window.innerHeight;
+
+    if (w > 0 && h > 0) {
+      const scaleX = nextW / w;
+      const scaleY = nextH / h;
+
+      for (const c of comets) {
+        c.startX *= scaleX;
+        c.endX *= scaleX;
+        c.headX *= scaleX;
+        c.tailX *= scaleX;
+        c.startY *= scaleY;
+        c.endY *= scaleY;
+        c.headY *= scaleY;
+        c.tailY *= scaleY;
+      }
+    }
+
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = window.innerWidth;
-    h = window.innerHeight;
+    w = nextW;
+    h = nextH;
 
     canvas.width = Math.floor(w * dpr);
     canvas.height = Math.floor(h * dpr);
@@ -61,7 +84,7 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function createComet() {
+  function createComet(createdAt = performance.now()) {
     const startX = rand(w + 120, w * 1.32);
     const startY = rand(-h * 0.06, h * 0.34);
 
@@ -82,21 +105,29 @@
         size: rand(0.35, 1.05) * power,
         drift: rand(0.35, 1.15),
         alpha: rand(0.2, 0.55),
-        warm: Math.random() > 0.72
+        hue: Math.random() > 0.72 ? rand(38, 48) : rand(196, 214)
       });
     }
+
+    const streams = Array.from({ length: 4 }, (_, i) => ({
+      side: (i - 1.5) * rand(0.55, 0.9),
+      length: rand(0.42, 0.88),
+      alpha: 0.095 - (i / 3) * 0.015,
+      width: rand(0.2, 0.38)
+    }));
 
     comets.push({
       startX,
       startY,
       endX,
       endY,
-      age: 0,
+      createdAt,
       life,
       power,
       curve: rand(-34, 34),
-      wobble: rand(0, Math.PI * 2),
+      glowPhase: rand(0, Math.PI * 2),
       fragments,
+      streams,
       headX: startX,
       headY: startY,
       tailX: startX,
@@ -106,23 +137,22 @@
   }
 
   function getCometPosition(c, t) {
-    const ease = 1 - Math.pow(1 - t, 2.25);
-
-    const x = c.startX + (c.endX - c.startX) * ease;
-    const y = c.startY + (c.endY - c.startY) * ease;
+    const x = c.startX + (c.endX - c.startX) * t;
+    const y = c.startY + (c.endY - c.startY) * t;
 
     const arc = Math.sin(t * Math.PI) * c.curve;
-    const wobble = Math.sin(t * Math.PI * 5 + c.wobble) * 1.8 * c.power;
 
     return {
       x,
-      y: y + arc + wobble
+      y: y + arc
     };
   }
 
-  function drawTail(c, head, prev, t, fade) {
-    const vx = head.x - prev.x;
-    const vy = head.y - prev.y;
+  function drawTail(c, head, t, fade) {
+    const before = getCometPosition(c, Math.max(0, t - 0.0025));
+    const after = getCometPosition(c, Math.min(1, t + 0.0025));
+    const vx = after.x - before.x;
+    const vy = after.y - before.y;
     const len = Math.hypot(vx, vy) || 1;
 
     const dx = vx / len;
@@ -135,9 +165,9 @@
     const py = dx;
 
     const pulse = 0.88 + 0.12 * Math.sin(t * Math.PI);
-    const tailLength = (280 + 230 * c.power) * pulse;
-    const coreWidth = (1.35 + 1.9 * c.power) * fade;
-    const glowWidth = (6 + 7 * c.power) * fade;
+    const tailLength = (240 + 190 * c.power) * pulse;
+    const coreWidth = (1.25 + 1.65 * c.power) * fade;
+    const glowWidth = (5 + 5.5 * c.power) * fade;
 
     const tailEndX = head.x + tx * tailLength;
     const tailEndY = head.y + ty * tailLength;
@@ -146,9 +176,9 @@
     ctx.lineCap = "round";
 
     const glow = ctx.createLinearGradient(head.x, head.y, tailEndX, tailEndY);
-    glow.addColorStop(0, `rgba(255, 255, 255, ${0.5 * fade})`);
-    glow.addColorStop(0.1, `rgba(170, 232, 255, ${0.34 * fade})`);
-    glow.addColorStop(0.46, `rgba(74, 163, 255, ${0.12 * fade})`);
+    glow.addColorStop(0, `rgba(255, 255, 255, ${0.44 * fade})`);
+    glow.addColorStop(0.1, `rgba(170, 232, 255, ${0.28 * fade})`);
+    glow.addColorStop(0.46, `rgba(74, 163, 255, ${0.09 * fade})`);
     glow.addColorStop(1, "rgba(0, 0, 0, 0)");
 
     ctx.strokeStyle = glow;
@@ -159,9 +189,9 @@
     ctx.stroke();
 
     const core = ctx.createLinearGradient(head.x, head.y, tailEndX, tailEndY);
-    core.addColorStop(0, `rgba(255, 255, 255, ${0.95 * fade})`);
-    core.addColorStop(0.08, `rgba(222, 249, 255, ${0.7 * fade})`);
-    core.addColorStop(0.38, `rgba(126, 203, 255, ${0.28 * fade})`);
+    core.addColorStop(0, `rgba(255, 255, 255, ${0.9 * fade})`);
+    core.addColorStop(0.08, `rgba(222, 249, 255, ${0.64 * fade})`);
+    core.addColorStop(0.38, `rgba(126, 203, 255, ${0.24 * fade})`);
     core.addColorStop(1, "rgba(0, 0, 0, 0)");
 
     ctx.strokeStyle = core;
@@ -171,14 +201,13 @@
     ctx.lineTo(tailEndX, tailEndY);
     ctx.stroke();
 
-    for (let i = 0; i < 4; i++) {
-      const k = i / 3;
-      const side = (i - 1.5) * coreWidth * rand(0.55, 0.9);
-      const streamLength = tailLength * rand(0.42, 0.88);
-      const streamFade = (0.12 - k * 0.018) * fade;
+    for (const stream of c.streams) {
+      const side = stream.side * coreWidth;
+      const streamLength = tailLength * stream.length;
+      const streamFade = stream.alpha * fade;
 
       ctx.strokeStyle = `rgba(205, 238, 255, ${streamFade})`;
-      ctx.lineWidth = Math.max(0.45, coreWidth * rand(0.2, 0.38));
+      ctx.lineWidth = Math.max(0.45, coreWidth * stream.width);
       ctx.beginPath();
       ctx.moveTo(head.x + px * side, head.y + py * side);
       ctx.lineTo(
@@ -205,11 +234,10 @@
       const y = head.y + dir.ty * back + dir.py * side;
 
       const a = f.alpha * fade * (1 - local);
-      const hue = f.warm ? rand(38, 48) : rand(196, 214);
 
       const glow = ctx.createRadialGradient(x, y, 0, x, y, f.size * 5);
-      glow.addColorStop(0, `hsla(${hue}, 100%, 82%, ${0.42 * a})`);
-      glow.addColorStop(0.5, `hsla(${hue}, 90%, 62%, ${0.12 * a})`);
+      glow.addColorStop(0, `hsla(${f.hue}, 100%, 82%, ${0.42 * a})`);
+      glow.addColorStop(0.5, `hsla(${f.hue}, 90%, 62%, ${0.12 * a})`);
       glow.addColorStop(1, "rgba(0,0,0,0)");
 
       ctx.fillStyle = glow;
@@ -220,7 +248,7 @@
   }
 
   function drawComaAndCore(c, head, dir, t, fade) {
-    const coreR = (2.1 + 1.8 * c.power) * (0.94 + Math.sin(t * Math.PI * 9) * 0.05);
+    const coreR = (2.1 + 1.8 * c.power) * (0.96 + Math.sin(t * Math.PI * 4 + c.glowPhase) * 0.025);
     const glowR = coreR * 5.2;
 
     ctx.globalCompositeOperation = "lighter";
@@ -299,41 +327,41 @@
   }
 
   function frame(now) {
-    const dt = Math.min((now - lastTime) / 1000, 0.033);
-    lastTime = now;
-
     ctx.clearRect(0, 0, w, h);
 
-    nextCometTime -= dt * 1000;
-    if (nextCometTime <= 0) {
-      createComet();
-      nextCometTime = rand(8500, 18000);
+    if (document.documentElement.dataset.theme === "light") {
+      comets.length = 0;
+      nextCometAt = now + 1800;
+      requestAnimationFrame(frame);
+      return;
+    }
+
+    if (now >= nextCometAt) {
+      createComet(now);
+      nextCometAt = now + rand(8500, 18000);
     }
 
     for (let i = comets.length - 1; i >= 0; i--) {
       const c = comets[i];
-      c.age += dt;
-
-      const t = c.age / c.life;
+      const t = (now - c.createdAt) / (c.life * 1000);
       if (t >= 1) {
         comets.splice(i, 1);
         continue;
       }
 
-      const fadeIn = clamp(t / 0.12, 0, 1);
-      const fadeOut = clamp((1 - t) / 0.22, 0, 1);
+      const fadeIn = smoothstep(0, 0.1, t);
+      const fadeOut = 1 - smoothstep(0.78, 1, t);
       const fade = fadeIn * fadeOut;
 
       const head = getCometPosition(c, t);
-      const prev = getCometPosition(c, Math.max(0, t - 0.012));
 
-      const dir = drawTail(c, head, prev, t, fade);
+      const dir = drawTail(c, head, t, fade);
       c.headX = head.x;
       c.headY = head.y;
       c.tailX = dir.tailEndX;
       c.tailY = dir.tailEndY;
       drawFragments(c, head, dir, t, fade);
-      drawComaAndCore(c, head, dir, t, fade, dt);
+      drawComaAndCore(c, head, dir, t, fade);
     }
 
     requestAnimationFrame(frame);
@@ -344,7 +372,6 @@
 
   window.addEventListener("click", handleClick, { passive: true });
 
-  setTimeout(createComet, 900);
   requestAnimationFrame(frame);
 })();
 </script>
