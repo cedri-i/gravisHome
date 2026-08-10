@@ -53,10 +53,16 @@ const uid = `tree-rotation-${direction}-${Math.random().toString(36).slice(2, 8)
         <span class="rotation-kicker">AVL · 单旋</span>
         <strong id={`${uid}-title`}>{config.label}过程</strong>
       </div>
-      <button class="rotation-control" type="button" aria-describedby={`${uid}-description`}>
-        <span class="rotation-control-icon" aria-hidden="true">↻</span>
-        <span data-action-label>播放旋转</span>
-      </button>
+      <div class="rotation-actions" role="group" aria-label={`${config.label}控制`}>
+        <button class="rotation-control is-reset" type="button" data-action="reset" aria-describedby={`${uid}-description`} disabled>
+          <span class="rotation-control-icon" aria-hidden="true">↶</span>
+          <span>归位</span>
+        </button>
+        <button class="rotation-control is-rotate" type="button" data-action="rotate" aria-describedby={`${uid}-description`}>
+          <span class="rotation-control-icon" aria-hidden="true">↻</span>
+          <span>旋转</span>
+        </button>
+      </div>
     </header>
 
     <div class="rotation-canvas">
@@ -122,8 +128,8 @@ const uid = `tree-rotation-${direction}-${Math.random().toString(36).slice(2, 8)
     animationFrame;
     nodes = new Map();
     edges = [];
-    control;
-    actionLabel;
+    rotateControl;
+    resetControl;
     phase;
 
     connectedCallback() {
@@ -134,12 +140,14 @@ const uid = `tree-rotation-${direction}-${Math.random().toString(36).slice(2, 8)
         this.nodes.set(node.dataset.node, node);
       });
       this.edges = [...this.querySelectorAll('.rotation-edge')];
-      this.control = this.querySelector('.rotation-control');
-      this.actionLabel = this.querySelector('[data-action-label]');
+      this.rotateControl = this.querySelector('[data-action="rotate"]');
+      this.resetControl = this.querySelector('[data-action="reset"]');
       this.phase = this.querySelector('[data-phase]');
 
       this.render(0);
-      this.control?.addEventListener('click', () => this.play());
+      this.updateControls();
+      this.rotateControl?.addEventListener('click', () => this.play());
+      this.resetControl?.addEventListener('click', () => this.reset());
     }
 
     disconnectedCallback() {
@@ -206,47 +214,80 @@ const uid = `tree-rotation-${direction}-${Math.random().toString(36).slice(2, 8)
     }
 
     play() {
-      if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+      if (this.dataset.state !== 'before' || this.animationFrame) return;
 
+      this.animate({
+        from: 0,
+        to: 1,
+        duration: 780,
+        motion: 'forward',
+        phase: '重连中',
+        onComplete: () => this.complete('after'),
+      });
+    }
+
+    reset() {
+      if (this.dataset.state !== 'after' || this.animationFrame) return;
+
+      this.animate({
+        from: 1,
+        to: 0,
+        duration: 480,
+        motion: 'reverse',
+        phase: '归位中',
+        onComplete: () => this.complete('before'),
+      });
+    }
+
+    animate({ from, to, duration, motion, phase, onComplete }) {
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      this.dataset.state = 'before';
       this.dataset.animating = 'true';
-      this.control.disabled = true;
-      this.actionLabel.textContent = '旋转中';
-      this.phase.textContent = '重连中';
-      this.render(0);
+      this.dataset.motion = motion;
+      this.phase.textContent = phase;
+      this.updateControls();
+      this.render(from);
 
       if (reduceMotion) {
-        this.finish();
+        this.render(to);
+        onComplete();
         return;
       }
 
-      const duration = 780;
       let start;
 
       const tick = (time) => {
         start ??= time;
-        const progress = Math.min((time - start) / duration, 1);
-        this.render(progress);
+        const elapsed = Math.min((time - start) / duration, 1);
+        this.render(from + (to - from) * elapsed);
 
-        if (progress < 1) {
+        if (elapsed < 1) {
           this.animationFrame = requestAnimationFrame(tick);
         } else {
-          this.finish();
+          this.animationFrame = undefined;
+          onComplete();
         }
       };
 
       this.animationFrame = requestAnimationFrame(tick);
     }
 
-    finish() {
-      this.render(1);
+    complete(state) {
+      const isAfter = state === 'after';
+      this.render(isAfter ? 1 : 0);
       this.animationFrame = undefined;
       this.dataset.animating = 'false';
-      this.dataset.state = 'after';
-      this.control.disabled = false;
-      this.actionLabel.textContent = '重新播放';
-      this.phase.textContent = '旋转后';
+      this.dataset.state = state;
+      delete this.dataset.motion;
+      this.phase.textContent = isAfter ? '旋转后' : '旋转前';
+      this.updateControls();
+    }
+
+    updateControls() {
+      const animating = this.dataset.animating === 'true';
+      const isAfter = this.dataset.state === 'after';
+
+      if (this.rotateControl) this.rotateControl.disabled = animating || isAfter;
+      if (this.resetControl) this.resetControl.disabled = animating || !isAfter;
     }
 
     easeInOutCubic(value) {
@@ -331,16 +372,22 @@ const uid = `tree-rotation-${direction}-${Math.random().toString(36).slice(2, 8)
     font: 600 0.95rem/1.3 var(--font-ui);
   }
 
+  .rotation-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.42rem;
+  }
+
   .rotation-control {
     display: inline-flex;
     align-items: center;
     gap: 0.42rem;
     min-height: 2.15rem;
     padding: 0.38rem 0.72rem;
-    border: 1px solid color-mix(in srgb, var(--rotation-cyan) 42%, var(--sl-color-hairline));
+    border: 1px solid var(--sl-color-hairline);
     border-radius: 999px;
-    background: color-mix(in srgb, var(--rotation-cyan) 9%, transparent);
-    color: var(--sl-color-white);
+    background: transparent;
+    color: var(--sl-color-gray-2);
     font: 600 0.78rem/1 var(--font-ui);
     cursor: pointer;
     transition:
@@ -349,9 +396,25 @@ const uid = `tree-rotation-${direction}-${Math.random().toString(36).slice(2, 8)
       transform 160ms ease;
   }
 
-  .rotation-control:hover:not(:disabled) {
+  .rotation-control.is-rotate {
     border-color: color-mix(in srgb, var(--rotation-cyan) 72%, var(--sl-color-hairline));
+    background: color-mix(in srgb, var(--rotation-cyan) 9%, transparent);
+    color: var(--sl-color-white);
+  }
+
+  .rotation-control.is-reset {
+    border-color: color-mix(in srgb, var(--rotation-violet) 48%, var(--sl-color-hairline));
+    background: color-mix(in srgb, var(--rotation-violet) 7%, transparent);
+  }
+
+  .rotation-control.is-rotate:hover:not(:disabled) {
     background: color-mix(in srgb, var(--rotation-cyan) 15%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .rotation-control.is-reset:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--rotation-violet) 72%, var(--sl-color-hairline));
+    background: color-mix(in srgb, var(--rotation-violet) 13%, transparent);
     transform: translateY(-1px);
   }
 
@@ -361,18 +424,27 @@ const uid = `tree-rotation-${direction}-${Math.random().toString(36).slice(2, 8)
   }
 
   .rotation-control:disabled {
+    cursor: default;
+    opacity: 0.36;
+  }
+
+  tree-rotation[data-animating='true'] .rotation-control:disabled {
     cursor: wait;
-    opacity: 0.82;
+    opacity: 0.68;
   }
 
   .rotation-control-icon {
     display: inline-block;
-    color: var(--rotation-cyan);
+    color: currentColor;
     font-size: 1rem;
   }
 
-  tree-rotation[data-animating='true'] .rotation-control-icon {
+  tree-rotation[data-motion='forward'] .rotation-control.is-rotate .rotation-control-icon {
     animation: rotation-control-spin 780ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  tree-rotation[data-motion='reverse'] .rotation-control.is-reset .rotation-control-icon {
+    animation: rotation-control-spin-reverse 480ms cubic-bezier(0.65, 0, 0.35, 1);
   }
 
   .rotation-canvas {
@@ -457,6 +529,12 @@ const uid = `tree-rotation-${direction}-${Math.random().toString(36).slice(2, 8)
   @keyframes rotation-control-spin {
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  @keyframes rotation-control-spin-reverse {
+    to {
+      transform: rotate(-360deg);
     }
   }
 

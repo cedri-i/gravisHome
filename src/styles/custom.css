@@ -3,6 +3,12 @@
 @import "@fontsource-variable/source-sans-3/wght-italic.css";
 @import "@fontsource-variable/newsreader/wght.css";
 @import "@fontsource-variable/newsreader/wght-italic.css";
+@import "@fontsource/maple-mono/latin-400.css";
+@import "@fontsource/maple-mono/latin-400-italic.css";
+@import "@fontsource/maple-mono/latin-600.css";
+@import "@fontsource/maple-mono/latin-600-italic.css";
+@import "lxgw-wenkai-webfont/lxgwwenkai-regular.css";
+@import "lxgw-wenkai-webfont/lxgwwenkai-bold.css";
 @import "@fontsource/noto-sans-sc/400.css";
 @import "@fontsource/noto-sans-sc/500.css";
 @import "@fontsource/noto-sans-sc/600.css";
@@ -100,6 +106,7 @@ body:not(:has(.home-starsky)) .content-panel {
 
 :root {
     --font-body: "Source Sans 3 Variable", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --font-prose: "Maple Mono", "LXGW WenKai", "Source Sans 3 Variable", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     --font-display: "Newsreader Variable", "Noto Sans SC", "Songti SC", serif;
     --font-heading: "Newsreader Variable", "Noto Serif SC Variable", "Source Han Serif SC", "Songti SC", serif;
     --font-ui: "Source Sans 3 Variable", "Noto Sans SC", "PingFang SC", sans-serif;
@@ -125,6 +132,10 @@ body {
     font-optical-sizing: auto;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
+}
+
+.sl-markdown-content {
+    font-family: var(--font-prose);
 }
 
 /* Use one display face across Markdown heading levels for a coherent hierarchy. */

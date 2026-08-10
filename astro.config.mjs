@@ -7,6 +7,7 @@ import { remarkObsidianColor } from './remark-obsidian-color.mjs';
 import { remarkObsidianHighlight } from './remark-obsidian-highlight.mjs';
 import { remarkCodeLanguageAliases } from './remark-code-language-aliases.mjs';
 import { remarkCjkSpacing } from './remark-cjk-spacing.mjs';
+import { remarkPreserveParagraphBreaks } from './remark-preserve-paragraph-breaks.mjs';
 import { rehypeMermaid } from './rehype-mermaid.mjs';
 
 function mermaidClient() {
@@ -382,6 +383,7 @@ if (document.readyState === 'loading') {
             remarkObsidianHighlight,
             remarkCodeLanguageAliases,
             remarkCjkSpacing,
+            remarkPreserveParagraphBreaks,
         ],
         rehypePlugins: [rehypeKatex, rehypeMermaid],
     },
