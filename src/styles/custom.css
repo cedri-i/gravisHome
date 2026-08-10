@@ -156,7 +156,14 @@ body {
 }
 .site-title,
 .sidebar-content,
-.right-sidebar,
+.right-sidebar {
+    font-family: var(--font-prose);
+}
+
+.right-sidebar :is(h2, h3, a, button) {
+    font-family: var(--font-prose);
+}
+
 nav,
 button,
 input {
