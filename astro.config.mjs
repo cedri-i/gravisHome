@@ -28,6 +28,9 @@ await mermaid.run({ querySelector: '.mermaid' });`
 
 export default defineConfig({
     site: 'https://gravis-home-xi.vercel.app',
+    build: {
+        inlineStylesheets: 'always',
+    },
     integrations: [
         starlight({
             title: 'My Docs',
