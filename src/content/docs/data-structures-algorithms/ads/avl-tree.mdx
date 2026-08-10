@@ -2,45 +2,39 @@
 title: "AVL Tree"
 ---
 
+import TreeRotation from '../../../../components/TreeRotation.astro';
+
 - 全称为 **Adelson-Velsky and Landis Tree**
-- 中文通常称为~={green}**平衡二叉树**=~/~={cyan}**平衡二叉搜索树**=~
+- 中文通常称为<span class="obsidian-color obsidian-color-green"><strong>平衡二叉树</strong></span>/<span class="obsidian-color obsidian-color-cyan"><strong>平衡二叉搜索树</strong></span>
 - 它是二叉搜索树的子集
 # 来由
 在二叉搜索树的构建过程中，数据插入顺序的不同，可能影响树的形状，进而影响其各种操作的时间复杂度。例如，单调地插入一组数据，会使得二叉搜索树退化为链表，使查找等操作从平均或理想情况下的 $O(\log n)$ 退化为最坏 $O(n)$。为了避免这种情况的发生，我们可以采用 AVL 树。
 相对于一般的二叉搜索树，AVL 树引入了平衡因子和旋转这两个概念，下面作介绍：
 # 平衡因子
 - 令 $h_L$ 为某个结点左子树的高度，$h_R$ 为其右子树的高度，则该结点的平衡因子 = $h_L-h_R$
-- 若平衡因子的**绝对值** $≤1$，则称该结点是平衡的，否则需要对以该结点为根的子树进行~={cyan}旋转=~
+- 若平衡因子的**绝对值** $≤1$，则称该结点是平衡的，否则需要对以该结点为根的子树进行<span class="obsidian-color obsidian-color-cyan">旋转</span>
 # 旋转操作
 用于将失衡的 AVL 树平衡化。
 
 | 失衡结点（BF）的平衡因子 | 其左儿子的平衡因子 | 其右儿子的平衡因子 | 类型  | 操作                |
 | ------------- | --------- | --------- | --- | ----------------- |
 | 2             | 0 或 1     | \         | LL  | 右旋                |
-| 2             | -1        | \         | LR  | 1. 左子树左旋<br>2. 右旋 |
+| 2             | -1        | \         | LR  | 1. 左子树左旋<br />2. 右旋 |
 | -2            | \         | -1 或 0    | RR  | 左旋                |
-| -2            | \         | 1         | RL  | 1. 右子树右旋<br>2. 左旋 |
+| -2            | \         | 1         | RL  | 1. 右子树右旋<br />2. 左旋 |
 - 空二叉树是平衡的
 ## 图示
 ### 右旋
-```
-        z                   y
-       / \                 / \
-      y   T3      →       T1  z
-     / \                     / \
-    T1 T2                   T2 T3
-```
+
+<TreeRotation direction="right" />
+
 ### 左旋
-```
-        z                     y
-       / \                   / \
-      T1  y       →         z  T3
-         / \               / \
-        T2 T3             T1 T2
-```
+
+<TreeRotation direction="left" />
+
 # 注意
-- 删除结点后需要~={red}依次对每个祖先检查并调整=~
-- 插入时只需要对~={red}最近的失衡结点进行调整=~
+- 删除结点后需要<span class="obsidian-color obsidian-color-red">依次对每个祖先检查并调整</span>
+- 插入时只需要对<span class="obsidian-color obsidian-color-red">最近的失衡结点进行调整</span>
 # 时间复杂度
 
 AVL 树始终保持高度为

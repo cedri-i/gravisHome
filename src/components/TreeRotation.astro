@@ -1,0 +1,495 @@
+---
+interface Props {
+  direction: 'left' | 'right';
+}
+
+const direction = Astro.props.direction === 'left' ? 'left' : 'right';
+
+const configurations = {
+  right: {
+    label: '右旋',
+    description: 'y 上升为新根，z 下沉到右侧，T2 改接为 z 的左子树。',
+    nodes: [
+      { id: 'z', kind: 'node', role: 'demoted', from: [360, 52], to: [510, 170] },
+      { id: 'y', kind: 'node', role: 'promoted', from: [220, 150], to: [360, 52] },
+      { id: 'T1', kind: 'subtree', role: 'subtree', from: [120, 270], to: [210, 170] },
+      { id: 'T2', kind: 'subtree', role: 'subtree', from: [300, 270], to: [430, 280] },
+      { id: 'T3', kind: 'subtree', role: 'subtree', from: [500, 150], to: [590, 280] },
+    ],
+    edges: [
+      { from: ['z', 'y'], to: ['z', 'y'] },
+      { from: ['z', 'T3'], to: ['z', 'T3'] },
+      { from: ['y', 'T1'], to: ['y', 'T1'] },
+      { from: ['y', 'T2'], to: ['z', 'T2'], handoff: true },
+    ],
+  },
+  left: {
+    label: '左旋',
+    description: 'y 上升为新根，z 下沉到左侧，T2 改接为 z 的右子树。',
+    nodes: [
+      { id: 'z', kind: 'node', role: 'demoted', from: [360, 52], to: [210, 170] },
+      { id: 'y', kind: 'node', role: 'promoted', from: [500, 150], to: [360, 52] },
+      { id: 'T1', kind: 'subtree', role: 'subtree', from: [220, 150], to: [130, 280] },
+      { id: 'T2', kind: 'subtree', role: 'subtree', from: [420, 270], to: [290, 280] },
+      { id: 'T3', kind: 'subtree', role: 'subtree', from: [600, 270], to: [510, 170] },
+    ],
+    edges: [
+      { from: ['z', 'T1'], to: ['z', 'T1'] },
+      { from: ['z', 'y'], to: ['z', 'y'] },
+      { from: ['y', 'T2'], to: ['z', 'T2'], handoff: true },
+      { from: ['y', 'T3'], to: ['y', 'T3'] },
+    ],
+  },
+} as const;
+
+const config = configurations[direction];
+const uid = `tree-rotation-${direction}-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<tree-rotation data-direction={direction} data-state="before">
+  <section class="rotation-shell" aria-labelledby={`${uid}-title`}>
+    <header class="rotation-meta">
+      <div>
+        <span class="rotation-kicker">AVL · 单旋</span>
+        <strong id={`${uid}-title`}>{config.label}过程</strong>
+      </div>
+      <button class="rotation-control" type="button" aria-describedby={`${uid}-description`}>
+        <span class="rotation-control-icon" aria-hidden="true">↻</span>
+        <span data-action-label>播放旋转</span>
+      </button>
+    </header>
+
+    <div class="rotation-canvas">
+      <svg
+        viewBox="0 0 720 340"
+        role="img"
+        aria-labelledby={`${uid}-svg-title ${uid}-description`}
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <title id={`${uid}-svg-title`}>{config.label}动画</title>
+        <desc id={`${uid}-description`}>{config.description}</desc>
+
+        <g class="rotation-edges" aria-hidden="true">
+          {config.edges.map((edge) => (
+            <line
+              class:list={['rotation-edge', { 'is-handoff': edge.handoff }]}
+              data-from-a={edge.from[0]}
+              data-from-b={edge.from[1]}
+              data-to-a={edge.to[0]}
+              data-to-b={edge.to[1]}
+            />
+          ))}
+        </g>
+
+        <g class="rotation-nodes" aria-hidden="true">
+          {config.nodes.map((node) => (
+            <g
+              class:list={[
+                'rotation-node',
+                `is-${node.kind}`,
+                {
+                  'is-promoted': node.role === 'promoted',
+                  'is-demoted': node.role === 'demoted',
+                },
+              ]}
+              data-node={node.id}
+              data-from-x={node.from[0]}
+              data-from-y={node.from[1]}
+              data-to-x={node.to[0]}
+              data-to-y={node.to[1]}
+            >
+              {node.kind === 'node' ? (
+                <circle r="29" />
+              ) : (
+                <rect x="-31" y="-20" width="62" height="40" rx="10" />
+              )}
+              <text text-anchor="middle" dominant-baseline="middle">{node.id}</text>
+            </g>
+          ))}
+        </g>
+      </svg>
+    </div>
+
+    <footer class="rotation-caption">
+      <span class="rotation-phase" data-phase aria-live="polite">旋转前</span>
+      <span>{config.description}</span>
+    </footer>
+  </section>
+</tree-rotation>
+
+<script>
+  class TreeRotationElement extends HTMLElement {
+    animationFrame;
+    nodes = new Map();
+    edges = [];
+    control;
+    actionLabel;
+    phase;
+
+    connectedCallback() {
+      if (this.dataset.ready === 'true') return;
+      this.dataset.ready = 'true';
+
+      this.querySelectorAll('[data-node]').forEach((node) => {
+        this.nodes.set(node.dataset.node, node);
+      });
+      this.edges = [...this.querySelectorAll('.rotation-edge')];
+      this.control = this.querySelector('.rotation-control');
+      this.actionLabel = this.querySelector('[data-action-label]');
+      this.phase = this.querySelector('[data-phase]');
+
+      this.render(0);
+      this.control?.addEventListener('click', () => this.play());
+    }
+
+    disconnectedCallback() {
+      if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+    }
+
+    nodePosition(node, progress) {
+      const fromX = Number(node.dataset.fromX);
+      const fromY = Number(node.dataset.fromY);
+      const toX = Number(node.dataset.toX);
+      const toY = Number(node.dataset.toY);
+
+      return {
+        x: fromX + (toX - fromX) * progress,
+        y: fromY + (toY - fromY) * progress,
+      };
+    }
+
+    endpointPosition(fromId, toId, progress, positions) {
+      const from = positions.get(fromId);
+      const to = positions.get(toId);
+
+      if (!from || !to || fromId === toId) return from || to;
+
+      const handoff = this.smoothstep(0.34, 0.66, progress);
+      return {
+        x: from.x + (to.x - from.x) * handoff,
+        y: from.y + (to.y - from.y) * handoff,
+      };
+    }
+
+    render(progress) {
+      const eased = this.easeInOutCubic(progress);
+      const positions = new Map();
+
+      this.nodes.forEach((node, id) => {
+        const position = this.nodePosition(node, eased);
+        positions.set(id, position);
+        node.setAttribute('transform', `translate(${position.x} ${position.y})`);
+      });
+
+      this.edges.forEach((edge) => {
+        const a = this.endpointPosition(
+          edge.dataset.fromA,
+          edge.dataset.toA,
+          eased,
+          positions
+        );
+        const b = this.endpointPosition(
+          edge.dataset.fromB,
+          edge.dataset.toB,
+          eased,
+          positions
+        );
+
+        if (!a || !b) return;
+        edge.setAttribute('x1', String(a.x));
+        edge.setAttribute('y1', String(a.y));
+        edge.setAttribute('x2', String(b.x));
+        edge.setAttribute('y2', String(b.y));
+      });
+
+      this.style.setProperty('--rotation-progress', String(eased));
+    }
+
+    play() {
+      if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.dataset.state = 'before';
+      this.dataset.animating = 'true';
+      this.control.disabled = true;
+      this.actionLabel.textContent = '旋转中';
+      this.phase.textContent = '重连中';
+      this.render(0);
+
+      if (reduceMotion) {
+        this.finish();
+        return;
+      }
+
+      const duration = 780;
+      let start;
+
+      const tick = (time) => {
+        start ??= time;
+        const progress = Math.min((time - start) / duration, 1);
+        this.render(progress);
+
+        if (progress < 1) {
+          this.animationFrame = requestAnimationFrame(tick);
+        } else {
+          this.finish();
+        }
+      };
+
+      this.animationFrame = requestAnimationFrame(tick);
+    }
+
+    finish() {
+      this.render(1);
+      this.animationFrame = undefined;
+      this.dataset.animating = 'false';
+      this.dataset.state = 'after';
+      this.control.disabled = false;
+      this.actionLabel.textContent = '重新播放';
+      this.phase.textContent = '旋转后';
+    }
+
+    easeInOutCubic(value) {
+      return value < 0.5
+        ? 4 * value * value * value
+        : 1 - Math.pow(-2 * value + 2, 3) / 2;
+    }
+
+    smoothstep(start, end, value) {
+      const normalized = Math.min(Math.max((value - start) / (end - start), 0), 1);
+      return normalized * normalized * (3 - 2 * normalized);
+    }
+  }
+
+  if (!customElements.get('tree-rotation')) {
+    customElements.define('tree-rotation', TreeRotationElement);
+  }
+</script>
+
+<style>
+  tree-rotation {
+    --rotation-surface: color-mix(in srgb, var(--sl-color-bg-nav) 78%, transparent);
+    --rotation-surface-strong: color-mix(in srgb, var(--sl-color-bg-inline-code) 86%, transparent);
+    --rotation-line: color-mix(in srgb, var(--sl-color-gray-3) 72%, transparent);
+    --rotation-node-fill: color-mix(in srgb, var(--sl-color-bg) 72%, var(--sl-color-bg-inline-code));
+    --rotation-subtree-fill: color-mix(in srgb, var(--sl-color-gray-6) 84%, transparent);
+    --rotation-cyan: var(--obsidian-cyan);
+    --rotation-violet: var(--obsidian-purple);
+    display: block;
+    margin: 1.15rem 0 1.65rem;
+  }
+
+  .rotation-shell {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.75rem;
+    background: var(--rotation-surface);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 5%, transparent);
+  }
+
+  .rotation-shell::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rotation-cyan) 75%, transparent),
+      color-mix(in srgb, var(--rotation-violet) 75%, transparent)
+    );
+    content: '';
+    opacity: 0.72;
+  }
+
+  .rotation-meta,
+  .rotation-caption {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .rotation-meta {
+    justify-content: space-between;
+    border-bottom: 1px solid var(--sl-color-hairline-light);
+  }
+
+  .rotation-meta > div {
+    display: grid;
+    gap: 0.08rem;
+  }
+
+  .rotation-kicker {
+    color: var(--sl-color-gray-3);
+    font: 600 0.67rem/1.2 var(--font-ui);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .rotation-meta strong {
+    color: var(--sl-color-white);
+    font: 600 0.95rem/1.3 var(--font-ui);
+  }
+
+  .rotation-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    min-height: 2.15rem;
+    padding: 0.38rem 0.72rem;
+    border: 1px solid color-mix(in srgb, var(--rotation-cyan) 42%, var(--sl-color-hairline));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--rotation-cyan) 9%, transparent);
+    color: var(--sl-color-white);
+    font: 600 0.78rem/1 var(--font-ui);
+    cursor: pointer;
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .rotation-control:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--rotation-cyan) 72%, var(--sl-color-hairline));
+    background: color-mix(in srgb, var(--rotation-cyan) 15%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .rotation-control:focus-visible {
+    outline: 2px solid var(--rotation-cyan);
+    outline-offset: 3px;
+  }
+
+  .rotation-control:disabled {
+    cursor: wait;
+    opacity: 0.82;
+  }
+
+  .rotation-control-icon {
+    display: inline-block;
+    color: var(--rotation-cyan);
+    font-size: 1rem;
+  }
+
+  tree-rotation[data-animating='true'] .rotation-control-icon {
+    animation: rotation-control-spin 780ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .rotation-canvas {
+    overflow-x: auto;
+    scrollbar-color: var(--sl-color-gray-5) transparent;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    min-width: 36rem;
+    height: auto;
+    background:
+      radial-gradient(circle at 50% 44%, color-mix(in srgb, var(--rotation-cyan) 5%, transparent), transparent 33%),
+      var(--rotation-surface-strong);
+  }
+
+  .rotation-edge {
+    stroke: var(--rotation-line);
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .rotation-edge.is-handoff {
+    stroke: color-mix(in srgb, var(--rotation-cyan) 74%, var(--rotation-line));
+    stroke-dasharray: 5 5;
+  }
+
+  tree-rotation[data-animating='true'] .rotation-edge.is-handoff {
+    animation: rotation-edge-flow 520ms linear infinite;
+  }
+
+  .rotation-node circle,
+  .rotation-node rect {
+    fill: var(--rotation-node-fill);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .rotation-node.is-promoted circle {
+    stroke: var(--rotation-cyan);
+    filter: drop-shadow(0 0 9px color-mix(in srgb, var(--rotation-cyan) 28%, transparent));
+  }
+
+  .rotation-node.is-demoted circle {
+    stroke: var(--rotation-violet);
+    filter: drop-shadow(0 0 9px color-mix(in srgb, var(--rotation-violet) 24%, transparent));
+  }
+
+  .rotation-node.is-subtree rect {
+    fill: var(--rotation-subtree-fill);
+    stroke: var(--sl-color-gray-4);
+  }
+
+  .rotation-node text {
+    fill: var(--sl-color-white);
+    font: 650 18px/1 var(--sl-font-mono);
+    pointer-events: none;
+  }
+
+  .rotation-node.is-subtree text {
+    fill: var(--sl-color-gray-2);
+    font-size: 15px;
+  }
+
+  .rotation-caption {
+    min-height: 2.8rem;
+    border-top: 1px solid var(--sl-color-hairline-light);
+    color: var(--sl-color-gray-2);
+    font: 400 0.78rem/1.45 var(--font-ui);
+  }
+
+  .rotation-phase {
+    flex: 0 0 auto;
+    min-width: 3.7rem;
+    border-right: 1px solid var(--sl-color-hairline);
+    color: var(--rotation-cyan);
+    font-weight: 650;
+  }
+
+  @keyframes rotation-control-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes rotation-edge-flow {
+    to {
+      stroke-dashoffset: -10;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .rotation-meta,
+    .rotation-caption {
+      padding-inline: 0.8rem;
+    }
+
+    .rotation-caption {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .rotation-phase {
+      min-width: 0;
+      border-right: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rotation-control,
+    .rotation-control-icon,
+    .rotation-edge {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
