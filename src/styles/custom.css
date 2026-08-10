@@ -170,6 +170,17 @@ input {
     font-family: var(--font-ui);
 }
 
+/* Match the search controls to note typography, including Pagefind's dialog. */
+site-search {
+    --pagefind-ui-font: var(--font-prose);
+    font-family: var(--font-prose);
+}
+
+site-search :is(button, input, kbd, dialog),
+.hero :is(.tagline, .actions, .sl-link-button) {
+    font-family: var(--font-prose);
+}
+
 .sl-markdown-content p,
 .sl-markdown-content li {
     line-height: 1.82;
