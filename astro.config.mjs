@@ -302,6 +302,18 @@ if (document.readyState === 'loading') {
                                             label: 'Overview',
                                             link: '/data-structures-algorithms/ads/',
                                         },
+                                        {
+                                            label: 'AVL Tree',
+                                            link: '/data-structures-algorithms/ads/avl-tree/',
+                                        },
+                                        {
+                                            label: 'Splay Tree',
+                                            link: '/data-structures-algorithms/ads/splay-tree/',
+                                        },
+                                        {
+                                            label: '红黑树',
+                                            link: '/data-structures-algorithms/ads/red-black-tree/',
+                                        },
                                     ],
                                 },
                             ],
