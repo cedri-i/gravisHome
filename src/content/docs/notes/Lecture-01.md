@@ -19,9 +19,9 @@ Example 2: Is $(x + y) + z = x + (y + z)$?
 
 For floats:
 
-$(1e20 + -1e20) + 3.14 -> 3.14$
+$\bigl(\mathtt{1e20} + (-\mathtt{1e20})\bigr) + 3.14 \longrightarrow 3.14$
 
-$1e20 + (-1e20 + 3.14) -> 0$
+$\mathtt{1e20} + \bigl(-\mathtt{1e20} + 3.14\bigr) \longrightarrow 0$
 
 我们将特别关注 Intel 处理器的汇编语言。
 
