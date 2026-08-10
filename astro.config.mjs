@@ -287,6 +287,26 @@ if (document.readyState === 'loading') {
                             ],
                         },
                         {
+                            label: '数据结构与算法',
+                            collapsed: true,
+                            items: [
+                                {
+                                    label: 'Overview',
+                                    link: '/data-structures-algorithms/',
+                                },
+                                {
+                                    label: 'ADS: 高级数据结构与算法分析',
+                                    collapsed: true,
+                                    items: [
+                                        {
+                                            label: 'Overview',
+                                            link: '/data-structures-algorithms/ads/',
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                        {
                             label: '白鱼n',
                             items: [
                                 {

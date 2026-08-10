@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" role="img" aria-label="Data structures and algorithms tree motif">
+  <defs>
+    <linearGradient id="root" x1="92" y1="18" x2="172" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="array" x1="42" y1="140" x2="220" y2="164" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+    <linearGradient id="walk" x1="130" y1="30" x2="48" y2="114" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M130 42 80 64M130 42l50 22M80 82l-30 24M80 82l27 24M180 82l-27 24M180 82l30 24" stroke="#64748b" stroke-width="7"/>
+    <path d="M130 42 80 64 50 106" stroke="url(#walk)" stroke-width="5" opacity=".9"/>
+    <circle cx="130" cy="30" r="14" fill="url(#root)" stroke="#0f172a" stroke-width="5"/>
+    <circle cx="80" cy="72" r="12" fill="#8b5cf6" opacity=".82" stroke="#0f172a" stroke-width="5"/>
+    <circle cx="180" cy="72" r="12" fill="#22d3ee" opacity=".78" stroke="#0f172a" stroke-width="5"/>
+    <circle cx="50" cy="112" r="10" fill="#22c55e" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="107" cy="112" r="10" fill="#a78bfa" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="153" cy="112" r="10" fill="#38bdf8" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="210" cy="112" r="10" fill="#f59e0b" stroke="#0f172a" stroke-width="4"/>
+    <path d="M50 122v16M107 122v16M153 122v16M210 122v16" stroke="#64748b" stroke-width="5"/>
+    <rect x="36" y="138" width="188" height="30" rx="7" fill="url(#array)" opacity=".68" stroke="#0f172a" stroke-width="5"/>
+    <path d="M74 139v28M112 139v28M150 139v28M188 139v28" stroke="#f8fafc" stroke-width="4" opacity=".74"/>
+    <path d="m46 153 8 7 13-14" stroke="#f8fafc" stroke-width="5" opacity=".9"/>
+  </g>
+</svg>
