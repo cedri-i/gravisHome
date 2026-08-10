@@ -136,23 +136,24 @@ body {
 
 .sl-markdown-content {
     font-family: var(--font-prose);
+    font-size: 1.04rem;
 }
 
 /* Use one display face across Markdown heading levels for a coherent hierarchy. */
-.sl-markdown-content :is(h1, h2, h3) {
-    font-family: var(--font-heading);
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-prose);
     font-optical-sizing: auto;
     letter-spacing: -0.008em;
-    font-weight: 400;
+    font-weight: 600;
 }
 
+.content-panel > .sl-container > h1,
 .content-panel > .sl-container > header h1 {
-    font-family: var(--font-heading);
+    font-family: var(--font-prose);
     font-optical-sizing: auto;
     letter-spacing: -0.008em;
-    font-weight: 480;
+    font-weight: 600;
 }
-.sl-markdown-content h4,
 .site-title,
 .sidebar-content,
 .right-sidebar,
