@@ -1,5 +1,5 @@
 ---
-title: "红黑树"
+title: "Red-Black Tree"
 ---
 
 - 相对于 [AVL Tree](/data-structures-algorithms/ads/avl-tree/)，是另一种平衡二叉搜索树

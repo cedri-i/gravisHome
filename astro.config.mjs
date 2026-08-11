@@ -5,6 +5,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { remarkObsidianColor } from './remark-obsidian-color.mjs';
 import { remarkObsidianHighlight } from './remark-obsidian-highlight.mjs';
+import { remarkLabeledBlockquote } from './remark-labeled-blockquote.mjs';
 import { remarkCodeLanguageAliases } from './remark-code-language-aliases.mjs';
 import { remarkCjkSpacing } from './remark-cjk-spacing.mjs';
 import { remarkPreserveParagraphBreaks } from './remark-preserve-paragraph-breaks.mjs';
@@ -34,6 +35,10 @@ export default defineConfig({
     integrations: [
         starlight({
             title: 'My Docs',
+            tableOfContents: {
+                minHeadingLevel: 1,
+                maxHeadingLevel: 3,
+            },
             customCss: ['./src/styles/custom.css', './src/styles/home-entry.css', './src/styles/collapsible-headings.css'],
             head: [
                 { tag: 'script', attrs: { type: 'module', src: '/seasonal-world.js' } },
@@ -315,7 +320,7 @@ if (document.readyState === 'loading') {
                                             link: '/data-structures-algorithms/ads/splay-tree/',
                                         },
                                         {
-                                            label: '红黑树',
+                                            label: 'Red-Black Tree',
                                             link: '/data-structures-algorithms/ads/red-black-tree/',
                                         },
                                         {
@@ -388,6 +393,7 @@ if (document.readyState === 'loading') {
             remarkMath,
             remarkObsidianColor,
             remarkObsidianHighlight,
+            remarkLabeledBlockquote,
             remarkCodeLanguageAliases,
             remarkCjkSpacing,
             remarkPreserveParagraphBreaks,

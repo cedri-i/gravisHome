@@ -65,12 +65,43 @@
 
 .right-sidebar-panel starlight-toc a {
   padding-block: 0.18rem;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .right-sidebar-panel starlight-toc ul ul {
   margin-inline-start: 0;
-  padding-inline-start: 1rem;
+  padding-inline-start: 0;
+}
+
+/* Make the document hierarchy legible at a glance. */
+.right-sidebar-panel starlight-toc > nav > ul > li > a {
+  padding-inline: 0.15rem 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.right-sidebar-panel starlight-toc > nav > ul > li:first-child > a {
+  color: var(--sl-color-gray-3);
+  font-size: 0.82rem;
+  font-weight: 450;
+}
+
+.right-sidebar-panel starlight-toc > nav > ul > li > ul {
+  margin-block: 0.08rem 0.28rem;
+}
+
+.right-sidebar-panel starlight-toc > nav > ul > li > ul > li > a {
+  padding-inline: 1rem 0.4rem;
+  color: var(--sl-color-gray-2);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.right-sidebar-panel starlight-toc > nav > ul > li > ul > li > ul > li > a {
+  padding-inline: 2rem 0.4rem;
+  color: var(--sl-color-gray-3);
+  font-size: 0.76rem;
+  font-weight: 400;
 }
 
 @media (max-width: 50rem) {
