@@ -330,6 +330,10 @@ if (document.readyState === 'loading') {
                                             label: 'B-Tree',
                                             link: '/data-structures-algorithms/ads/b-tree/',
                                         },
+                                        {
+                                            label: 'B+ Tree',
+                                            link: '/data-structures-algorithms/ads/b-plus-tree/',
+                                        },
                                     ],
                                 },
                             ],
