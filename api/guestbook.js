@@ -116,6 +116,11 @@ const normalizeParentId = (parentId) => {
   return String(parentId || '').trim().slice(0, 80);
 };
 
+const normalizePagePath = (pagePath) => {
+  const value = String(pagePath || '/').trim().slice(0, 240);
+  return value.startsWith('/') ? value : '/';
+};
+
 const normalizeLikedBy = (likedBy) => {
   if (!Array.isArray(likedBy)) return [];
   return [...new Set(likedBy.map(normalizeLogin).filter(Boolean))].slice(0, 500);
@@ -158,13 +163,14 @@ const parseComment = (comment) => {
     message,
     createdAt: parsed.payload.createdAt || comment.created_at,
     parentId: normalizeParentId(parsed.payload.parentId),
+    pagePath: normalizePagePath(parsed.payload.pagePath),
     likedBy,
     likeCount: likedBy.length,
     hidden: Boolean(parsed.payload.hidden),
   };
 };
 
-const toCommentBody = ({ author, message, createdAt, parentId }) => {
+const toCommentBody = ({ author, message, createdAt, parentId, pagePath }) => {
   const displayName = normalizeName(author.name || author.login) || 'GitHub user';
   const normalizedParentId = normalizeParentId(parentId);
   const payload = {
@@ -175,6 +181,7 @@ const toCommentBody = ({ author, message, createdAt, parentId }) => {
     message: normalizeMessage(message),
     createdAt,
     parentId: normalizedParentId,
+    pagePath: normalizePagePath(pagePath),
     likedBy: [],
     hidden: false,
   };
@@ -207,13 +214,16 @@ export default async function handler(request, response) {
 
   try {
     if (request.method === 'GET') {
+      const pagePath = normalizePagePath(
+        new URL(request.url || '/', 'https://gravis.local').searchParams.get('page') || '/'
+      );
       const comments = await githubRequest(
         config,
         `/repos/${config.repository}/issues/${config.issueNumber}/comments?per_page=100`
       );
       const messages = comments
         .map(parseComment)
-        .filter((message) => message && !message.hidden)
+        .filter((message) => message && !message.hidden && message.pagePath === pagePath)
         .sort((left, right) => new Date(right.createdAt) - new Date(left.createdAt));
 
       return jsonResponse(response, 200, { messages });
@@ -229,6 +239,7 @@ export default async function handler(request, response) {
       const message = normalizeMessage(body.message);
       const parentId = normalizeParentId(body.parentId);
       const createdAt = new Date().toISOString();
+      const pagePath = normalizePagePath(body.pagePath);
 
       if (!message) {
         return jsonResponse(response, 400, { error: 'Message is required.' });
@@ -240,7 +251,7 @@ export default async function handler(request, response) {
         {
           method: 'POST',
           body: JSON.stringify({
-            body: toCommentBody({ author: session.user, message, createdAt, parentId }),
+            body: toCommentBody({ author: session.user, message, createdAt, parentId, pagePath }),
           }),
         }
       );

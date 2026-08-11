@@ -1,0 +1,13 @@
+---
+import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
+import NoteComments from './NoteComments.astro';
+
+const { starlightRoute } = Astro.locals;
+const isDocumentPage =
+  starlightRoute.entry.id !== '404' &&
+  !starlightRoute.entry.id.endsWith('/404') &&
+  !starlightRoute.entry.data.hero;
+---
+
+{isDocumentPage && <NoteComments />}
+<DefaultFooter />

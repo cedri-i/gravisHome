@@ -1,0 +1,177 @@
+---
+const pagePath = Astro.url.pathname;
+---
+
+<section class="note-comments" data-note-comments data-page-path={pagePath} aria-labelledby="note-comments-title">
+  <header>
+    <div>
+      <p class="note-comments-kicker">页边批注</p>
+      <h2 id="note-comments-title">聊聊这篇笔记</h2>
+    </div>
+    <span class="note-comments-total" data-comment-total>0 条</span>
+  </header>
+  <ol class="note-comments-list" data-comment-list></ol>
+  <p class="note-comments-empty" data-comment-empty>还没有评论，留下一句吧。</p>
+  <form class="note-comments-form" data-comment-form>
+    <label for="note-comment-message">评论</label>
+    <textarea id="note-comment-message" name="message" rows="2" maxlength="320" placeholder="写下你的想法…" required></textarea>
+    <div class="note-comments-actions">
+      <span data-comment-status>正在连接评论区…</span>
+      <button type="submit">发布</button>
+    </div>
+  </form>
+</section>
+
+<script>
+  const initNoteComments = async () => {
+    const root = document.querySelector('[data-note-comments]');
+    if (!root || root.dataset.ready === 'true') return;
+    root.dataset.ready = 'true';
+    const pagePath = root.dataset.pagePath || location.pathname;
+    const list = root.querySelector('[data-comment-list]');
+    const empty = root.querySelector('[data-comment-empty]');
+    const total = root.querySelector('[data-comment-total]');
+    const form = root.querySelector('[data-comment-form]');
+    const status = root.querySelector('[data-comment-status]');
+    const submit = form?.querySelector('button');
+    let currentUser = null;
+
+    const setStatus = (text) => { if (status) status.textContent = text; };
+    const formatDate = (value) => new Intl.DateTimeFormat('zh-CN', {
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+    }).format(new Date(value));
+
+    const render = (messages) => {
+      if (!list || !empty || !total) return;
+      list.replaceChildren();
+      total.textContent = `${messages.length} 条`;
+      empty.hidden = messages.length > 0;
+      for (const item of messages) {
+        const entry = document.createElement('li');
+        const avatar = document.createElement('img');
+        avatar.className = 'note-comment-avatar';
+        avatar.src = item.avatarUrl || `https://github.com/${item.githubLogin}.png`;
+        avatar.alt = '';
+        avatar.loading = 'lazy';
+        const body = document.createElement('div');
+        const meta = document.createElement('p');
+        meta.className = 'note-comment-meta';
+        const author = document.createElement(item.profileUrl ? 'a' : 'span');
+        author.textContent = item.githubLogin ? `@${item.githubLogin}` : item.name || '匿名';
+        if (item.profileUrl) { author.href = item.profileUrl; author.rel = 'noreferrer'; }
+        const time = document.createElement('time');
+        time.dateTime = item.createdAt;
+        time.textContent = formatDate(item.createdAt);
+        meta.append(author, time);
+        const message = document.createElement('p');
+        message.className = 'note-comment-message';
+        message.textContent = item.message;
+        body.append(meta, message);
+        entry.append(avatar, body);
+        list.append(entry);
+      }
+    };
+
+    const loadComments = async () => {
+      const response = await fetch(`/api/guestbook?page=${encodeURIComponent(pagePath)}`);
+      if (!response.ok) throw new Error('Comments unavailable');
+      render((await response.json()).messages || []);
+    };
+
+    try {
+      const [sessionResponse] = await Promise.all([
+        fetch('/api/github-auth?action=session'), loadComments(),
+      ]);
+      if (sessionResponse.ok) currentUser = (await sessionResponse.json()).user || null;
+      if (currentUser) setStatus(`以 @${currentUser.login} 身份评论`);
+      else { setStatus('登录 GitHub 后可评论'); if (submit) submit.textContent = '登录后评论'; }
+    } catch {
+      setStatus('评论区暂时不可用');
+      if (submit) submit.disabled = true;
+    }
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!currentUser) {
+        location.href = `/api/github-auth?action=login&returnTo=${encodeURIComponent(location.pathname)}`;
+        return;
+      }
+      const textarea = form.querySelector('textarea');
+      const message = textarea?.value.trim();
+      if (!message || !submit) return;
+      submit.disabled = true;
+      setStatus('正在发布…');
+      try {
+        const response = await fetch('/api/guestbook', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ message, pagePath }),
+        });
+        if (!response.ok) throw new Error('Publish failed');
+        textarea.value = '';
+        await loadComments();
+        setStatus(`已以 @${currentUser.login} 身份发布`);
+      } catch { setStatus('发布失败，请稍后重试'); }
+      finally { submit.disabled = false; }
+    });
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initNoteComments, { once: true });
+  else initNoteComments();
+</script>
+
+<style>
+  .note-comments {
+    --comment-accent: color-mix(in srgb, var(--sl-color-accent) 62%, #8ba7ff);
+    margin-top: 4.5rem;
+    padding: 1.25rem 0 0 1.15rem;
+    border-left: 2px solid color-mix(in srgb, var(--comment-accent) 42%, transparent);
+  }
+  .note-comments header, .note-comments-actions, .note-comment-meta {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  }
+  .note-comments-kicker {
+    margin: 0 0 0.15rem; color: var(--comment-accent); font-size: 0.7rem;
+    font-weight: 650; letter-spacing: 0.16em;
+  }
+  .note-comments h2 { margin: 0; font-size: 1.12rem; letter-spacing: 0.01em; }
+  .note-comments-total, .note-comments-actions, .note-comment-meta { color: var(--sl-color-gray-3); font-size: 0.76rem; }
+  .note-comments-list { display: grid; gap: 0; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+  .note-comments-list li {
+    display: grid; grid-template-columns: 1.8rem 1fr; gap: 0.75rem; padding: 0.9rem 0;
+    border-top: 1px solid color-mix(in srgb, var(--sl-color-hairline) 72%, transparent);
+  }
+  .note-comment-avatar { width: 1.8rem; height: 1.8rem; border-radius: 50%; }
+  .note-comment-meta { justify-content: flex-start; }
+  .note-comment-meta a { color: var(--sl-color-white); font-weight: 600; text-decoration: none; }
+  .note-comment-message {
+    margin: 0.25rem 0 0; color: var(--sl-color-gray-1); font-size: 0.92rem;
+    line-height: 1.65; white-space: pre-wrap;
+  }
+  .note-comments-empty { margin: 1rem 0; color: var(--sl-color-gray-3); font-size: 0.86rem; }
+  .note-comments-form { margin-top: 1rem; }
+  .note-comments-form label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .note-comments textarea {
+    width: 100%; min-height: 4.25rem; resize: vertical; padding: 0.75rem 0.85rem;
+    border: 1px solid var(--sl-color-hairline); border-radius: 0.45rem;
+    background: color-mix(in srgb, var(--sl-color-black) 72%, transparent);
+    color: var(--sl-color-white); font: inherit; font-size: 0.9rem;
+  }
+  .note-comments textarea:focus {
+    border-color: var(--comment-accent);
+    outline: 2px solid color-mix(in srgb, var(--comment-accent) 18%, transparent); outline-offset: 2px;
+  }
+  .note-comments-actions { align-items: center; margin-top: 0.55rem; }
+  .note-comments button {
+    padding: 0.38rem 0.78rem; border: 1px solid color-mix(in srgb, var(--comment-accent) 44%, var(--sl-color-hairline));
+    border-radius: 999px; background: transparent; color: var(--sl-color-gray-1);
+    font: inherit; font-size: 0.78rem; cursor: pointer;
+  }
+  .note-comments button:hover, .note-comments button:focus-visible {
+    background: color-mix(in srgb, var(--comment-accent) 12%, transparent); color: var(--sl-color-white);
+  }
+  .note-comments button:disabled { cursor: wait; opacity: 0.55; }
+  :root[data-theme='light'] .note-comments textarea { background: color-mix(in srgb, white 82%, transparent); }
+  @media (max-width: 30rem) {
+    .note-comments { margin-top: 3.25rem; padding-left: 0.85rem; }
+    .note-comments header { align-items: flex-end; }
+  }
+</style>

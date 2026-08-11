@@ -35,6 +35,9 @@ export default defineConfig({
     integrations: [
         starlight({
             title: 'My Docs',
+            components: {
+                Footer: './src/components/Footer.astro',
+            },
             tableOfContents: {
                 minHeadingLevel: 1,
                 maxHeadingLevel: 3,
