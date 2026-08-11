@@ -318,6 +318,10 @@ if (document.readyState === 'loading') {
                                             label: '红黑树',
                                             link: '/data-structures-algorithms/ads/red-black-tree/',
                                         },
+                                        {
+                                            label: 'B-Tree',
+                                            link: '/data-structures-algorithms/ads/b-tree/',
+                                        },
                                     ],
                                 },
                             ],
