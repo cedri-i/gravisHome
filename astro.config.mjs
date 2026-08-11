@@ -37,6 +37,7 @@ export default defineConfig({
             title: 'My Docs',
             components: {
                 Footer: './src/components/Footer.astro',
+                TwoColumnContent: './src/components/ResizableTwoColumnContent.astro',
             },
             tableOfContents: {
                 minHeadingLevel: 1,

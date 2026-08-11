@@ -1,0 +1,280 @@
+<div class="lg:sl-flex resizable-content-layout" data-toc-layout>
+	{
+		Astro.locals.starlightRoute.toc && (
+			<aside class="right-sidebar-container print:hidden" data-toc-pane>
+				<div class="right-sidebar">
+					<div
+						class="toc-resize-handle"
+						data-toc-resize-handle
+						role="separator"
+						aria-label="调整本页内容栏宽度"
+						aria-orientation="vertical"
+						aria-valuemin="224"
+						aria-valuemax="640"
+						aria-valuenow="300"
+						tabindex="0"
+						title="拖动调整目录宽度；双击恢复默认"
+					>
+						<span aria-hidden="true"></span>
+					</div>
+					<slot name="right-sidebar" />
+				</div>
+			</aside>
+		)
+	}
+	<div class="main-pane"><slot /></div>
+</div>
+
+<script>
+	const STORAGE_KEY = 'gravis:toc-panel-width';
+	const desktopQuery = window.matchMedia('(min-width: 72rem)');
+
+	function initializeTocResize() {
+		document.querySelectorAll('[data-toc-layout]').forEach((layout) => {
+			if (!(layout instanceof HTMLElement) || layout.dataset.tocResizeReady === 'true') return;
+
+			const pane = layout.querySelector('[data-toc-pane]');
+			const handle = layout.querySelector('[data-toc-resize-handle]');
+			const tocContent = layout.querySelector('.right-sidebar-panel .sl-container');
+			if (!(pane instanceof HTMLElement) || !(handle instanceof HTMLElement)) return;
+
+			layout.dataset.tocResizeReady = 'true';
+			const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+			const minimumWidth = 14 * rootFontSize;
+			const absoluteMaximumWidth = 40 * rootFontSize;
+			const minimumMainWidth = 34 * rootFontSize;
+			const defaultPanelWidth = pane.getBoundingClientRect().width;
+			const defaultContentWidth =
+				tocContent instanceof HTMLElement ? tocContent.getBoundingClientRect().width : minimumWidth;
+			const contentOffset = Math.max(0, defaultPanelWidth - defaultContentWidth);
+			let currentWidth = defaultPanelWidth;
+			let startX = 0;
+			let startWidth = defaultPanelWidth;
+			let activePointerId;
+
+			function bounds() {
+				const layoutWidth = layout.getBoundingClientRect().width;
+				const maximumWidth = Math.max(
+					minimumWidth,
+					Math.min(absoluteMaximumWidth, layoutWidth - minimumMainWidth),
+				);
+				return { minimumWidth: Math.min(minimumWidth, maximumWidth), maximumWidth };
+			}
+
+			function clampWidth(width) {
+				const { minimumWidth: minimum, maximumWidth: maximum } = bounds();
+				return Math.min(Math.max(width, minimum), maximum);
+			}
+
+			function updateAccessibility(width) {
+				const { minimumWidth: minimum, maximumWidth: maximum } = bounds();
+				handle.setAttribute('aria-valuemin', String(Math.round(minimum)));
+				handle.setAttribute('aria-valuemax', String(Math.round(maximum)));
+				handle.setAttribute('aria-valuenow', String(Math.round(width)));
+				handle.setAttribute('aria-valuetext', `${Math.round(width)} 像素`);
+			}
+
+			function applyWidth(width, persist = false) {
+				if (!desktopQuery.matches) return;
+				currentWidth = clampWidth(width);
+				const contentWidth = Math.max(10 * rootFontSize, currentWidth - contentOffset);
+				layout.style.setProperty('--toc-panel-width', `${currentWidth}px`);
+				layout.style.setProperty('--toc-content-width', `${contentWidth}px`);
+				updateAccessibility(currentWidth);
+
+				if (persist) {
+					try {
+						localStorage.setItem(STORAGE_KEY, String(Math.round(currentWidth)));
+					} catch {
+						// Storage can be unavailable in private or restricted browsing contexts.
+					}
+				}
+			}
+
+			function storedWidth() {
+				try {
+					const value = Number.parseFloat(localStorage.getItem(STORAGE_KEY) || '');
+					return Number.isFinite(value) ? value : undefined;
+				} catch {
+					return undefined;
+				}
+			}
+
+			function finishDrag(event) {
+				if (activePointerId === undefined || event.pointerId !== activePointerId) return;
+				if (handle.hasPointerCapture(activePointerId)) handle.releasePointerCapture(activePointerId);
+				activePointerId = undefined;
+				delete document.documentElement.dataset.tocDragging;
+				applyWidth(currentWidth, true);
+			}
+
+			handle.addEventListener('pointerdown', (event) => {
+				if (!desktopQuery.matches || event.button !== 0) return;
+				activePointerId = event.pointerId;
+				startX = event.clientX;
+				startWidth = currentWidth;
+				handle.setPointerCapture(event.pointerId);
+				document.documentElement.dataset.tocDragging = 'true';
+				event.preventDefault();
+			});
+
+			handle.addEventListener('pointermove', (event) => {
+				if (activePointerId === undefined || event.pointerId !== activePointerId) return;
+				applyWidth(startWidth + startX - event.clientX);
+			});
+
+			handle.addEventListener('pointerup', finishDrag);
+			handle.addEventListener('pointercancel', finishDrag);
+
+			handle.addEventListener('keydown', (event) => {
+				const step = event.shiftKey ? 32 : 16;
+				let nextWidth;
+
+				if (event.key === 'ArrowLeft') nextWidth = currentWidth + step;
+				if (event.key === 'ArrowRight') nextWidth = currentWidth - step;
+				if (event.key === 'Home') nextWidth = bounds().minimumWidth;
+				if (event.key === 'End') nextWidth = bounds().maximumWidth;
+				if (nextWidth === undefined) return;
+
+				event.preventDefault();
+				applyWidth(nextWidth, true);
+			});
+
+			handle.addEventListener('dblclick', () => {
+				try {
+					localStorage.removeItem(STORAGE_KEY);
+				} catch {
+					// Ignore unavailable storage and still restore this page.
+				}
+				applyWidth(defaultPanelWidth);
+			});
+
+			window.addEventListener('resize', () => applyWidth(currentWidth), { passive: true });
+			desktopQuery.addEventListener('change', () => applyWidth(currentWidth));
+			applyWidth(storedWidth() ?? defaultPanelWidth);
+		});
+	}
+
+	initializeTocResize();
+	document.addEventListener('astro:page-load', initializeTocResize);
+</script>
+
+<style>
+	@layer starlight.core {
+		.main-pane {
+			isolation: isolate;
+		}
+
+		.toc-resize-handle {
+			display: none;
+		}
+
+		@media (min-width: 72rem) {
+			.resizable-content-layout {
+				--toc-panel-width: calc(
+					var(--sl-sidebar-width) +
+						(100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2
+				);
+			}
+
+			.right-sidebar-container {
+				order: 2;
+				position: relative;
+				width: var(--toc-panel-width);
+			}
+
+			.right-sidebar {
+				position: fixed;
+				inset-block-start: 0;
+				inset-inline-end: 0;
+				border-inline-start: 1px solid var(--sl-color-hairline);
+				padding-top: var(--sl-nav-height);
+				width: var(--toc-panel-width);
+				height: 100vh;
+				overflow-y: auto;
+				scrollbar-width: none;
+			}
+
+			.main-pane {
+				width: 100%;
+			}
+
+			:global([data-has-sidebar][data-has-toc]) .main-pane {
+				--sl-content-margin-inline: auto 0;
+				order: 1;
+				width: calc(100% - var(--toc-panel-width));
+			}
+
+			.resizable-content-layout[data-toc-resize-ready='true']
+				:global(.right-sidebar-panel .sl-container) {
+				width: min(
+					var(--toc-content-width),
+					calc(var(--toc-panel-width) - 2 * var(--sl-sidebar-pad-x))
+				);
+				max-width: none;
+			}
+
+			.toc-resize-handle {
+				position: absolute;
+				z-index: 2;
+				inset-block: var(--sl-nav-height) 0;
+				inset-inline-start: 0;
+				display: block;
+				width: 0.8rem;
+				transform: translateX(-50%);
+				border: 0;
+				outline: 0;
+				cursor: col-resize;
+				touch-action: none;
+			}
+
+			.toc-resize-handle::before {
+				position: absolute;
+				inset-block: 0;
+				inset-inline-start: 50%;
+				width: 1px;
+				background: var(--sl-color-hairline);
+				content: '';
+				transition: background-color 160ms ease, box-shadow 160ms ease;
+			}
+
+			.toc-resize-handle span {
+				position: absolute;
+				inset-block-start: 4.75rem;
+				inset-inline-start: 50%;
+				width: 0.24rem;
+				height: 2.4rem;
+				transform: translateX(-50%) scaleY(0.82);
+				border-radius: 999px;
+				background: color-mix(in srgb, var(--obsidian-cyan) 72%, var(--sl-color-gray-4));
+				opacity: 0.3;
+				transition: opacity 160ms ease, transform 160ms ease;
+			}
+
+			.toc-resize-handle:hover::before,
+			.toc-resize-handle:focus-visible::before,
+			:global(html[data-toc-dragging]) .toc-resize-handle::before {
+				background: color-mix(in srgb, var(--obsidian-cyan) 68%, var(--sl-color-hairline));
+				box-shadow: 0 0 0.7rem color-mix(in srgb, var(--obsidian-cyan) 18%, transparent);
+			}
+
+			.toc-resize-handle:hover span,
+			.toc-resize-handle:focus-visible span,
+			:global(html[data-toc-dragging]) .toc-resize-handle span {
+				transform: translateX(-50%) scaleY(1);
+				opacity: 0.85;
+			}
+
+			.toc-resize-handle:focus-visible {
+				outline: 2px solid var(--obsidian-cyan);
+				outline-offset: -3px;
+			}
+		}
+
+		:global(html[data-toc-dragging]),
+		:global(html[data-toc-dragging] *) {
+			cursor: col-resize !important;
+			user-select: none !important;
+		}
+	}
+</style>
