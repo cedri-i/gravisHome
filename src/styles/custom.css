@@ -181,6 +181,11 @@ site-search :is(button, input, kbd, dialog),
     font-family: var(--font-prose);
 }
 
+.pagination-links,
+.pagination-links :is(a, span) {
+    font-family: var(--font-prose);
+}
+
 .sl-markdown-content p,
 .sl-markdown-content li {
     line-height: 1.82;
@@ -2617,8 +2622,8 @@ starlight-theme-select svg,
 /* Distinguish sourced quotations from explicitly labeled explanatory notes. */
 body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote {
     position: relative;
-    margin-block: 1.35rem;
-    padding: 1rem 1.1rem 1rem 1.75rem;
+    margin-block: 1rem;
+    padding: .85rem 1rem .85rem 1.65rem;
     border: 1px solid color-mix(in srgb, var(--sl-color-hairline) 72%, transparent);
     border-inline-start: 2px solid color-mix(in srgb, var(--sl-color-accent) 58%, var(--sl-color-hairline));
     border-radius: .45rem;
@@ -2640,7 +2645,11 @@ body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote:not(.note-explainer
 }
 
 body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote.note-explainer {
-    padding-block-start: 2.25rem;
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: start;
+    gap: .75rem;
+    padding: .85rem 1rem;
     border-color: color-mix(in srgb, var(--sl-color-accent) 32%, var(--sl-color-hairline));
     border-inline-start-width: 3px;
     border-inline-start-color: color-mix(in srgb, var(--sl-color-accent) 82%, var(--sl-color-white) 18%);
@@ -2651,9 +2660,9 @@ body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote.note-explainer {
 
 body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote.note-explainer::before {
     content: "说明";
-    position: absolute;
-    inset-block-start: .62rem;
-    inset-inline-start: 1rem;
+    position: static;
+    grid-column: 1;
+    margin-top: .38rem;
     padding-block-end: .12rem;
     border-bottom: 1px solid color-mix(in srgb, var(--sl-color-accent) 64%, transparent);
     color: color-mix(in srgb, var(--sl-color-accent) 78%, var(--sl-color-text) 22%);
@@ -2662,6 +2671,27 @@ body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote.note-explainer::bef
     font-weight: 600;
     letter-spacing: .16em;
     line-height: 1;
+    white-space: nowrap;
+}
+
+body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote.note-explainer > * {
+    grid-column: 2;
+}
+
+@media (max-width: 42rem) {
+    body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote.note-explainer {
+        grid-template-columns: minmax(0, 1fr);
+        gap: .45rem;
+    }
+
+    body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote.note-explainer::before,
+    body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote.note-explainer > * {
+        grid-column: 1;
+    }
+
+    body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote.note-explainer::before {
+        margin-top: 0;
+    }
 }
 
 
