@@ -2747,3 +2747,18 @@ body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun
     text-align: justify;
     text-indent: 2em !important;
 }
+
+/* Preserve source-note indentation on plain paragraphs without list markers. */
+.sl-markdown-content p:has(> .note-source-indent) {
+    margin-inline-start: 2rem;
+}
+
+.note-source-indent {
+    display: none;
+}
+
+@media (max-width: 50rem) {
+    .sl-markdown-content p:has(> .note-source-indent) {
+        margin-inline-start: 1.25rem;
+    }
+}

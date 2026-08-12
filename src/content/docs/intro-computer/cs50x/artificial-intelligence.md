@@ -46,9 +46,9 @@ While game is ongoing:
 
 Here's the key detail with reinforcement learning (teaching the robot to flip pancakes):
 
-Behind the scenes, the human is probably ~={green}**rewarding**=~ the robot when it does a good job, like better and better it flips, the more it gets rewarded, as by hitting a key and giving it a point, for instance.
+<span class="note-source-indent" aria-hidden="true"></span>Behind the scenes, the human is probably ~={green}**rewarding**=~ the robot when it does a good job, like better and better it flips, the more it gets rewarded, as by hitting a key and giving it a point, for instance.
 
-Or conversely, every time the robot screws up and drops the pancake on the floor, or a proverbial slap on the wrist, a ~={red}**punishment**=~. So that it does less of that behavior.
+<span class="note-source-indent" aria-hidden="true"></span>Or conversely, every time the robot screws up and drops the pancake on the floor, or a proverbial slap on the wrist, a ~={red}**punishment**=~. So that it does less of that behavior.
 
 # Deep Learning
 
