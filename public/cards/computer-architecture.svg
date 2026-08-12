@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" role="img" aria-label="CPU datapath motif">
+  <defs>
+    <linearGradient id="chip" x1="88" y1="34" x2="172" y2="144" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="34" y1="50" x2="228" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset=".56" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="82" y="40" width="96" height="100" rx="14" fill="url(#chip)" opacity=".76" stroke="#0f172a" stroke-width="6"/>
+    <rect x="101" y="60" width="58" height="60" rx="8" fill="#0f172a" opacity=".72" stroke="#f8fafc" stroke-width="4"/>
+    <path d="M42 54h40M42 86h40M42 118h40M178 54h40M178 86h40M178 118h40M98 40V23M130 40V23M162 40V23M98 140v17M130 140v17M162 140v17" stroke="#64748b" stroke-width="7"/>
+    <path d="M42 54h70v24h36v40h70M42 118h48V94h22M148 78h70" stroke="url(#signal)" stroke-width="5"/>
+    <path d="m119 76 14 14-14 14M141 76l-14 14 14 14" stroke="#f8fafc" stroke-width="5" opacity=".92"/>
+    <circle cx="42" cy="54" r="7" fill="#22d3ee" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="218" cy="78" r="7" fill="#f59e0b" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="218" cy="118" r="7" fill="#22c55e" stroke="#0f172a" stroke-width="4"/>
+  </g>
+</svg>

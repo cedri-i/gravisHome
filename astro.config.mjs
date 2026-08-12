@@ -340,6 +340,30 @@ if (document.readyState === 'loading') {
                             ],
                         },
                         {
+                            label: '计算机体系结构',
+                            collapsed: true,
+                            items: [
+                                {
+                                    label: 'Overview',
+                                    link: '/computer-architecture/',
+                                },
+                                {
+                                    label: 'UCB: CS61C',
+                                    collapsed: true,
+                                    items: [
+                                        {
+                                            label: 'Overview',
+                                            link: '/computer-architecture/cs61c/',
+                                        },
+                                        {
+                                            label: '18 Single-Cycle CPU Datapath I',
+                                            link: '/computer-architecture/cs61c/18-single-cycle-cpu-datapath-i/',
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                        {
                             label: '白鱼n',
                             items: [
                                 {
