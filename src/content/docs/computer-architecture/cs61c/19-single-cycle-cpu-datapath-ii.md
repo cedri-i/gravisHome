@@ -3,6 +3,8 @@ title: "19. Single-Cycle CPU Datapath II"
 description: UCB CS61C 单周期 CPU 数据通路笔记
 ---
 
+<span class="cs61c-19-note-marker" aria-hidden="true"></span>
+
 本节笔记顺承 [18 Single-Cycle CPU Datapath I](/computer-architecture/cs61c/18-single-cycle-cpu-datapath-i/)。
 
 ## Review
@@ -122,14 +124,20 @@ description: UCB CS61C 单周期 CPU 数据通路笔记
 
 #### Branch Comparator
 
+<div class="cs61c-figure-aside">
+
 <a class="cs61c-note-image" href="/cs61c/19-branch-comparator.png" target="_blank" rel="noopener" aria-label="打开分支比较器原图">
   <img src="/cs61c/19-branch-comparator.png" alt="分支比较器" loading="lazy" decoding="async" />
   <span aria-hidden="true">↗ 原图</span>
 </a>
 
-- `BrEq = 1, if A = B`
-- `BrLT = 1, if A < B`
-- `BrUn = 1` selects unsigned comparison for `BrLT`, 0 = signed
+<ul class="cs61c-figure-notes">
+  <li><code>BrEq = 1, if A = B</code></li>
+  <li><code>BrLT = 1, if A &lt; B</code></li>
+  <li><code>BrUn = 1</code> selects unsigned comparison for <code>BrLT</code>, 0 = signed</li>
+</ul>
+
+</div>
 
 #### Branch Immediates
 

@@ -3020,10 +3020,6 @@ body:has(.home-starsky) .hero .actions .sl-link-button.secondary:focus-visible {
     cursor: zoom-in;
     overflow: hidden;
     text-decoration: none;
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        translate .2s ease;
 }
 
 .sl-markdown-content .cs61c-note-image img {
@@ -3033,7 +3029,6 @@ body:has(.home-starsky) .hero .actions .sl-link-button.secondary:focus-visible {
     height: auto;
     margin: 0 !important;
     border-radius: 0;
-    transition: filter .2s ease;
 }
 
 .sl-markdown-content .cs61c-note-image > span {
@@ -3042,37 +3037,87 @@ body:has(.home-starsky) .hero .actions .sl-link-button.secondary:focus-visible {
     right: .58rem;
     display: inline-flex;
     align-items: center;
-    min-height: 2rem;
-    padding: .35rem .62rem;
+    justify-content: center;
+    width: 1.68rem;
+    height: 1.68rem;
+    padding: 0;
     border: 1px solid rgba(184, 227, 255, .42);
     border-radius: 999px;
     background: rgba(7, 20, 49, .78);
     color: #edf9ff;
     font-family: var(--font-prose);
-    font-size: .78rem;
+    font-size: 0;
     font-weight: 600;
     letter-spacing: .02em;
     line-height: 1;
     box-shadow: 0 .28rem .8rem rgba(4, 10, 30, .2);
     backdrop-filter: blur(.42rem);
-    pointer-events: none;
+    pointer-events: auto;
+    transition:
+        translate .18s ease,
+        border-color .18s ease,
+        background-color .18s ease,
+        box-shadow .18s ease;
 }
 
-.sl-markdown-content .cs61c-note-image:hover,
-.sl-markdown-content .cs61c-note-image:focus-visible {
-    translate: 0 -.1rem;
-    border-color: color-mix(in srgb, var(--sl-color-accent-high) 56%, var(--sl-color-gray-5));
-    box-shadow: 0 .75rem 1.65rem rgba(8, 16, 45, .18);
+.sl-markdown-content .cs61c-note-image > span::before {
+    content: "↗";
+    font-size: .76rem;
+    line-height: 1;
 }
 
-.sl-markdown-content .cs61c-note-image:hover img,
-.sl-markdown-content .cs61c-note-image:focus-visible img {
-    filter: brightness(1.025) contrast(1.015);
+.sl-markdown-content .cs61c-note-image > span:hover,
+.sl-markdown-content .cs61c-note-image:focus-visible > span {
+    translate: 0 -.14rem;
+    border-color: rgba(194, 238, 255, .76);
+    background-color: rgba(13, 34, 75, .94);
+    box-shadow: 0 .48rem 1rem rgba(4, 10, 30, .32);
 }
 
 .sl-markdown-content .cs61c-note-image:focus-visible {
     outline: 2px solid var(--sl-color-accent-high);
     outline-offset: .2rem;
+}
+
+/* This lecture keeps its title in metadata/navigation, but starts at the note body. */
+body:has(.cs61c-19-note-marker) main > .content-panel:first-child {
+    display: none;
+}
+
+.cs61c-19-note-marker {
+    display: none;
+}
+
+/* Compact figure explanation: diagram and its signal notes read as one unit. */
+.sl-markdown-content .cs61c-figure-aside {
+    display: grid;
+    grid-template-columns: minmax(12rem, 19rem) minmax(16rem, 1fr);
+    align-items: center;
+    gap: clamp(1.15rem, 3vw, 2.25rem);
+    margin: 1.15rem 0 1.45rem;
+}
+
+.sl-markdown-content .cs61c-figure-aside .cs61c-note-image {
+    width: 100%;
+    margin: 0;
+}
+
+.sl-markdown-content .cs61c-figure-aside .cs61c-note-image img {
+    width: 100%;
+}
+
+.sl-markdown-content .cs61c-figure-notes {
+    display: grid;
+    gap: .72rem;
+    align-content: center;
+    margin: 0;
+    padding-inline-start: 1.25rem;
+}
+
+.sl-markdown-content .cs61c-figure-notes li {
+    margin: 0;
+    padding-inline-start: .18rem;
+    line-height: 1.65;
 }
 
 @media (max-width: 40rem) {
@@ -3084,9 +3129,20 @@ body:has(.home-starsky) .hero .actions .sl-link-button.secondary:focus-visible {
     .sl-markdown-content .cs61c-note-image > span {
         top: .42rem;
         right: .42rem;
-        min-height: 1.8rem;
-        padding: .3rem .52rem;
-        font-size: .72rem;
+        width: 1.58rem;
+        height: 1.58rem;
+    }
+}
+
+@media (max-width: 48rem) {
+    .sl-markdown-content .cs61c-figure-aside {
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: .9rem;
+    }
+
+    .sl-markdown-content .cs61c-figure-aside .cs61c-note-image {
+        width: min(100%, 19rem);
     }
 }
 
