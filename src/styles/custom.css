@@ -2777,3 +2777,27 @@ body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun
         margin-inline-start: 1.25rem;
     }
 }
+
+/* Keep Baiyun spine titles in the site typeface and inside each book. */
+.baiyun-spine {
+    overflow: hidden;
+}
+
+.baiyun-spine-title {
+    min-height: 0;
+    overflow: hidden;
+    font-family: var(--font-prose);
+}
+
+.baiyun-spine:nth-child(10) .baiyun-spine-title {
+    margin-top: .42rem;
+    font-size: clamp(.74rem, 1.05vw, .82rem);
+    line-height: 1.1;
+}
+
+@media (max-width: 48rem) {
+    .baiyun-spine:nth-child(10) .baiyun-spine-title {
+        font-size: .72rem;
+        line-height: 1.08;
+    }
+}
