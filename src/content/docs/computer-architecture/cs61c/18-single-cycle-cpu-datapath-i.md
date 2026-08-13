@@ -26,8 +26,11 @@ description: UCB CS61C 单周期 CPU 数据通路笔记
 - Stage 3: ***Execute*** 执行（EX）- ALU
 - Stage 4: ***Memory Access*** 内存访问（MEM）
 - Stage 5: ***Write Back to Register*** 写回寄存器（WB）
+
 所有这五个阶段在一个时钟周期内完成。
+
 ![单周期 CPU 数据通路总览](/cs61c/18-datapath-overview.png)
+
 - PC（Program Counter，程序计数器）在顺序执行指令时，将增加 4 个字节，以指向 RISC-V 中的下一个 32 位字
 - MUX 的用途：当分支需要跳转时，绕过正常的 `PC + 4` 路径，选择分支目标地址并将其写入 PC
 - IMEM 发出与目标寄存器或第一、二个源寄存器相对应的地址
@@ -38,24 +41,37 @@ description: UCB CS61C 单周期 CPU 数据通路笔记
 - Storage elements + clock methodology
 - Building blocks
 ## R-Type Add Datapath
+
 ![RISC-V R 型 ALU 指令编码表](/cs61c/18-r-type-instruction-format.png)
+
 `add rd, rs1, rs2`
+
 Instruction makes two changes to machine's state:
+
 - `Reg[rd] = Reg[rs1] + Reg[rs2]`
 - `PC = PC + 4`
+
 ![R 型 add 指令的数据通路](/cs61c/18-r-type-add-datapath.png)
+
 ### Sub Datapath
+
 ![R 型 add 与 sub 指令编码差异](/cs61c/18-add-sub-instruction-format.png)
+
 - `inst[30]` selects between add and subtract
 - 此前我们只需要一个支持 add 的 ALU，现在我们需要一个既支持 add 又支持 sub 的 ALU
 以此为基础扩展到其他 R-type 指令也很简单。
 ## Datapath With Immediates
 ### `addi`
+
 - RISC-V Assembly Instruction:
 	`addi x15, x1, -50`
+
 ![addi 指令的 I 型立即数编码](/cs61c/18-addi-instruction-format.png)
+
 - 相对于 add/sub，需要构建另一个支持立即数的数据通路（以替代 `Reg[rs2]`，两者之间通过 `BSel` 作选择）
 	- 需要一个立即数生成器，由 `ImmSel` 信号控制
 ### I-Format Immediates
+
 ![I 型立即数的符号扩展](/cs61c/18-i-format-sign-extension.png)
+
 - Sign-extended
