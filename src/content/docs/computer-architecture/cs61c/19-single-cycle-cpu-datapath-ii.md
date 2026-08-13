@@ -1,9 +1,7 @@
 ---
-title: "19. Single-Cycle CPU Datapath II"
+title: "19 Single-Cycle CPU Datapath II"
 description: UCB CS61C 单周期 CPU 数据通路笔记
 ---
-
-<span class="cs61c-19-note-marker" aria-hidden="true"></span>
 
 本节笔记顺承 [18 Single-Cycle CPU Datapath I](/computer-architecture/cs61c/18-single-cycle-cpu-datapath-i/)。
 

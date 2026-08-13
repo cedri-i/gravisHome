@@ -3079,15 +3079,6 @@ body:has(.home-starsky) .hero .actions .sl-link-button.secondary:focus-visible {
     outline-offset: .2rem;
 }
 
-/* This lecture keeps its title in metadata/navigation, but starts at the note body. */
-body:has(.cs61c-19-note-marker) main > .content-panel:first-child {
-    display: none;
-}
-
-.cs61c-19-note-marker {
-    display: none;
-}
-
 /* Compact figure explanation: diagram and its signal notes read as one unit. */
 .sl-markdown-content .cs61c-figure-aside {
     display: grid;
@@ -3151,4 +3142,9 @@ body:has(.cs61c-19-note-marker) main > .content-panel:first-child {
     .sl-markdown-content .cs61c-note-image img {
         transition: none;
     }
+}
+
+/* The empty social-icons divider does not align with the hanging theme toggle. */
+.header .social-icons::after {
+    display: none !important;
 }
