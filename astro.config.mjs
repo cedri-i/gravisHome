@@ -359,6 +359,10 @@ if (document.readyState === 'loading') {
                                             label: '18 Single-Cycle CPU Datapath I',
                                             link: '/computer-architecture/cs61c/18-single-cycle-cpu-datapath-i/',
                                         },
+                                        {
+                                            label: '19. Single-Cycle CPU Datapath II',
+                                            link: '/computer-architecture/cs61c/19-single-cycle-cpu-datapath-ii/',
+                                        },
                                     ],
                                 },
                             ],

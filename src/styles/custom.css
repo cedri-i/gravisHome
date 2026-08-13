@@ -3005,3 +3005,94 @@ body:has(.home-starsky) .hero .actions .sl-link-button.secondary:focus-visible {
         opacity: 0;
     }
 }
+
+/* CS61C lecture figures: edge-aligned and easy to open at full resolution. */
+.sl-markdown-content .cs61c-note-image {
+    position: relative;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 1.15rem 0;
+    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 78%, transparent);
+    border-radius: .72rem;
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 82%, transparent);
+    box-shadow: 0 .48rem 1.35rem rgba(8, 16, 45, .12);
+    cursor: zoom-in;
+    overflow: hidden;
+    text-decoration: none;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        translate .2s ease;
+}
+
+.sl-markdown-content .cs61c-note-image img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    margin: 0 !important;
+    border-radius: 0;
+    transition: filter .2s ease;
+}
+
+.sl-markdown-content .cs61c-note-image > span {
+    position: absolute;
+    top: .58rem;
+    right: .58rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: .35rem .62rem;
+    border: 1px solid rgba(184, 227, 255, .42);
+    border-radius: 999px;
+    background: rgba(7, 20, 49, .78);
+    color: #edf9ff;
+    font-family: var(--font-prose);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    line-height: 1;
+    box-shadow: 0 .28rem .8rem rgba(4, 10, 30, .2);
+    backdrop-filter: blur(.42rem);
+    pointer-events: none;
+}
+
+.sl-markdown-content .cs61c-note-image:hover,
+.sl-markdown-content .cs61c-note-image:focus-visible {
+    translate: 0 -.1rem;
+    border-color: color-mix(in srgb, var(--sl-color-accent-high) 56%, var(--sl-color-gray-5));
+    box-shadow: 0 .75rem 1.65rem rgba(8, 16, 45, .18);
+}
+
+.sl-markdown-content .cs61c-note-image:hover img,
+.sl-markdown-content .cs61c-note-image:focus-visible img {
+    filter: brightness(1.025) contrast(1.015);
+}
+
+.sl-markdown-content .cs61c-note-image:focus-visible {
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: .2rem;
+}
+
+@media (max-width: 40rem) {
+    .sl-markdown-content .cs61c-note-image {
+        margin-block: .9rem;
+        border-radius: .55rem;
+    }
+
+    .sl-markdown-content .cs61c-note-image > span {
+        top: .42rem;
+        right: .42rem;
+        min-height: 1.8rem;
+        padding: .3rem .52rem;
+        font-size: .72rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sl-markdown-content .cs61c-note-image,
+    .sl-markdown-content .cs61c-note-image img {
+        transition: none;
+    }
+}
