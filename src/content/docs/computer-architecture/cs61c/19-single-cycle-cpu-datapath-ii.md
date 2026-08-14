@@ -195,7 +195,7 @@ description: UCB CS61C 单周期 CPU 数据通路笔记
 
 # Conclusion
 
-我们已经设计好了完整的数据通路——它可以执行 RISC-V ISA 中的每一条 RB32i 指令，也就意味着执行任何可以编译成 RISC-V 汇编的 `C` 程序。
+我们已经设计好了完整的数据通路——它可以执行 RISC-V ISA 中的每一条 RV32i 指令，也就意味着执行任何可以编译成 RISC-V 汇编的 `C` 程序。
 
 <a class="cs61c-note-image" href="/cs61c/19-complete-datapath.png" target="_blank" rel="noopener" aria-label="打开完整单周期 CPU 数据通路原图">
   <img src="/cs61c/19-complete-datapath.png" alt="完整单周期 CPU 数据通路" loading="lazy" decoding="async" />
