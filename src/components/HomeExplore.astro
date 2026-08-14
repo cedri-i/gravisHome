@@ -1,0 +1,121 @@
+---
+const noteModules = import.meta.glob('../content/docs/**/*.{md,mdx}');
+
+const routes = Object.keys(noteModules)
+  .map((file) => file.split('/content/docs/')[1])
+  .filter((file): file is string => Boolean(file))
+  .filter((file) => !/(^|\/)index\.mdx?$/.test(file))
+  .filter((file) => !/^(my-notes|updates)\.mdx?$/.test(file))
+  .filter((file) => !/^(guides|reference)\//.test(file))
+  .filter((file) => file !== 'computer-systems/csapp.mdx')
+  .filter((file) => file !== 'notes/chap1.md')
+  .map((file) => `/${file.replace(/\.mdx?$/, '')}/`)
+  .sort();
+---
+
+<script is:inline define:vars={{ routes }}>
+  (() => {
+    const bindHomeActions = () => {
+      const hero = document.querySelector('body:has(.home-starsky) .hero');
+      if (!hero) return;
+
+      const explore = hero.querySelector('.actions .sl-link-button.primary');
+      if (explore && explore.dataset.randomNoteBound !== 'true' && routes.length) {
+        explore.dataset.randomNoteBound = 'true';
+
+        let previousRoute = '';
+        try {
+          previousRoute = sessionStorage.getItem('gravis-last-random-note') || '';
+        } catch {}
+
+        const candidates = routes.filter((route) => route !== previousRoute);
+        const pool = candidates.length ? candidates : routes;
+        const chosenRoute = pool[Math.floor(Math.random() * pool.length)];
+
+        explore.setAttribute('href', chosenRoute);
+        explore.addEventListener('click', () => {
+          try {
+            sessionStorage.setItem('gravis-last-random-note', chosenRoute);
+          } catch {}
+        });
+      }
+
+      const themeAction = hero.querySelector('.actions .sl-link-button.secondary');
+      if (!themeAction) return;
+
+      if (!themeAction.querySelector('.home-theme-flip')) {
+        const flip = document.createElement('span');
+        flip.className = 'home-theme-flip';
+
+        const front = document.createElement('span');
+        front.className = 'home-theme-face home-theme-face-front';
+        front.textContent = themeAction.textContent?.trim() || '🌌建议使用深色模式';
+
+        const back = document.createElement('span');
+        back.className = 'home-theme-face home-theme-face-back';
+        back.textContent = '看来你已经接受了建议😊';
+
+        flip.append(front, back);
+        themeAction.replaceChildren(flip);
+      }
+
+      if (themeAction.dataset.themeFlipBound === 'true') return;
+      themeAction.dataset.themeFlipBound = 'true';
+
+      const syncThemeAction = () => {
+        const isDark = document.documentElement.dataset.theme === 'dark';
+        themeAction.dataset.themeState = isDark ? 'accepted' : 'suggestion';
+        themeAction.setAttribute('aria-disabled', String(isDark));
+        themeAction.setAttribute(
+          'aria-label',
+          isDark ? '看来你已经接受了深色模式建议' : '建议使用深色模式',
+        );
+
+        if (isDark) {
+          themeAction.removeAttribute('href');
+          themeAction.setAttribute('role', 'button');
+          themeAction.setAttribute('tabindex', '0');
+        } else {
+          themeAction.setAttribute('href', '/#dark');
+          themeAction.removeAttribute('role');
+          themeAction.removeAttribute('tabindex');
+        }
+      };
+
+      themeAction.addEventListener(
+        'click',
+        (event) => {
+          if (document.documentElement.dataset.theme === 'dark') {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+          }
+        },
+        true,
+      );
+
+      themeAction.addEventListener('keydown', (event) => {
+        if (
+          document.documentElement.dataset.theme === 'dark' &&
+          (event.key === 'Enter' || event.key === ' ')
+        ) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+      });
+
+      new MutationObserver(syncThemeAction).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme'],
+      });
+      syncThemeAction();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bindHomeActions, { once: true });
+    } else {
+      bindHomeActions();
+    }
+
+    document.addEventListener('astro:page-load', bindHomeActions);
+  })();
+</script>
