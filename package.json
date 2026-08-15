@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "check:note-format": "node scripts/test-note-formatting.mjs",
+    "build": "npm run check:note-format && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },

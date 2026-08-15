@@ -1,5 +1,3 @@
-const proseParents = new Set(['root', 'blockquote']);
-
 function splitTextNode(node) {
     if (node.type !== 'text' || !node.value.includes('\n')) return [node];
 
@@ -22,21 +20,34 @@ function splitTextNode(node) {
     return next;
 }
 
-function transformNode(node, parent) {
+function preserveInlineBreaks(node) {
     if (!Array.isArray(node.children)) return;
 
-    if (node.type === 'paragraph' && parent && proseParents.has(parent.type)) {
-        node.children = node.children.flatMap(splitTextNode);
+    node.children = node.children.flatMap((child) => {
+        if (child.type === 'text') return splitTextNode(child);
+        preserveInlineBreaks(child);
+        return [child];
+    });
+}
+
+function transformNode(node) {
+    if (!Array.isArray(node.children)) return;
+
+    // A physical newline in an imported Obsidian paragraph is intentional.
+    // Apply this to every paragraph, including blockquotes and list items,
+    // instead of letting CommonMark collapse the newline into a space.
+    if (node.type === 'paragraph') {
+        preserveInlineBreaks(node);
         return;
     }
 
     for (const child of node.children) {
-        transformNode(child, node);
+        transformNode(child);
     }
 }
 
 export function remarkPreserveParagraphBreaks() {
     return (tree) => {
-        transformNode(tree, null);
+        transformNode(tree);
     };
 }
