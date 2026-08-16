@@ -7,7 +7,11 @@ source Markdown takes priority over rewriting or compacting it.
 
 - Preserve every intentional physical line break. Never join adjacent prose
   lines into one line, and never invent `-` markers to simulate line breaks.
-- Preserve blank lines and paragraph boundaries.
+- Preserve blank lines and paragraph boundaries. When Obsidian visually places
+  an unmarked, unindented paragraph outside a preceding list but CommonMark
+  would parse it as a lazy continuation, insert the blank separator required to
+  close the list in the imported target. Never repair this by adding a list
+  marker or indentation.
 - Preserve every blockquote marker (`>`) and its nesting depth. Obsidian
   callout markers such as `> [!note]` must stay inside the blockquote; do not
   turn quoted text into an ordinary paragraph or custom HTML card.

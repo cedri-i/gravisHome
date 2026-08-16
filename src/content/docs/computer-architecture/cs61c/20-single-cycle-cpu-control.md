@@ -8,6 +8,7 @@ description: UCB CS61C 单周期 CPU 控制逻辑笔记
 - CSRs are ~={yellow}**separate**=~ from the register file (`x0-31`)
 	- Used  for monitoring the status and performance
 	- There can be up to 4096 CSRs
+
 为了保持RISC-V 的基础 ISA 简洁，CSR 并不在其中（曾经在，但后来被删掉了）：它被拆成独立模块。但一个有用的 CPU 是离不开它的。它用于保存和控制处理器状态，如异常、中断、权限和性能计数等；还可以用于与协处理器（如浮点单元）或外围设备（如打印机）通信。
 ## CSR Instructions
 <a class="cs61c-note-image" href="/cs61c/20-csr-instruction-format.png" target="_blank" rel="noopener" aria-label="打开 CSR 指令编码格式原图">
@@ -35,6 +36,7 @@ description: UCB CS61C 单周期 CPU 控制逻辑笔记
 - 以上三种都属于 RV32i
 # Datapath Control
 - 处理器内部有两个主要单元：~={orange}数据通路=~和~={yellow}控制单元=~
+
 控制单元负责设置多路选择器们的和数据通路内其他的配置选项，以执行不同的指令。以下举几条指令的执行过程为例子：
 ## Examples
 ### `sw`
