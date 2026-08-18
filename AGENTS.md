@@ -17,6 +17,10 @@ source Markdown takes priority over rewriting or compacting it.
   turn quoted text into an ordinary paragraph or custom HTML card.
 - Preserve heading levels, list markers and indentation, fenced code blocks,
   tables, math delimiters, image order, captions, and intentional inline HTML.
+- Keep display-math delimiters compatible with the site parser: when Obsidian
+  places TeX on the same physical line as an opening or closing `$$`, move only
+  the delimiter onto its own line in the imported target. Preserve the formula
+  body exactly; otherwise remark-math may consume the remainder of the note.
 - Allowed transformations are limited to site frontmatter, routable internal
   links and asset paths, and corrections explicitly requested by the user.
 - Match the destination folder and frontmatter conventions of adjacent notes,

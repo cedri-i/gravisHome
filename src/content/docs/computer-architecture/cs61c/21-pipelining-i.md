@@ -41,7 +41,8 @@ description: UCB CS61C 流水线与处理器性能笔记
 
 # Processor Performance Iron Law
 这条“铁律”告诉我们根据机器和程序的一些基本参数，执行程序需要多长时间：
-$$\boxed{
+$$
+\boxed{
 \frac{\text{Time}}{\text{Program}}
 =
 \frac{\text{Instructions}}{\text{Program}}
@@ -49,7 +50,8 @@ $$\boxed{
 \frac{\text{Cycles}}{\text{Instruction}}
 \times
 \frac{\text{Time}}{\text{Cycle}}
-}$$
+}
+$$
 CPI = Cycles Per Instruction
 这些参数都不能单独分析，必须放在一起才能理解执行任务需要多长时间
 ## Instructions per Program
