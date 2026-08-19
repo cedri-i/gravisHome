@@ -449,7 +449,7 @@ mark {
 }
 
 .stack-map__header strong {
-    color: var(--sl-color-white);
+    color: var(--sl-color-text);
     font-size: clamp(1rem, 2vw, 1.25rem);
     font-weight: 560;
 }
@@ -3103,6 +3103,147 @@ body:has(.home-starsky) .home-theme-face-back {
 @media (prefers-reduced-motion: reduce) {
     .sl-markdown-content .cs61c-note-image,
     .sl-markdown-content .cs61c-note-image img {
+        transition: none;
+    }
+}
+
+/* CS61C overview: topic rail mirrors the datapath's ordered stages. */
+.sl-markdown-content .cs61c-course-outline {
+    --cs61c-outline-rail: color-mix(in srgb, var(--sl-color-text-accent) 44%, var(--sl-color-gray-5));
+    display: grid;
+    gap: .9rem;
+    width: min(100%, 46rem);
+    margin: 1.55rem 0 2rem;
+}
+
+.sl-markdown-content .cs61c-course-topic {
+    margin: 0;
+}
+
+.sl-markdown-content .cs61c-course-topic-title {
+    margin: 0 0 .42rem;
+    border: 0;
+    color: var(--sl-color-white);
+    font-family: var(--font-prose);
+    font-size: clamp(1.18rem, 1rem + .5vw, 1.48rem);
+    font-weight: 720;
+    letter-spacing: .015em;
+    line-height: 1.35;
+}
+
+.sl-markdown-content .cs61c-course-episodes,
+.sl-markdown-content .cs61c-course-singles {
+    display: grid;
+    gap: .08rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sl-markdown-content .cs61c-course-episodes {
+    position: relative;
+    margin-left: .32rem;
+    padding-left: 1.38rem;
+}
+
+.sl-markdown-content .cs61c-course-episodes::before {
+    content: "";
+    position: absolute;
+    top: .68rem;
+    bottom: .68rem;
+    left: .27rem;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--cs61c-outline-rail) 16% 84%, transparent);
+}
+
+.sl-markdown-content .cs61c-course-episodes li {
+    position: relative;
+    margin: 0;
+}
+
+.sl-markdown-content .cs61c-course-episodes li::before {
+    content: "";
+    position: absolute;
+    top: 1.02rem;
+    left: -1.3rem;
+    z-index: 1;
+    width: .38rem;
+    height: .38rem;
+    border: 1px solid var(--cs61c-outline-rail);
+    border-radius: 50%;
+    background: var(--sl-color-bg);
+    transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
+}
+
+.sl-markdown-content .cs61c-course-episodes li:has(a:hover)::before,
+.sl-markdown-content .cs61c-course-episodes li:has(a:focus-visible)::before {
+    border-color: var(--sl-color-text-accent);
+    background: var(--sl-color-text-accent);
+    box-shadow: 0 0 .62rem color-mix(in srgb, var(--sl-color-text-accent) 55%, transparent);
+}
+
+.sl-markdown-content .cs61c-course-singles {
+    padding-top: .74rem;
+    border-top: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 48%, transparent);
+}
+
+.sl-markdown-content .cs61c-course-outline a {
+    display: grid;
+    grid-template-columns: 2.1rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: .62rem;
+    padding: .42rem .48rem;
+    border-radius: .42rem;
+    color: var(--sl-color-text);
+    font-family: var(--font-prose);
+    line-height: 1.55;
+    text-decoration: none;
+    text-underline-offset: .18em;
+    transition: color .18s ease, translate .18s ease;
+}
+
+.sl-markdown-content .cs61c-course-outline a:hover {
+    color: var(--sl-color-text-accent);
+    text-decoration: underline;
+    translate: .12rem 0;
+}
+
+.sl-markdown-content .cs61c-course-outline a:focus-visible {
+    outline: 2px solid var(--sl-color-text-accent);
+    outline-offset: .12rem;
+}
+
+.sl-markdown-content .cs61c-course-number {
+    color: var(--sl-color-text-accent);
+    font-size: .86em;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: .04em;
+}
+
+@media (max-width: 34rem) {
+    .sl-markdown-content .cs61c-course-outline {
+        margin-top: 1.25rem;
+    }
+
+    .sl-markdown-content .cs61c-course-episodes {
+        padding-left: 1.15rem;
+    }
+
+    .sl-markdown-content .cs61c-course-episodes li::before {
+        left: -1.07rem;
+    }
+
+    .sl-markdown-content .cs61c-course-outline a {
+        grid-template-columns: 1.8rem minmax(0, 1fr);
+        gap: .48rem;
+        padding-inline: .28rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sl-markdown-content .cs61c-course-outline a,
+    .sl-markdown-content .cs61c-course-episodes li::before {
         transition: none;
     }
 }
