@@ -1,0 +1,207 @@
+---
+type ReplicaKind =
+    | 'stage-latency'
+    | 'instruction-latency'
+    | 'transport-comparison'
+    | 'processor-comparison'
+    | 'cmos-inverter'
+    | 'sequential-laundry'
+    | 'pipelined-laundry';
+
+interface Props {
+    kind: ReplicaKind;
+}
+
+const { kind } = Astro.props;
+
+const titles: Record<ReplicaKind, string> = {
+    'stage-latency': '五阶段延迟',
+    'instruction-latency': '不同指令的阶段与总延迟',
+    'transport-comparison': '交通与计算机性能指标',
+    'processor-comparison': '处理器 A / B 性能比较',
+    'cmos-inverter': 'CMOS 反相器的两种抽象',
+    'sequential-laundry': '顺序洗衣',
+    'pipelined-laundry': '流水线洗衣',
+};
+
+const laundryStages = [
+    { label: '洗', full: '清洗', tone: 'wash' },
+    { label: '烘', full: '烘干', tone: 'dry' },
+    { label: '叠', full: '折叠', tone: 'fold' },
+    { label: '收', full: '收纳', tone: 'store' },
+];
+
+const laundry = kind === 'sequential-laundry'
+    ? { slots: 16, starts: [1, 5, 9, 13], times: ['6 PM', '7', '8', '9', '10', '11', '12', '1', '2'] }
+    : { slots: 8, starts: [1, 2, 3, 4], times: ['6 PM', '7', '8', '9', '10'] };
+---
+
+<figure class:list={['cs61c-chart-replica', `cs61c-chart-replica--${kind}`]}>
+    <figcaption>
+        <span>网页复刻</span>
+        <strong>{titles[kind]}</strong>
+    </figcaption>
+
+    {kind === 'stage-latency' && (
+        <div class="cs61c-replica-scroll">
+            <table class="cs61c-replica-table cs61c-replica-table--stage" aria-label="五阶段延迟">
+                <thead>
+                    <tr>
+                        <th scope="col">IF</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">EX</th>
+                        <th scope="col">MEM</th>
+                        <th scope="col">WB</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>I-MEM</td>
+                        <td>Reg Read</td>
+                        <td>ALU</td>
+                        <td>D-MEM</td>
+                        <td>Reg W</td>
+                        <td aria-label="空"></td>
+                    </tr>
+                    <tr>
+                        <td>200 ps</td>
+                        <td>100 ps</td>
+                        <td>200 ps</td>
+                        <td>200 ps</td>
+                        <td>100 ps</td>
+                        <td class="cs61c-replica-total">800 ps</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    )}
+
+    {kind === 'instruction-latency' && (
+        <div class="cs61c-replica-scroll">
+            <table class="cs61c-replica-table cs61c-replica-table--instruction" aria-label="不同指令的阶段与总延迟">
+                <thead>
+                    <tr>
+                        <th scope="col">Instr</th>
+                        <th scope="col">IF = 200 ps</th>
+                        <th scope="col">ID = 100 ps</th>
+                        <th scope="col">ALU = 200 ps</th>
+                        <th scope="col">MEM = 200 ps</th>
+                        <th scope="col">WB = 100 ps</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><th scope="row">add</th><td>×</td><td>×</td><td>×</td><td></td><td>×</td><td>600 ps</td></tr>
+                    <tr><th scope="row">beq</th><td>×</td><td>×</td><td>×</td><td></td><td></td><td>500 ps</td></tr>
+                    <tr><th scope="row">jal</th><td>×</td><td>×</td><td>×</td><td></td><td>×</td><td>600 ps</td></tr>
+                    <tr class="cs61c-replica-highlight"><th scope="row">lw</th><td>×</td><td>×</td><td>×</td><td>×</td><td>×</td><td>800 ps</td></tr>
+                    <tr><th scope="row">sw</th><td></td><td>×</td><td>×</td><td>×</td><td></td><td>700 ps</td></tr>
+                </tbody>
+            </table>
+        </div>
+    )}
+
+    {kind === 'transport-comparison' && (
+        <div class="cs61c-replica-scroll">
+            <table class="cs61c-replica-table cs61c-replica-table--comparison" aria-label="交通与计算机性能指标">
+                <thead>
+                    <tr><th scope="col">Transportation</th><th scope="col">Computer</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Trip Time</td><td>Program execution time:<small>e.g. time to update display</small></td></tr>
+                    <tr><td>Time for 100 passengers</td><td>Throughput:<small>e.g. number of server requests handled per hour</small></td></tr>
+                    <tr><td>Gallons per passenger</td><td>Energy per task*:<small>e.g. how many movies you can watch per battery charge or energy bill for datacenter</small></td></tr>
+                </tbody>
+            </table>
+        </div>
+    )}
+
+    {kind === 'processor-comparison' && (
+        <div class="cs61c-replica-scroll">
+            <table class="cs61c-replica-table cs61c-replica-table--processor" aria-label="处理器 A 和处理器 B 性能比较">
+                <thead>
+                    <tr><th scope="col"></th><th scope="col">Processor A</th><th scope="col">Processor B</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th scope="row"># Instructions</th><td>1 Million</td><td>1.5 Million</td></tr>
+                    <tr><th scope="row">Average CPI</th><td>2.5</td><td>1</td></tr>
+                    <tr><th scope="row">Clock rate <i>f</i></th><td>2.5 GHz</td><td>2 GHz</td></tr>
+                    <tr><th scope="row">Execution time</th><td>1 ms</td><td class="cs61c-replica-best">0.75 ms</td></tr>
+                </tbody>
+            </table>
+        </div>
+    )}
+
+    {kind === 'cmos-inverter' && (
+        <div class="cs61c-circuit-wrap">
+            <svg class="cs61c-circuit" viewBox="0 0 920 390" role="img" aria-labelledby="cs61c-circuit-title cs61c-circuit-desc">
+                <title id="cs61c-circuit-title">CMOS 反相器符号与晶体管级原理图</title>
+                <desc id="cs61c-circuit-desc">左侧是带输出电容的反相器符号，右侧是 CMOS 反相器晶体管级结构，并标出漏电与电容充电。</desc>
+                <defs>
+                    <marker id="cs61c-circuit-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+                        <path d="M 0 0 L 10 5 L 0 10 z" class="cs61c-circuit-arrowhead"></path>
+                    </marker>
+                </defs>
+
+                <text class="cs61c-circuit-heading" x="26" y="38">Symbol (INV)</text>
+                <text class="cs61c-circuit-heading" x="500" y="38">Schematic</text>
+
+                <text class="cs61c-circuit-label" x="116" y="82">V<tspan baseline-shift="sub" font-size="18">DD</tspan></text>
+                <path class="cs61c-circuit-line" d="M 112 104 H 188 M 150 104 V 145"></path>
+                <text class="cs61c-circuit-label" x="34" y="205">A</text>
+                <path class="cs61c-circuit-line" d="M 58 194 H 126 L 126 148 L 214 194 L 126 240 V 194"></path>
+                <circle class="cs61c-circuit-node" cx="222" cy="194" r="9"></circle>
+                <path class="cs61c-circuit-line" d="M 231 194 H 322 M 150 240 V 282 M 112 282 H 188 M 123 294 H 177 M 137 306 H 163"></path>
+                <text class="cs61c-circuit-label" x="268" y="176">Out</text>
+                <path class="cs61c-circuit-line" d="M 292 194 V 224 M 260 224 H 324 M 260 242 H 324 M 292 242 V 282 M 254 282 H 330 M 267 294 H 317 M 281 306 H 303"></path>
+
+                <text class="cs61c-circuit-label" x="478" y="205">A</text>
+                <path class="cs61c-circuit-line" d="M 504 194 H 555 M 610 74 H 674 M 642 74 V 120 H 614 V 158 M 642 158 V 194 M 642 194 V 232 M 614 232 V 270 H 642 V 306 M 608 306 H 676 M 620 318 H 664 M 634 330 H 650 M 642 194 H 754"></path>
+                <path class="cs61c-circuit-line" d="M 555 150 H 590 M 555 238 H 590 M 590 130 V 176 M 590 218 V 260"></path>
+                <circle class="cs61c-circuit-node cs61c-circuit-node--gate" cx="600" cy="150" r="8"></circle>
+                <text class="cs61c-circuit-label" x="706" y="176">Out</text>
+                <path class="cs61c-circuit-line" d="M 724 194 V 226 M 692 226 H 756 M 692 244 H 756 M 724 244 V 286 M 686 286 H 762 M 699 298 H 749 M 713 310 H 735"></path>
+
+                <path class="cs61c-circuit-accent" marker-end="url(#cs61c-circuit-arrow)" d="M 622 258 C 616 292, 602 316, 580 338"></path>
+                <text class="cs61c-circuit-note" x="390" y="350">Leakage</text>
+                <path class="cs61c-circuit-accent cs61c-circuit-accent--dash" d="M 490 338 L 568 300"></path>
+
+                <path class="cs61c-circuit-accent" marker-end="url(#cs61c-circuit-arrow)" d="M 684 78 C 666 132, 718 132, 746 206"></path>
+                <path class="cs61c-circuit-accent cs61c-circuit-accent--dash" d="M 770 224 L 842 264"></path>
+                <text class="cs61c-circuit-note" x="744" y="294">Charging</text>
+                <text class="cs61c-circuit-note" x="744" y="328">capacitors</text>
+                <text class="cs61c-circuit-note" x="744" y="364">(CV²)</text>
+            </svg>
+        </div>
+    )}
+
+    {(kind === 'sequential-laundry' || kind === 'pipelined-laundry') && (
+        <div class="cs61c-laundry-scroll">
+            <div class="cs61c-laundry-board" style={`--cs61c-laundry-slots: ${laundry.slots}`}>
+                <div class="cs61c-laundry-corner">Task</div>
+                <div class="cs61c-laundry-axis" aria-label="时间轴">
+                    {laundry.times.map((time, index) => (
+                        <span style={`grid-column: ${index * 2 + 1} / span 2`}>{time}</span>
+                    ))}
+                </div>
+                {['A', 'B', 'C', 'D'].map((task, taskIndex) => (
+                    <>
+                        <div class="cs61c-laundry-task">{task}</div>
+                        <div class="cs61c-laundry-track">
+                            {laundryStages.map((stage, stageIndex) => (
+                                <span
+                                    class:list={['cs61c-laundry-stage', `cs61c-laundry-stage--${stage.tone}`]}
+                                    style={`grid-column: ${laundry.starts[taskIndex] + stageIndex}`}
+                                    title={`${task}：${stage.full}（30 分钟）`}
+                                >
+                                    {stage.label}<small>30</small>
+                                </span>
+                            ))}
+                        </div>
+                    </>
+                ))}
+            </div>
+        </div>
+    )}
+</figure>
