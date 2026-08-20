@@ -17,19 +17,9 @@ import CS61CChartReplica from '../../../../components/CS61CChartReplica.astro';
 # Measures of Performance
 ## Instruction Timing
 我们有一个性能指标，即在我们的单周期 RISC-V CPU 中执行一条指令所需的~=\{cyan}最小周期时间=~。我们通过测量五个执行阶段中每个阶段所需的时间来确定这个时间。
-<a class="cs61c-note-image" href="/cs61c/21-instruction-timing-stages.png" target="_blank" rel="noopener" aria-label="打开指令执行阶段原图">
-  <img src="/cs61c/21-instruction-timing-stages.png" alt="指令执行阶段" loading="lazy" decoding="async" />
-  <span aria-hidden="true">↗ 原图</span>
-</a>
-
 <CS61CChartReplica kind="stage-latency" />
 
 并不是每条指令都会经历所有五个执行阶段：我们发现只有 `lw` 指令会经历所有五个执行阶段。
-<a class="cs61c-note-image" href="/cs61c/21-single-cycle-instruction-timings.png" target="_blank" rel="noopener" aria-label="打开单周期指令时序原图">
-  <img src="/cs61c/21-single-cycle-instruction-timings.png" alt="单周期指令时序" loading="lazy" decoding="async" />
-  <span aria-hidden="true">↗ 原图</span>
-</a>
-
 <CS61CChartReplica kind="instruction-latency" />
 
 按照这个标准，我们的单周期 CPU 每秒可以完成 12.5 条指令。
@@ -40,11 +30,6 @@ import CS61CChartReplica from '../../../../components/CS61CChartReplica.astro';
 	- 消耗的~=\{red}能量=~
 
 与交通对比理解：
-<a class="cs61c-note-image" href="/cs61c/21-performance-perspectives-traffic.png" target="_blank" rel="noopener" aria-label="打开交通类比性能视角原图">
-  <img src="/cs61c/21-performance-perspectives-traffic.png" alt="交通类比性能视角" loading="lazy" decoding="async" />
-  <span aria-hidden="true">↗ 原图</span>
-</a>
-
 <CS61CChartReplica kind="transport-comparison" />
 
 # Processor Performance Iron Law
@@ -87,11 +72,6 @@ Determined by
 - Power budget
 	- Lower voltages reduce transistor speed
 ## Example
-<a class="cs61c-note-image" href="/cs61c/21-processor-performance-example.png" target="_blank" rel="noopener" aria-label="打开处理器性能铁律示例原图">
-  <img src="/cs61c/21-processor-performance-example.png" alt="处理器性能铁律示例" loading="lazy" decoding="async" />
-  <span aria-hidden="true">↗ 原图</span>
-</a>
-
 <CS61CChartReplica kind="processor-comparison" />
 
 对于这个任务，处理器 B 是更好的选择——即使它要执行的指令更多，每一个时钟周期也更长。
@@ -105,8 +85,6 @@ Determined by
   <img src="/cs61c/21-cmos-inverter-abstractions.png" alt="CMOS 反相器抽象层次" loading="lazy" decoding="async" />
   <span aria-hidden="true">↗ 原图</span>
 </a>
-
-<CS61CChartReplica kind="cmos-inverter" />
 
 上面两张图是反相器不同的抽象级别。 
 我们在反相器中使用的每个晶体管都有其输入和输出电容。因此，每当我们试图将输出电平从 0 切换到 1 时，我们必须给电容器充电。该电容器由位于该反相器输出端的电容以及任何位于该反相器下游的、由该反相器驱动的反相器输入端的电容组成。这个过程的能量损耗就是当今 CMOS 技术中功耗的主要部分。
@@ -148,12 +126,8 @@ $$
   <span aria-hidden="true">↗ 原图</span>
 </a>
 
-<CS61CChartReplica kind="sequential-laundry" />
-
 ### Pipelined Laundry
 <a class="cs61c-note-image" href="/cs61c/21-pipelined-laundry.png" target="_blank" rel="noopener" aria-label="打开流水线洗衣示例原图">
   <img src="/cs61c/21-pipelined-laundry.png" alt="流水线洗衣示例" loading="lazy" decoding="async" />
   <span aria-hidden="true">↗ 原图</span>
 </a>
-
-<CS61CChartReplica kind="pipelined-laundry" />
