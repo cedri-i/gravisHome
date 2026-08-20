@@ -3272,13 +3272,16 @@ body:has(.home-starsky) .home-theme-face-back {
 }
 
 .sl-markdown-content .cs61c-replica-scroll {
+    width: 100%;
     max-width: 100%;
     overflow-x: auto;
     scrollbar-color: rgba(98, 216, 255, .45) rgba(5, 12, 27, .5);
 }
 
 .sl-markdown-content .cs61c-replica-table {
-    width: 100%;
+    display: table;
+    width: 100% !important;
+    max-width: none;
     margin: 0;
     border: 0;
     border-collapse: collapse;
