@@ -3271,30 +3271,6 @@ body:has(.home-starsky) .home-theme-face-back {
     overflow: hidden;
 }
 
-.sl-markdown-content .cs61c-chart-replica > figcaption {
-    display: flex;
-    align-items: baseline;
-    gap: .72rem;
-    margin: 0;
-    border-bottom: 1px solid rgba(154, 169, 189, .22);
-    padding: .62rem .85rem .58rem;
-    font-family: var(--font-prose);
-    line-height: 1.35;
-}
-
-.sl-markdown-content .cs61c-chart-replica > figcaption span {
-    color: var(--cs61c-replica-cyan);
-    font-size: .7rem;
-    font-weight: 750;
-    letter-spacing: .12em;
-}
-
-.sl-markdown-content .cs61c-chart-replica > figcaption strong {
-    color: var(--cs61c-replica-ink);
-    font-size: .88rem;
-    font-weight: 650;
-}
-
 .sl-markdown-content .cs61c-replica-scroll {
     max-width: 100%;
     overflow-x: auto;
@@ -3395,10 +3371,6 @@ body:has(.home-starsky) .home-theme-face-back {
     .sl-markdown-content .cs61c-chart-replica {
         margin-bottom: 1.45rem;
         border-radius: .56rem;
-    }
-
-    .sl-markdown-content .cs61c-chart-replica > figcaption {
-        padding-inline: .68rem;
     }
 }
 

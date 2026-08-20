@@ -10,21 +10,9 @@ interface Props {
 }
 
 const { kind } = Astro.props;
-
-const titles: Record<ReplicaKind, string> = {
-    'stage-latency': '五阶段延迟',
-    'instruction-latency': '不同指令的阶段与总延迟',
-    'transport-comparison': '交通与计算机性能指标',
-    'processor-comparison': '处理器 A / B 性能比较',
-};
 ---
 
 <figure class:list={['cs61c-chart-replica', `cs61c-chart-replica--${kind}`]}>
-    <figcaption>
-        <span>网页表格</span>
-        <strong>{titles[kind]}</strong>
-    </figcaption>
-
     {kind === 'stage-latency' && (
         <div class="cs61c-replica-scroll">
             <table class="cs61c-replica-table cs61c-replica-table--stage" aria-label="五阶段延迟">
