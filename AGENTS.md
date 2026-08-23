@@ -1,33 +1,86 @@
-# Repository working rules
+# 仓库工作规则
 
-## Obsidian note imports (mandatory)
+## 新笔记导入格式公约（强制）
 
-When importing or updating a note from the Obsidian repository, fidelity to the
-source Markdown takes priority over rewriting or compacting it.
+本公约适用于从 `D:\MainObsidianRepo` 向本站导入或更新任何 Obsidian 笔记。
+新对话开始工作前必须先遵守本文件；原始 Markdown 是内容与结构的唯一依据。
 
-- Preserve every intentional physical line break. Never join adjacent prose
-  lines into one line, and never invent `-` markers to simulate line breaks.
-- Preserve blank lines and paragraph boundaries. When Obsidian visually places
-  an unmarked, unindented paragraph outside a preceding list but CommonMark
-  would parse it as a lazy continuation, insert the blank separator required to
-  close the list in the imported target. Never repair this by adding a list
-  marker or indentation.
-- Preserve every blockquote marker (`>`) and its nesting depth. Obsidian
-  callout markers such as `> [!note]` must stay inside the blockquote; do not
-  turn quoted text into an ordinary paragraph or custom HTML card.
-- Preserve heading levels, list markers and indentation, fenced code blocks,
-  tables, math delimiters, image order, captions, and intentional inline HTML.
-- Keep display-math delimiters compatible with the site parser: when Obsidian
-  places TeX on the same physical line as an opening or closing `$$`, move only
-  the delimiter onto its own line in the imported target. Preserve the formula
-  body exactly; otherwise remark-math may consume the remainder of the note.
-- Allowed transformations are limited to site frontmatter, routable internal
-  links and asset paths, and corrections explicitly requested by the user.
-- Match the destination folder and frontmatter conventions of adjacent notes,
-  but do not rephrase, summarize, or reorder the note body.
-- After an import, inspect the Markdown diff and run both
-  `npm run check:note-format` and `npm run build`.
+### 1. 基本原则
 
-The site converts soft newlines inside all Markdown paragraphs—including
-paragraphs in blockquotes and list items—into visible line breaks. Do not remove
-those source newlines during import.
+- 导入的目标是忠实呈现原笔记，不是重写、润色、总结或重新组织。
+- 不得擅自增加导语、总结、解释、提示、标签、徽标、图注或“网页复刻”等文字。
+- 不得为了“更美观”改变原文顺序、标题层级、段落边界、列表结构或图片位置。
+- 除非用户明确要求，不得纠正事实、拼写、标点或代码；发现疑似错误时应先指出。
+- 允许的变换仅包括：站点 frontmatter、可访问的内部链接、资源路径、站点解析兼容处理，以及用户明确要求的修改。
+
+### 2. 文件位置、命名与导航
+
+- 先检查相邻笔记，沿用同一课程的目录、frontmatter、文件命名和资源命名方式。
+- 页面显示标题中的下划线 `_` 应改为空格；路由文件名使用小写连字符形式。
+- 新笔记必须进入正确课程与子栏目，不得放入临时目录或相邻但错误的课程。
+- 同步更新课程 Overview 和侧栏目录；同一主题的连续课程应组成分组，而不是散列为互不相关的项目。
+- Overview 课程入口使用现有的简洁列表/分组形式，不擅自改成卡片或添加说明文案。
+- 目录顺序必须与课程编号和前后篇关系一致，并检查上一页、下一页导航是否合理。
+
+### 3. 物理换行与段落
+
+- 保留每一个有意的物理换行；绝不把相邻正文行合并成一行。
+- 保留所有空行和段落边界；不得把多个段落压缩成一个段落。
+- 不得发明 `-`、序号或缩进来模拟原本的换行。
+- 当 Obsidian 将无标记、无缩进的段落显示在列表外，而 CommonMark 会把它解析为上一列表项的 lazy continuation 时，只插入结束列表所需的空行。
+- 上述兼容修复不得通过增加列表标记或缩进完成。
+- 本站会把段落、引用和列表项内部的 soft newline 显示为可见换行，因此绝不能删除源文件中的 soft newline。
+
+### 4. 标题、列表、引用与代码
+
+- 原样保留标题级别、标题顺序和标题文字；不得为了右侧目录自行升降级。
+- 原样保留列表标记、编号、嵌套深度、Tab/空格缩进及列表间的空行。
+- 原样保留每一个 `>` 及其嵌套深度；普通引用和 Obsidian callout 都不能改写成普通段落或自制 HTML 卡片。
+- `> [!note]` 等 callout 标记必须继续位于引用块内部。
+- 原样保留 fenced code block 的围栏、语言、内容、缩进和换行。
+- 原样保留表格、脚注、内联 HTML、强调、删除线、颜色标记及其他有意的 Markdown 语法。
+
+### 5. 数学公式与 MDX
+
+- 原样保留公式正文、命令、对齐方式和数学含义。
+- 若 Obsidian 把 TeX 与开头或结尾的 `$$` 写在同一物理行，只把 `$$` 移到独立行；公式正文不得改写。
+- 不得把显示公式擅自改为行内公式，或反向转换。
+- 普通笔记优先使用 `.md`；只有确实需要 Astro 组件时才使用 `.mdx`。
+- 在 MDX 中，为避免 `{yellow}` 被当作表达式，Obsidian 颜色语法应做解析兼容转义，例如 `~={yellow}` 写为 `~=\{yellow}`；最终视觉效果必须保持不变。
+- 构建后检查不得出现原始 TeX、HTML 或 MDX 表达式泄漏到页面正文。
+
+### 6. 图片与图表
+
+- 保留图片出现顺序、对应段落、原始比例和完整内容；不得裁剪、拉伸、重绘或擅自改变信息。
+- 将图片复制到相应课程的站点资源目录，并使用清晰、稳定、无空格的资源文件名。
+- 独立图片默认顶格放置，不增加正文缩进；若原图明确属于引用或列表结构，则保留其原始语义位置。
+- 沿用相邻 CS61C 笔记的可点击原图样式：图片本身不悬浮，右上角只保留紧凑的打开按钮。
+- 不得在图片上下擅自增加“原图”“网页复刻”、标题、解释或说明文字；已有正文中的图注必须保留。
+- 只有纯文字/数据、横平竖直的规则网格表格才可替换为 HTML 表格。
+- 如果单元格内含流程图、元件、箭头、时序、图标、波形或其他图示，即使外观像表格，也必须保留原图。
+- 替换表格时直接用网页表格替代原图，不同时显示两份；不得添加表格名称栏或额外描述。
+- 网页表格必须完整复现单元格文字、空单元格、行列结构和有意义的高亮；桌面端填满正文背景，移动端允许横向滚动，不得留下右侧空白。
+
+### 7. 字体与视觉样式
+
+- 正文继承站点统一的 Maple Mono + 霞鹜文楷字体体系。
+- 笔记标题、Markdown 标题、侧栏、右侧目录、搜索和翻页区域沿用站点既有规则。
+- 已明确使用柳体或其他专门字体的标题/区域不得覆盖。
+- 新导入笔记不得新增专属字体、渐变、卡片、动画或装饰；只有用户明确要求时才设计。
+- 引用块使用站点统一引用样式，不为单篇笔记制作体积更大的特殊引用组件。
+
+### 8. 导入后的核对
+
+- 对照源文件逐段检查：物理换行、空行、段落、标题、列表、引用、代码、公式、图片和链接必须一致。
+- 检查 Markdown diff；除允许变换和用户要求外，不应出现正文措辞变化。
+- 检查所有内部链接、图片路径、Overview、侧栏目录和前后页导航。
+- 运行 `npm run check:note-format`。
+- 使用 Node 22 运行 `npm run build`，并确认目标页面成功生成。
+- 若修改涉及图片或自定义组件，检查生成后的 HTML，必要时进行桌面和移动端视觉验收。
+
+### 9. Git 与并行对话
+
+- 工作树中既有的修改可能属于用户或其他对话；不得覆盖、删除、回退或顺手提交。
+- 只暂存本次任务涉及的文件；共享文件存在无关修改时必须使用部分暂存，禁止把他人的修改混入提交。
+- 不使用 `git reset --hard`、`git checkout --` 等破坏性命令处理用户修改。
+- 只有在格式检查和完整构建通过后才能提交、推送。

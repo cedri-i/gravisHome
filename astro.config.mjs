@@ -374,8 +374,22 @@ if (document.readyState === 'loading') {
                                             link: '/computer-architecture/cs61c/20-single-cycle-cpu-control/',
                                         },
                                         {
-                                            label: '21 Pipelining I',
-                                            link: '/computer-architecture/cs61c/21-pipelining-i/',
+                                            label: 'Pipelining',
+                                            collapsed: false,
+                                            items: [
+                                                {
+                                                    label: '21 Pipelining I',
+                                                    link: '/computer-architecture/cs61c/21-pipelining-i/',
+                                                },
+                                                {
+                                                    label: '22 Pipelining II',
+                                                    link: '/computer-architecture/cs61c/22-pipelining-ii/',
+                                                },
+                                                {
+                                                    label: '23 Pipelining III',
+                                                    link: '/computer-architecture/cs61c/23-pipelining-iii/',
+                                                },
+                                            ],
                                         },
                                     ],
                                 },
