@@ -1,0 +1,368 @@
+/*
+ * Reversible navigation-atlas layer.
+ * Rollback: remove this file from `customCss` in astro.config.mjs, then delete
+ * this file and /public/cards/baiyun-fish.svg. The original card system remains intact.
+ */
+
+:root {
+    --notes-atlas-route: color-mix(in srgb, var(--sl-color-accent) 40%, var(--sl-color-gray-4));
+    --notes-atlas-muted: color-mix(in srgb, var(--sl-color-gray-2) 88%, transparent);
+}
+
+.notes-card-grid {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(0.15rem, 1vw, 0.75rem);
+    width: 100%;
+    max-width: 50rem;
+    margin: clamp(1.25rem, 3vw, 2.4rem) auto 0;
+    padding: 0.4rem clamp(0.25rem, 1.5vw, 1rem) 2.2rem;
+}
+
+/* One quiet route is the only decorative structure on the page. */
+.notes-card-grid::before {
+    position: absolute;
+    inset: 0.5rem 0 0;
+    z-index: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 700' preserveAspectRatio='none'%3E%3Cpath d='M70 124 C 260 18 405 205 553 131 S 832 23 933 162 C 1016 277 806 310 701 378 S 618 596 495 626 C 364 658 249 556 278 444 S 177 274 69 334' fill='none' stroke='%237dd3fc' stroke-opacity='.25' stroke-width='2' stroke-dasharray='4 11'/%3E%3Ccircle cx='70' cy='124' r='4' fill='%23a78bfa' fill-opacity='.42'/%3E%3Ccircle cx='933' cy='162' r='4' fill='%2338bdf8' fill-opacity='.42'/%3E%3Ccircle cx='495' cy='626' r='5' fill='%2322d3ee' fill-opacity='.38'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    content: "";
+    opacity: 0.72;
+    pointer-events: none;
+}
+
+.notes-link-card {
+    --notes-atlas-accent: var(--sl-color-text-accent);
+    --notes-atlas-art: none;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: center;
+    min-height: clamp(9.4rem, 13vw, 11rem);
+    margin: 0;
+    padding: clamp(1.05rem, 2vw, 1.55rem) clamp(10rem, 14vw, 12.2rem) clamp(1.05rem, 2vw, 1.55rem) 0.72rem;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--sl-color-text);
+    box-shadow: none;
+    filter: none;
+    text-decoration: none;
+    transform: none;
+    transition: color 220ms ease;
+}
+
+.notes-link-card:nth-child(2),
+.notes-link-card:nth-child(4) {
+    padding-right: 0.72rem;
+    padding-left: clamp(10rem, 14vw, 12.2rem);
+}
+
+.notes-link-card:nth-child(5) {
+    grid-column: auto;
+    justify-self: stretch;
+    width: 100%;
+    margin-top: 0;
+}
+
+.notes-link-card:nth-child(2)::before,
+.notes-link-card:nth-child(4)::before {
+    right: auto;
+    left: 0.25rem;
+}
+
+.notes-link-card:nth-child(2)::after,
+.notes-link-card:nth-child(4)::after {
+    right: auto;
+    left: clamp(10rem, 14vw, 12.2rem);
+}
+
+.notes-link-card::before {
+    position: absolute;
+    inset: 50% 0.25rem auto auto;
+    width: clamp(8.2rem, 12vw, 10.2rem);
+    height: clamp(6.6rem, 10vw, 8.2rem);
+    background: var(--notes-atlas-art) center / contain no-repeat;
+    content: "";
+    opacity: 0.58;
+    filter: saturate(0.92) brightness(1.08) drop-shadow(0 0.75rem 1.6rem color-mix(in srgb, var(--notes-atlas-accent) 14%, transparent));
+    pointer-events: none;
+    transform: translateY(-50%);
+    transform-origin: center;
+    transition: opacity 240ms ease, transform 320ms cubic-bezier(0.2, 0.75, 0.25, 1), filter 240ms ease;
+}
+
+/* A small waypoint, not a card edge. */
+.notes-link-card::after {
+    position: absolute;
+    inset: auto auto 1.12rem 0.72rem;
+    width: 1.85rem;
+    height: 1px;
+    border: 0;
+    border-radius: 0;
+    background: linear-gradient(90deg, var(--notes-atlas-accent), transparent);
+    content: "";
+    opacity: 0.32;
+    pointer-events: none;
+    transform: none;
+    transition: width 240ms ease, opacity 240ms ease;
+}
+
+.notes-link-card-systems {
+    --notes-atlas-accent: #55d7b6;
+    --notes-atlas-art: url('/cards/computer-systems.svg');
+}
+
+.notes-link-card-intro {
+    --notes-atlas-accent: #55c9f2;
+    --notes-atlas-art: url('/cards/computer-intro.svg');
+}
+
+.notes-link-card-algorithms {
+    --notes-atlas-accent: #a990ff;
+    --notes-atlas-art: url('/cards/data-structures-algorithms.svg');
+}
+
+.notes-link-card-architecture {
+    --notes-atlas-accent: #72d7e7;
+    --notes-atlas-art: url('/cards/computer-architecture.svg');
+}
+
+.notes-link-card-baiyun {
+    --notes-atlas-accent: #8ccbe2;
+    --notes-atlas-art: url('/cards/baiyun-fish.svg');
+}
+
+.notes-link-card-title,
+.notes-link-card-description {
+    position: relative;
+    z-index: 1;
+    display: block;
+}
+
+.notes-link-card-title {
+    width: fit-content;
+    max-width: 20ch;
+    color: var(--sl-color-text);
+    font-family: var(--font-prose);
+    font-size: clamp(1.26rem, 1rem + 0.65vw, 1.58rem);
+    font-weight: 680;
+    line-height: 1.28;
+    letter-spacing: 0.005em;
+    transition: color 220ms ease, transform 220ms ease;
+}
+
+.notes-link-card-title::after {
+    display: inline-block;
+    margin-inline-start: 0.46rem;
+    color: var(--notes-atlas-accent);
+    content: "↗";
+    font-family: var(--font-ui);
+    font-size: 0.72em;
+    opacity: 0;
+    transform: translate(-0.35rem, 0.08rem);
+    transition: opacity 200ms ease, transform 220ms ease;
+}
+
+.notes-link-card-description {
+    max-width: 32ch;
+    margin-top: 0.62rem;
+    color: var(--notes-atlas-muted);
+    font-family: var(--font-prose);
+    font-size: clamp(0.88rem, 0.82rem + 0.2vw, 0.98rem);
+    font-weight: 460;
+    line-height: 1.7;
+    letter-spacing: -0.012em;
+}
+
+.notes-link-card-arrow {
+    display: none;
+}
+
+.notes-link-card:hover,
+.notes-link-card:focus-visible {
+    border: 0;
+    background: transparent;
+    color: var(--sl-color-text);
+    box-shadow: none;
+    filter: none;
+    transform: none;
+}
+
+.notes-link-card:hover::before,
+.notes-link-card:focus-visible::before {
+    opacity: 0.9;
+    filter: saturate(1.08) brightness(1.14) drop-shadow(0 1rem 2rem color-mix(in srgb, var(--notes-atlas-accent) 22%, transparent));
+    transform: translate(0.5rem, -50%) scale(1.035);
+}
+
+.notes-link-card:hover::after,
+.notes-link-card:focus-visible::after {
+    width: 3.5rem;
+    opacity: 0.72;
+}
+
+.notes-link-card:hover .notes-link-card-title,
+.notes-link-card:focus-visible .notes-link-card-title {
+    color: color-mix(in srgb, var(--notes-atlas-accent) 72%, var(--sl-color-text));
+    transform: translateX(0.16rem);
+}
+
+.notes-link-card:hover .notes-link-card-title::after,
+.notes-link-card:focus-visible .notes-link-card-title::after {
+    opacity: 0.92;
+    transform: translate(0, 0.08rem);
+}
+
+.notes-link-card:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--notes-atlas-accent) 72%, transparent);
+    outline-offset: 0.45rem;
+}
+
+:root[data-theme='light'] .notes-card-grid::before {
+    opacity: 0.5;
+    filter: saturate(0.72) brightness(0.82);
+}
+
+:root[data-theme='light'] .notes-link-card::before {
+    opacity: 0.7;
+    filter: saturate(0.78) brightness(0.88) drop-shadow(0 0.75rem 1.4rem color-mix(in srgb, var(--notes-atlas-accent) 13%, transparent));
+}
+
+@media (max-width: 49.999rem) {
+    .notes-card-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding-inline: clamp(0.5rem, 4vw, 2rem);
+    }
+
+    .notes-card-grid::before {
+        inset: 1.2rem auto 1rem 0.75rem;
+        width: 1px;
+        background: repeating-linear-gradient(to bottom, var(--notes-atlas-route) 0 4px, transparent 4px 12px);
+        opacity: 0.38;
+    }
+
+    .notes-link-card,
+    .notes-link-card:nth-child(2),
+    .notes-link-card:nth-child(4),
+    .notes-link-card:nth-child(5) {
+        grid-column: auto;
+        justify-self: stretch;
+        width: 100%;
+        min-height: 10rem;
+        margin: 0;
+        padding-left: 2.1rem;
+    }
+
+    .notes-link-card::after {
+        inset: 50% auto auto 0.5rem;
+        width: 0.52rem;
+        height: 0.52rem;
+        border: 1px solid var(--notes-atlas-accent);
+        border-radius: 50%;
+        background: var(--sl-color-bg);
+        opacity: 0.72;
+        transform: translate(-50%, -50%);
+    }
+
+    .notes-link-card:hover::after,
+    .notes-link-card:focus-visible::after {
+        width: 0.68rem;
+        height: 0.68rem;
+        opacity: 1;
+    }
+}
+
+@media (max-width: 49.999rem) {
+    .notes-card-grid {
+        gap: 0.2rem;
+        margin-top: 1.1rem;
+        padding: 0.6rem 0 1.1rem 1rem;
+    }
+
+    .notes-card-grid::before {
+        left: 0.24rem;
+    }
+
+    .notes-link-card,
+    .notes-link-card:nth-child(2),
+    .notes-link-card:nth-child(4),
+    .notes-link-card:nth-child(5) {
+        min-height: 8.4rem;
+        padding: 1rem 6.35rem 1rem 1.35rem;
+    }
+
+    .notes-link-card::before {
+        right: 0.1rem;
+        width: 5.8rem;
+        height: 5.6rem;
+        opacity: 0.6;
+    }
+
+    .notes-link-card:nth-child(2)::before,
+    .notes-link-card:nth-child(4)::before {
+        right: 0.1rem;
+        left: auto;
+    }
+
+    .notes-link-card::after {
+        left: -0.76rem;
+    }
+
+    .notes-link-card-title {
+        max-width: 100%;
+        font-size: 1.16rem;
+    }
+
+    .notes-link-card-description {
+        max-width: 100%;
+        margin-top: 0.42rem;
+        font-size: 0.86rem;
+        line-height: 1.56;
+    }
+}
+
+/* Keep the page hand-off as quiet as the atlas itself. */
+html:has(.notes-card-grid) .pagination-links > a {
+    width: fit-content;
+    min-height: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0.55rem 0;
+    justify-self: end;
+    transition: color 180ms ease, transform 180ms ease;
+}
+
+html:has(.notes-card-grid) .pagination-links > a:hover,
+html:has(.notes-card-grid) .pagination-links > a:focus-visible {
+    color: var(--sl-color-text-accent);
+    transform: translateX(0.2rem);
+}
+
+html:has(.notes-card-grid) .pagination-links .link-title {
+    font-size: 1rem;
+}
+
+@media (max-width: 49.999rem) {
+    html:has(.notes-card-grid) .pagination-links {
+        padding-inline: 1rem;
+    }
+
+    html:has(.notes-card-grid) .pagination-links > a {
+        padding-block: 0.3rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .notes-link-card,
+    .notes-link-card::before,
+    .notes-link-card::after,
+    .notes-link-card-title,
+    .notes-link-card-title::after {
+        transition: none;
+    }
+}

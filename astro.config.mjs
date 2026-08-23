@@ -43,10 +43,17 @@ export default defineConfig({
                 minHeadingLevel: 1,
                 maxHeadingLevel: 3,
             },
-            customCss: ['./src/styles/custom.css', './src/styles/home-entry.css', './src/styles/collapsible-headings.css'],
+            customCss: [
+                './src/styles/custom.css',
+                './src/styles/home-entry.css',
+                './src/styles/collapsible-headings.css',
+                './src/styles/mobile-reading.css',
+                './src/styles/notes-atlas.css',
+            ],
             head: [
                 { tag: 'script', attrs: { type: 'module', src: '/seasonal-world.js' } },
                 { tag: 'script', attrs: { type: 'module', src: '/collapsible-headings.js' } },
+                { tag: 'script', attrs: { type: 'module', src: '/mobile-reading.js' } },
                 {
                     tag: 'script',
                     attrs: { type: 'module' },

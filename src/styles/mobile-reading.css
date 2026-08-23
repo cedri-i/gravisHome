@@ -1,0 +1,415 @@
+/*
+ * Mobile is a focused reading surface, not a compressed desktop layout.
+ * This file loads last so the responsive system stays easy to audit.
+ */
+
+.mobile-table-cue {
+    display: none;
+}
+
+@media (max-width: 49.999rem) {
+    :root {
+        --mobile-reading-gutter: clamp(1rem, 4.6vw, 1.28rem);
+        --mobile-reading-radius: 0.82rem;
+        --mobile-reading-rule: color-mix(in srgb, var(--sl-color-gray-4) 34%, transparent);
+        --mobile-reading-surface: color-mix(in srgb, var(--sl-color-bg) 91%, transparent);
+        --sl-text-h1: clamp(1.54rem, 6vw, 1.68rem);
+        --sl-text-h2: clamp(1.3rem, 5.2vw, 1.45rem);
+        --sl-text-h3: clamp(1.14rem, 4.4vw, 1.28rem);
+        --sl-text-h4: clamp(1.02rem, 4vw, 1.12rem);
+        scroll-padding-top: calc(var(--sl-nav-height) + var(--sl-mobile-toc-height) + 0.85rem);
+    }
+
+    .page,
+    .main-frame,
+    main {
+        max-width: 100%;
+        overflow-x: clip;
+    }
+
+    body:not(:has(.home-starsky)) main:not(:has(.baiyun-meta)) {
+        background: var(--mobile-reading-surface);
+    }
+
+    body:not(:has(.home-starsky)) .content-panel {
+        padding: 1.1rem var(--mobile-reading-gutter) 1.35rem;
+    }
+
+    body:not(:has(.home-starsky)) .content-panel + .content-panel {
+        border-top-color: var(--mobile-reading-rule);
+    }
+
+    .content-panel > .sl-container {
+        width: 100%;
+        max-width: none;
+    }
+
+    /* The fixed mobile TOC becomes the page's single navigational signature. */
+    mobile-starlight-toc nav {
+        border-top: 0;
+        background: color-mix(in srgb, var(--sl-color-bg-nav) 86%, transparent);
+        box-shadow: 0 0.45rem 1.4rem color-mix(in srgb, #000 10%, transparent);
+        backdrop-filter: blur(1rem) saturate(1.18);
+    }
+
+    mobile-starlight-toc summary {
+        gap: 0.72rem;
+        padding-inline: var(--mobile-reading-gutter);
+        border-bottom-color: var(--mobile-reading-rule);
+        font-family: var(--font-prose);
+    }
+
+    mobile-starlight-toc .toggle {
+        gap: 0.42rem;
+        border-color: color-mix(in srgb, var(--sl-color-accent) 24%, var(--sl-color-gray-5));
+        border-radius: 999px;
+        padding: 0.5rem 0.62rem 0.5rem 0.74rem;
+        background: color-mix(in srgb, var(--sl-color-bg-inline-code) 78%, transparent);
+        color: var(--sl-color-gray-2);
+        font-size: 0.74rem;
+        font-weight: 650;
+        letter-spacing: 0.035em;
+    }
+
+    mobile-starlight-toc details[open] .toggle {
+        color: var(--sl-color-text);
+        background: color-mix(in srgb, var(--sl-color-accent-low) 78%, transparent);
+    }
+
+    mobile-starlight-toc .display-current {
+        min-width: 0;
+        color: var(--sl-color-text);
+        font-family: var(--font-prose);
+        font-size: 0.78rem;
+        font-weight: 580;
+        letter-spacing: 0.012em;
+    }
+
+    mobile-starlight-toc .dropdown {
+        border-inline: 0;
+        background: color-mix(in srgb, var(--sl-color-bg) 96%, transparent);
+        backdrop-filter: blur(1rem);
+    }
+
+    /* Give the menu button its corner back: the sky switch moves to the thumb zone. */
+    #sky-toggle {
+        top: auto;
+        right: max(0.86rem, env(safe-area-inset-right));
+        bottom: max(0.86rem, env(safe-area-inset-bottom));
+        width: 2.72rem;
+        height: 2.72rem;
+        border: 1px solid color-mix(in srgb, var(--sl-color-gray-3) 34%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--sl-color-bg-nav) 88%, transparent);
+        box-shadow: 0 0.65rem 1.8rem color-mix(in srgb, #000 22%, transparent);
+        backdrop-filter: blur(0.8rem) saturate(1.15);
+        z-index: var(--sl-z-index-toc);
+    }
+
+    #sky-toggle::before {
+        display: none;
+    }
+
+    #sky-toggle span {
+        top: 50%;
+        bottom: auto;
+        font-size: 1.16rem;
+        line-height: 1;
+        transform: translate(-50%, -50%);
+    }
+
+    #sky-toggle:focus-visible {
+        outline: 2px solid var(--sl-color-accent-high);
+        outline-offset: 0.2rem;
+    }
+
+    /* Mobile type hierarchy: compact titles, generous body rhythm. */
+    .content-panel > .sl-container > h1,
+    .content-panel > .sl-container > header h1,
+    .sl-markdown-content :is(h1, h2, h3, h4) {
+        max-width: 100%;
+        text-wrap: balance;
+        overflow-wrap: anywhere;
+    }
+
+    .content-panel > .sl-container > h1,
+    .content-panel > .sl-container > header h1 {
+        font-size: clamp(1.72rem, 7.2vw, 2rem);
+        line-height: 1.16;
+        letter-spacing: -0.022em;
+    }
+
+    .sl-markdown-content {
+        font-size: 0.98rem;
+    }
+
+    .sl-markdown-content h1 {
+        margin-top: 1.8rem;
+        line-height: 1.18;
+    }
+
+    .sl-markdown-content h2 {
+        margin-top: 2.15rem;
+        padding-top: 0.18rem;
+        line-height: 1.24;
+    }
+
+    .sl-markdown-content h3 {
+        margin-top: 1.75rem;
+        line-height: 1.3;
+    }
+
+    .sl-markdown-content h4 {
+        margin-top: 1.45rem;
+        line-height: 1.36;
+    }
+
+    .sl-markdown-content p,
+    .sl-markdown-content li {
+        line-height: 1.74;
+    }
+
+    .sl-markdown-content :is(ul, ol) {
+        padding-inline-start: 1.35rem;
+    }
+
+    .obsidian-heading-toggle {
+        width: 1.18rem;
+        height: 1.18rem;
+        margin-inline: -0.08rem 0.16rem;
+        opacity: 0.5;
+    }
+
+    .obsidian-heading-toggle span {
+        font-size: 0.9rem;
+    }
+
+    /* Wide technical material gets a visible, keyboard-focusable viewport. */
+    .mobile-table-scroll {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        margin: 1.25rem 0;
+        overflow-x: auto;
+        border: 1px solid var(--mobile-reading-rule);
+        border-radius: var(--mobile-reading-radius);
+        background: color-mix(in srgb, var(--sl-color-bg-nav) 80%, transparent);
+        box-shadow: inset -1rem 0 1.5rem -1.4rem color-mix(in srgb, var(--sl-color-accent) 46%, transparent);
+        overscroll-behavior-inline: contain;
+        scrollbar-color: color-mix(in srgb, var(--sl-color-accent) 52%, transparent) transparent;
+        scrollbar-width: thin;
+    }
+
+    .mobile-table-scroll:focus-visible {
+        outline: 2px solid var(--sl-color-accent-high);
+        outline-offset: 0.16rem;
+    }
+
+    .mobile-table-cue {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: min(100%, 26rem);
+        padding: 0.42rem 0.68rem;
+        border-bottom: 1px solid var(--mobile-reading-rule);
+        background: color-mix(in srgb, var(--sl-color-bg-inline-code) 88%, transparent);
+        color: var(--sl-color-gray-2);
+        font-family: var(--font-ui);
+        font-size: 0.72rem;
+        font-weight: 620;
+        letter-spacing: 0.025em;
+    }
+
+    .mobile-table-cue span:last-child {
+        color: var(--sl-color-text-accent);
+        font-size: 0.9rem;
+    }
+
+    .mobile-table-scroll > table {
+        display: table !important;
+        width: max-content !important;
+        max-width: none !important;
+        min-width: 100%;
+        margin: 0 !important;
+        overflow: visible !important;
+        table-layout: auto;
+    }
+
+    .mobile-table-scroll[data-columns='2'] > table {
+        min-width: 28rem;
+    }
+
+    .mobile-table-scroll[data-columns='3'] > table {
+        min-width: 34rem;
+    }
+
+    .mobile-table-scroll[data-columns='4'] > table {
+        min-width: 42rem;
+    }
+
+    .mobile-table-scroll[data-columns='5'] > table,
+    .mobile-table-scroll[data-columns='6'] > table {
+        min-width: 48rem;
+    }
+
+    .mobile-table-scroll > table :is(th, td) {
+        min-width: 7.5rem;
+        word-break: normal;
+        overflow-wrap: normal;
+    }
+
+    .sl-markdown-content :is(pre, .expressive-code) {
+        max-width: calc(100vw - 2 * var(--mobile-reading-gutter));
+    }
+
+    .sl-markdown-content pre {
+        scrollbar-color: color-mix(in srgb, var(--sl-color-accent) 46%, transparent) transparent;
+        scrollbar-width: thin;
+    }
+
+    /* Index cards become calm, full-width chapter rows. */
+    .notes-card-grid {
+        grid-template-columns: 1fr;
+        gap: 0.72rem;
+        margin-top: 1.05rem;
+    }
+
+    .notes-link-card {
+        min-height: 6.9rem;
+        border-radius: var(--mobile-reading-radius);
+        padding: 1.05rem 1rem;
+        box-shadow: 0 0.35rem 1rem color-mix(in srgb, #000 9%, transparent);
+    }
+
+    .notes-link-card::before {
+        width: min(42%, 10rem);
+        opacity: 0.16;
+    }
+
+    .notes-link-card-title {
+        max-width: 78%;
+        font-size: 1.12rem;
+        line-height: 1.28;
+    }
+
+    .notes-link-card-description {
+        max-width: 76%;
+        margin-top: 0.38rem;
+        font-size: 0.88rem;
+        line-height: 1.52;
+    }
+
+    .notes-link-card-arrow {
+        top: 1rem;
+        right: 0.95rem;
+        font-size: 1.25rem;
+    }
+
+    .home-entry-card {
+        min-height: 6.7rem;
+        gap: 0.82rem;
+        border-radius: var(--mobile-reading-radius);
+        padding: 1rem;
+    }
+
+    .home-entry-emoji {
+        min-width: 2.2rem;
+        font-size: 1.62rem;
+    }
+
+    .home-entry-content {
+        gap: 0.32rem;
+    }
+
+    .home-entry-title {
+        font-size: 1.02rem;
+    }
+
+    .home-entry-desc {
+        font-size: 0.86rem;
+        line-height: 1.56;
+    }
+
+    .pagination-links {
+        gap: 0.72rem;
+    }
+
+    .pagination-links a {
+        min-height: 4.25rem;
+        border-radius: var(--mobile-reading-radius);
+        padding: 0.82rem 0.9rem;
+        box-shadow: none;
+    }
+
+    .pagination-links .link-title {
+        font-size: 1rem;
+        line-height: 1.35;
+    }
+
+    /* Essays keep their literary voice, but lose the oversized glass frame. */
+    main:has(.baiyun-meta) .content-panel {
+        padding-inline: var(--mobile-reading-gutter);
+    }
+
+    main:has(.baiyun-meta) h1 {
+        font-size: clamp(2rem, 9.5vw, 2.45rem);
+        line-height: 1.22;
+        letter-spacing: 0.035em;
+        text-wrap: balance;
+    }
+
+    main:has(.baiyun-meta) .content-panel:has(.baiyun-meta) > .sl-container {
+        max-width: none;
+        margin: 0 auto 2rem;
+        padding: 1.15rem 1rem 1.5rem;
+        border-color: var(--mobile-reading-rule);
+        border-radius: var(--mobile-reading-radius);
+        background: color-mix(in srgb, var(--sl-color-bg) 91%, transparent);
+        box-shadow: 0 0.5rem 1.6rem color-mix(in srgb, #000 10%, transparent);
+        backdrop-filter: none;
+    }
+
+    .baiyun-meta {
+        gap: 0.34rem 0.62rem;
+        margin-bottom: 1.55rem;
+        font-size: 0.8rem;
+    }
+
+    body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun-signoff),
+    body:has(.baiyun-meta) .sl-markdown-content > ul,
+    body:has(.baiyun-meta) .sl-markdown-content > ol,
+    body:has(.baiyun-meta) .sl-markdown-content blockquote {
+        font-size: 0.98rem;
+        line-height: 1.98;
+    }
+
+    body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun-caption-note):not(.baiyun-signoff):not(.baiyun-preface) {
+        text-align: start;
+    }
+
+    .baiyun-figure {
+        margin-block: 1.45rem;
+    }
+
+    .baiyun-figure img {
+        border-radius: 0.55rem;
+        box-shadow: 0 0.6rem 1.6rem color-mix(in srgb, #000 18%, transparent);
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .notes-link-card:hover,
+    .home-entry-card:hover {
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #sky-toggle,
+    #sky-toggle span {
+        transition: none;
+    }
+}
