@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Data structures and algorithms tree motif">
+  <defs>
+    <linearGradient id="algorithm-array" x1="40" y1="116" x2="200" y2="138" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d6a03c"/>
+      <stop offset=".52" stop-color="#9388dc"/>
+      <stop offset="1" stop-color="#58c59e"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 30 79 59m41-29 41 29M79 71 51 97m28-26 27 26m55-26-27 26m27-26 28 26" stroke="#70819b" stroke-width="5"/>
+    <path d="M120 30 79 59 51 97" stroke="#54c7d8" stroke-width="3.5"/>
+    <circle cx="120" cy="27" r="9" fill="#9388dc" stroke="#3f506a" stroke-width="4"/>
+    <circle cx="79" cy="65" r="8" fill="#9388dc" fill-opacity=".86" stroke="#3f506a" stroke-width="4"/>
+    <circle cx="161" cy="65" r="8" fill="#54c7d8" fill-opacity=".86" stroke="#3f506a" stroke-width="4"/>
+    <circle cx="51" cy="103" r="7" fill="#58c59e" stroke="#3f506a" stroke-width="3.5"/>
+    <circle cx="106" cy="103" r="7" fill="#9388dc" stroke="#3f506a" stroke-width="3.5"/>
+    <circle cx="134" cy="103" r="7" fill="#54c7d8" stroke="#3f506a" stroke-width="3.5"/>
+    <circle cx="189" cy="103" r="7" fill="#d6a03c" stroke="#3f506a" stroke-width="3.5"/>
+    <path d="M51 110v7M106 110v7M134 110v7M189 110v7" stroke="#70819b" stroke-width="3.5"/>
+    <rect x="39" y="116" width="162" height="24" rx="6" fill="url(#algorithm-array)" fill-opacity=".5" stroke="#3f506a" stroke-width="4"/>
+    <path d="M72 117v22M104 117v22M136 117v22M168 117v22" stroke="#e6f1f7" stroke-width="3" opacity=".72"/>
+    <path d="m47 128 6 5 10-11" stroke="#e6f1f7" stroke-width="3.5"/>
+  </g>
+</svg>

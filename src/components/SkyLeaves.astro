@@ -39,7 +39,6 @@
   let windTime = 0;
 
   const leaves = [];
-  const LEAF_COUNT = 12;
 
   function rand(min, max) {
     return min + Math.random() * (max - min);
@@ -56,6 +55,7 @@
     canvas.style.height = h + "px";
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    syncLeafDensity();
   }
 
   function makeLeaf(initial = false) {
@@ -87,6 +87,16 @@
       alpha: rand(0.45, 0.9),
       color
     };
+  }
+
+  function syncLeafDensity() {
+    // Light mode should feel seasonal, not busy: four leaves on narrow screens,
+    // seven on larger canvases (down from the previous fixed count of twelve).
+    const target = w < 800 ? 4 : 7;
+    while (leaves.length < target) {
+      leaves.push(makeLeaf(true));
+    }
+    if (leaves.length > target) leaves.splice(target);
   }
 
   function resetLeaf(leaf) {
@@ -206,10 +216,6 @@
 
   resize();
   window.addEventListener("resize", resize, { passive: true });
-
-  for (let i = 0; i < LEAF_COUNT; i++) {
-    leaves.push(makeLeaf(true));
-  }
 
   requestAnimationFrame(frame);
 })();

@@ -1451,3 +1451,114 @@ body.is-netting-fish {
     0%, 100% { margin-left: -.1rem; margin-top: .02rem; }
     50% { margin-left: .16rem; margin-top: -.08rem; }
 }
+
+/*
+ * Unified pond-tool illustrations.
+ * Both tools use the same 112px artboard, button box, baseline and ink palette.
+ * The older CSS/PNG artwork remains above for a one-section rollback.
+ */
+#water-pond {
+    --pond-tool-bottom: 1.75rem;
+    --pond-tool-gap: 0.65rem;
+    --pond-tool-right: 1.75rem;
+    --pond-tool-size: 4.85rem;
+}
+
+#fish-food-bag,
+#fish-net-tool {
+    position: fixed;
+    bottom: var(--pond-tool-bottom);
+    z-index: 20;
+    width: var(--pond-tool-size);
+    height: var(--pond-tool-size);
+    padding: 0;
+    border: 0 !important;
+    border-radius: 0;
+    outline: 0 !important;
+    background-color: transparent !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    box-shadow: none !important;
+    opacity: 0.86;
+    cursor: pointer;
+    transform: none;
+    transform-origin: center bottom;
+    transition: opacity 180ms ease, filter 180ms ease, transform 220ms cubic-bezier(.2, .76, .24, 1);
+    -webkit-tap-highlight-color: transparent;
+}
+
+#fish-food-bag {
+    right: var(--pond-tool-right);
+    background-image: url('/pond-tools/fish-food.svg') !important;
+}
+
+#fish-net-tool {
+    right: calc(var(--pond-tool-right) + var(--pond-tool-size) + var(--pond-tool-gap));
+    background-image: url('/pond-tools/fish-net.svg');
+}
+
+#fish-food-bag::before,
+#fish-food-bag::after,
+#fish-net-tool::before,
+#fish-net-tool::after {
+    content: none !important;
+}
+
+#fish-food-bag:hover,
+#fish-food-bag:focus,
+#fish-food-bag:focus-visible,
+#fish-food-bag:active,
+#fish-food-bag.is-active,
+#fish-net-tool:hover,
+#fish-net-tool:focus-visible,
+#fish-net-tool.is-active {
+    opacity: 1;
+    filter: saturate(1.03) drop-shadow(0 .55rem .75rem rgba(44, 89, 99, .2));
+    transform: translateY(-0.28rem) scale(1.025);
+}
+
+#fish-net-cursor {
+    width: 5.4rem;
+    height: 5.4rem;
+    background: url('/pond-tools/fish-net.svg') center / 100% 100% no-repeat;
+    transform: translate(-46%, -42%);
+    filter: drop-shadow(0 .65rem .8rem rgba(44, 89, 99, .2));
+}
+
+#fish-net-cursor::before,
+#fish-net-cursor::after {
+    content: none !important;
+}
+
+:root[data-theme='dark'] #fish-food-bag,
+:root[data-theme='dark'] #fish-net-tool {
+    opacity: 0.74;
+    filter: brightness(1.06) saturate(0.9);
+}
+
+:root[data-theme='dark'] #fish-food-bag:hover,
+:root[data-theme='dark'] #fish-food-bag:focus-visible,
+:root[data-theme='dark'] #fish-food-bag.is-active,
+:root[data-theme='dark'] #fish-net-tool:hover,
+:root[data-theme='dark'] #fish-net-tool:focus-visible,
+:root[data-theme='dark'] #fish-net-tool.is-active {
+    opacity: 0.96;
+    filter: brightness(1.12) saturate(1) drop-shadow(0 .55rem .8rem rgba(72, 169, 184, .18));
+}
+
+@media (max-width: 42rem) {
+    #water-pond {
+        --pond-tool-bottom: 5rem;
+        --pond-tool-gap: 0.35rem;
+        --pond-tool-right: 0.85rem;
+        --pond-tool-size: 3.9rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #fish-food-bag,
+    #fish-net-tool {
+        transition: none;
+    }
+}

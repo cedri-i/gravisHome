@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Computer systems circuit motif">
+  <defs>
+    <linearGradient id="systems-core" x1="78" y1="56" x2="164" y2="108" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#54c7d8"/>
+      <stop offset="1" stop-color="#58c59e"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 80h42M162 80h42M120 26v30M120 104v30M53 38l30 25M187 38l-30 25M53 122l30-25M187 122l-30-25" stroke="#70819b" stroke-width="5"/>
+    <rect x="78" y="56" width="84" height="48" rx="11" fill="url(#systems-core)" fill-opacity=".5" stroke="#3f506a" stroke-width="5"/>
+    <path d="M98 72h44M98 81h35M98 90h25" stroke="#e6f1f7" stroke-width="3.5" opacity=".82"/>
+    <circle cx="36" cy="80" r="7" fill="#54c7d8" stroke="#3f506a" stroke-width="3.5"/>
+    <circle cx="204" cy="80" r="7" fill="#58c59e" stroke="#3f506a" stroke-width="3.5"/>
+    <circle cx="120" cy="26" r="7" fill="#d6a03c" stroke="#3f506a" stroke-width="3.5"/>
+    <circle cx="120" cy="134" r="7" fill="#9388dc" stroke="#3f506a" stroke-width="3.5"/>
+    <circle cx="51" cy="36" r="5" fill="#70819b"/>
+    <circle cx="189" cy="36" r="5" fill="#70819b"/>
+    <circle cx="51" cy="124" r="5" fill="#70819b"/>
+    <circle cx="189" cy="124" r="5" fill="#70819b"/>
+    <path d="M70 80h8M162 80h8M120 48v8M120 104v8" stroke="#d8e7f0" stroke-width="3" opacity=".62"/>
+  </g>
+</svg>

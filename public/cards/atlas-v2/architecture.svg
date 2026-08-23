@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="CPU datapath motif">
+  <defs>
+    <linearGradient id="architecture-core" x1="82" y1="42" x2="158" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9388dc"/>
+      <stop offset="1" stop-color="#54c7d8"/>
+    </linearGradient>
+    <linearGradient id="architecture-signal" x1="35" y1="58" x2="205" y2="105" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#54c7d8"/>
+      <stop offset=".55" stop-color="#9388dc"/>
+      <stop offset="1" stop-color="#d6a03c"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="79" y="39" width="82" height="82" rx="13" fill="url(#architecture-core)" fill-opacity=".42" stroke="#3f506a" stroke-width="5"/>
+    <rect x="96" y="56" width="48" height="48" rx="8" fill="#3f506a" fill-opacity=".34" stroke="#d8e7f0" stroke-width="3.5"/>
+    <path d="M37 53h42M37 80h42M37 107h42M161 53h42M161 80h42M161 107h42M94 39V24m26 15V24m26 15V24M94 121v15m26-15v15m26-15v15" stroke="#70819b" stroke-width="5"/>
+    <path d="M37 53h59v17h48v37h59M37 107h42V88h17M144 70h59" stroke="url(#architecture-signal)" stroke-width="3.5"/>
+    <path d="m109 67 12 13-12 13m23-26-12 13 12 13" stroke="#e6f1f7" stroke-width="4"/>
+    <circle cx="37" cy="53" r="5" fill="#54c7d8" stroke="#3f506a" stroke-width="3"/>
+    <circle cx="203" cy="70" r="5" fill="#d6a03c" stroke="#3f506a" stroke-width="3"/>
+    <circle cx="203" cy="107" r="5" fill="#58c59e" stroke="#3f506a" stroke-width="3"/>
+  </g>
+</svg>

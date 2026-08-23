@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Baiyun fish motif">
+  <defs>
+    <linearGradient id="baiyun-fish" x1="36" y1="50" x2="203" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9388dc"/>
+      <stop offset=".5" stop-color="#54c7d8"/>
+      <stop offset="1" stop-color="#58c59e"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 81c27-29 65-41 106-22 13 6 24 14 33 22-9 8-20 16-33 22-41 19-79 7-106-22Z" fill="url(#baiyun-fish)" fill-opacity=".12" stroke="url(#baiyun-fish)" stroke-width="5"/>
+    <path d="M174 81c18-27 29-34 34-30 5 5 2 20-5 30 7 10 10 25 5 30-5 4-16-3-34-30Z" fill="#9388dc" fill-opacity=".12" stroke="#9388dc" stroke-width="5"/>
+    <path d="M117 59c8 7 12 14 13 22-1 8-5 15-13 22M140 67c8 4 14 9 19 14-5 5-11 10-19 14" stroke="#54c7d8" stroke-width="3.5"/>
+    <path d="M92 106c11 10 25 13 40 8" stroke="#70819b" stroke-width="3" opacity=".74"/>
+    <circle cx="68" cy="73" r="5" fill="#e6f1f7"/>
+    <circle cx="68" cy="73" r="2.2" fill="#3f506a"/>
+    <circle cx="44" cy="38" r="5" fill="#54c7d8" fill-opacity=".8"/>
+    <circle cx="58" cy="26" r="3.5" fill="#9388dc" fill-opacity=".82"/>
+    <path d="M39 124c26 8 53 8 80 0M91 136c28 7 56 5 83-4" stroke="#70819b" stroke-width="3.5" opacity=".64"/>
+  </g>
+</svg>

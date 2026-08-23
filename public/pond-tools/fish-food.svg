@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 112" role="img" aria-label="Fish food pouch">
+  <defs>
+    <linearGradient id="food-pouch" x1="30" y1="12" x2="82" y2="101" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#78d2d4"/>
+      <stop offset=".58" stop-color="#4bb6c2"/>
+      <stop offset="1" stop-color="#317f9d"/>
+    </linearGradient>
+    <linearGradient id="food-band" x1="30" y1="18" x2="82" y2="29" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#526d7d"/>
+      <stop offset="1" stop-color="#405b78"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 13h72l8 78c.6 7-5 11-13 12-21 2-41 2-62 0-8-1-13.6-5-13-12Z" fill="url(#food-pouch)" fill-opacity=".9" stroke="#526d7d" stroke-width="4"/>
+    <path d="M20 13h72l2 16H18Z" fill="url(#food-band)" stroke="#526d7d" stroke-width="4"/>
+    <path d="M13 88h86l.4 4c.5 6-5.4 10-13.4 11-20 2-40 2-60 0-8-1-13.9-5-13.4-11l.4-4Z" fill="#405b78" fill-opacity=".92"/>
+    <path d="M36 39c10-7 27-8 39-1 9 5 12 13 8 20-5 9-20 13-34 10-13-2-22-10-20-18 1-4 3-8 7-11Z" fill="#f8f0d9" fill-opacity=".96" stroke="#d9ede8" stroke-width="2.5"/>
+    <path d="M42 53c8-9 20-12 31-4-3 6-10 10-18 10-5 0-10-2-13-6Z" fill="#e7a448" fill-opacity=".92"/>
+    <path d="M71 49c6-5 10-6 12-4-1 4-3 7-6 9 3 2 5 5 6 9-3 1-7 0-12-5" fill="#c57838"/>
+    <circle cx="47" cy="50" r="2" fill="#405b78"/>
+    <path d="M34 78h44" fill="none" stroke="#f6ecd1" stroke-width="9" opacity=".92"/>
+    <circle cx="39" cy="78" r="3.2" fill="#a96f35"/>
+    <circle cx="50" cy="78" r="3.2" fill="#d5903e"/>
+    <circle cx="61" cy="78" r="3.2" fill="#70864b"/>
+    <circle cx="72" cy="78" r="3.2" fill="#bd7040"/>
+    <path d="M35 20h42" fill="none" stroke="#d8edf0" stroke-width="3" opacity=".68"/>
+  </g>
+</svg>

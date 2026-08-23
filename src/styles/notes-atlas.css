@@ -2,6 +2,9 @@
  * Reversible navigation-atlas layer.
  * Rollback: remove this file from `customCss` in astro.config.mjs, then delete
  * this file and /public/cards/baiyun-fish.svg. The original card system remains intact.
+ * The normalized v2 illustrations live in /public/cards/atlas-v2; the previous
+ * artwork remains untouched so this illustration pass can be reverted by only
+ * restoring the five URLs below and deleting that directory.
  */
 
 :root {
@@ -82,8 +85,8 @@
 .notes-link-card::before {
     position: absolute;
     inset: 50% 0.25rem auto auto;
-    width: clamp(8.2rem, 12vw, 10.2rem);
-    height: clamp(6.6rem, 10vw, 8.2rem);
+    width: clamp(8.8rem, 13vw, 10.4rem);
+    height: clamp(5.87rem, 8.67vw, 6.94rem);
     background: var(--notes-atlas-art) center / contain no-repeat;
     content: "";
     opacity: 0.58;
@@ -112,27 +115,27 @@
 
 .notes-link-card-systems {
     --notes-atlas-accent: #55d7b6;
-    --notes-atlas-art: url('/cards/computer-systems.svg');
+    --notes-atlas-art: url('/cards/atlas-v2/systems.svg');
 }
 
 .notes-link-card-intro {
     --notes-atlas-accent: #55c9f2;
-    --notes-atlas-art: url('/cards/computer-intro.svg');
+    --notes-atlas-art: url('/cards/atlas-v2/intro.svg');
 }
 
 .notes-link-card-algorithms {
     --notes-atlas-accent: #a990ff;
-    --notes-atlas-art: url('/cards/data-structures-algorithms.svg');
+    --notes-atlas-art: url('/cards/atlas-v2/algorithms.svg');
 }
 
 .notes-link-card-architecture {
     --notes-atlas-accent: #72d7e7;
-    --notes-atlas-art: url('/cards/computer-architecture.svg');
+    --notes-atlas-art: url('/cards/atlas-v2/architecture.svg');
 }
 
 .notes-link-card-baiyun {
     --notes-atlas-accent: #8ccbe2;
-    --notes-atlas-art: url('/cards/baiyun-fish.svg');
+    --notes-atlas-art: url('/cards/atlas-v2/baiyun.svg');
 }
 
 .notes-link-card-title,
@@ -298,7 +301,7 @@
     .notes-link-card::before {
         right: 0.1rem;
         width: 5.8rem;
-        height: 5.6rem;
+        height: 3.87rem;
         opacity: 0.6;
     }
 
