@@ -135,7 +135,7 @@
 
 .notes-link-card-baiyun {
     --notes-atlas-accent: #8ccbe2;
-    --notes-atlas-art: url('/cards/atlas-v2/baiyun.svg');
+    --notes-atlas-art: url('/baiyun/fish-mark.jpg');
 }
 
 .notes-link-card-title,
@@ -232,6 +232,32 @@
 :root[data-theme='light'] .notes-link-card::before {
     opacity: 0.7;
     filter: saturate(0.78) brightness(0.88) drop-shadow(0 0.75rem 1.4rem color-mix(in srgb, var(--notes-atlas-accent) 13%, transparent));
+}
+
+/* The Baiyun entry intentionally keeps the original JPG, including its canvas. */
+.notes-link-card-baiyun::before {
+    background-size: 132% auto;
+    opacity: 0.2;
+    mix-blend-mode: normal;
+    filter: none;
+}
+
+:root[data-theme='light'] .notes-link-card-baiyun::before {
+    opacity: 0.42;
+    mix-blend-mode: normal;
+    filter: none;
+}
+
+.notes-link-card-baiyun:hover::before,
+.notes-link-card-baiyun:focus-visible::before {
+    opacity: 0.32;
+    filter: none;
+}
+
+:root[data-theme='light'] .notes-link-card-baiyun:hover::before,
+:root[data-theme='light'] .notes-link-card-baiyun:focus-visible::before {
+    opacity: 0.58;
+    filter: none;
 }
 
 @media (max-width: 49.999rem) {
