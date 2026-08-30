@@ -398,6 +398,16 @@ if (document.readyState === 'loading') {
                                                 },
                                             ],
                                         },
+                                        {
+                                            label: 'Caches',
+                                            collapsed: false,
+                                            items: [
+                                                {
+                                                    label: '24 Caches I',
+                                                    link: '/computer-architecture/cs61c/24-caches-i/',
+                                                },
+                                            ],
+                                        },
                                     ],
                                 },
                             ],
