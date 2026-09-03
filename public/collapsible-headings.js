@@ -12,11 +12,23 @@ const formatTableOfContents = () => {
   });
 };
 
+const wrapMarkdownTables = (root) => {
+  root.querySelectorAll('table:not([style]):not([class])').forEach((table) => {
+    if (table.parentElement?.classList.contains('markdown-table-scroll')) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'markdown-table-scroll';
+    table.before(wrapper);
+    wrapper.append(table);
+  });
+};
+
 const bindCollapsibleHeadings = () => {
   formatTableOfContents();
   const root = document.querySelector('.sl-markdown-content');
   if (!root || root.dataset.collapsibleHeadings === 'true') return;
   root.dataset.collapsibleHeadings = 'true';
+  wrapMarkdownTables(root);
 
   const headings = [...root.querySelectorAll(headingSelector)];
   headings.forEach((heading, index) => {

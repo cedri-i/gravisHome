@@ -12,7 +12,7 @@ const prepareMobileTables = () => {
   document.querySelectorAll('.sl-markdown-content table').forEach((table) => {
     if (
       table.hasAttribute('style') ||
-      table.closest('.mobile-table-scroll, .cs61c-replica-scroll') ||
+      table.closest('.mobile-table-scroll, .markdown-table-scroll, .cs61c-replica-scroll') ||
       table.classList.contains('cs61c-replica-table')
     ) {
       return;
@@ -25,7 +25,6 @@ const prepareMobileTables = () => {
       )
     );
     const shell = document.createElement('div');
-    const cue = document.createElement('div');
 
     shell.className = 'mobile-table-scroll';
     shell.dataset.columns = String(Math.min(columnCount, 6));
@@ -33,12 +32,8 @@ const prepareMobileTables = () => {
     shell.setAttribute('role', 'region');
     shell.setAttribute('aria-label', '可横向滚动的表格');
 
-    cue.className = 'mobile-table-cue';
-    cue.setAttribute('aria-hidden', 'true');
-    cue.innerHTML = '<span>横向滑动查看完整表格</span><span>↔</span>';
-
     table.before(shell);
-    shell.append(cue, table);
+    shell.append(table);
   });
 };
 

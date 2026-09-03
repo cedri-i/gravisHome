@@ -270,6 +270,79 @@ mark {
     padding: 0 0.14em;
 }
 
+.sl-markdown-content .markdown-table-scroll {
+    inline-size: 100%;
+    max-inline-size: 100%;
+    margin-block: 1.25rem;
+    overflow-x: auto;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: .68rem;
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 78%, transparent);
+    scrollbar-color: color-mix(in srgb, var(--sl-color-text-accent) 48%, transparent) transparent;
+}
+
+.sl-markdown-content .markdown-table-scroll > table:not([style]) {
+    display: table !important;
+    inline-size: max-content !important;
+    min-inline-size: 100% !important;
+    max-inline-size: none !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+}
+
+:where(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body, .sl-markdown-content .markdown-table-scroll) > table:not([style]) {
+    display: block !important;
+    inline-size: 100% !important;
+    max-inline-size: 100% !important;
+    margin-block: 1.25rem !important;
+    overflow-x: auto !important;
+    border: 1px solid var(--sl-color-gray-5) !important;
+    border-radius: .68rem !important;
+    border-spacing: 0 !important;
+    background: color-mix(in srgb, var(--sl-color-bg-nav) 78%, transparent) !important;
+    font-family: var(--font-prose);
+    font-size: .92em;
+    line-height: 1.45;
+    scrollbar-color: color-mix(in srgb, var(--sl-color-text-accent) 48%, transparent) transparent;
+}
+
+:where(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body, .sl-markdown-content .markdown-table-scroll) > table:not([style]) th,
+:where(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body, .sl-markdown-content .markdown-table-scroll) > table:not([style]) td {
+    min-inline-size: max-content !important;
+    padding: .58rem .74rem !important;
+    border: 0 !important;
+    border-inline-end: 1px solid var(--sl-color-gray-5) !important;
+    border-block-end: 1px solid var(--sl-color-gray-5) !important;
+    background: transparent !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+}
+
+:where(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body, .sl-markdown-content .markdown-table-scroll) > table:not([style]) thead th {
+    background: color-mix(in srgb, var(--sl-color-accent-low) 38%, var(--sl-color-bg-nav)) !important;
+    color: var(--sl-color-text-accent) !important;
+    font-weight: 720 !important;
+}
+
+:where(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body, .sl-markdown-content .markdown-table-scroll) > table:not([style]) tbody tr:nth-child(even) td {
+    background: color-mix(in srgb, var(--sl-color-gray-6) 48%, transparent) !important;
+}
+
+:where(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body, .sl-markdown-content .markdown-table-scroll) > table:not([style]) tr > :last-child {
+    border-inline-end: 0;
+}
+
+:where(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body, .sl-markdown-content .markdown-table-scroll) > table:not([style]) tbody tr:last-child > td {
+    border-block-end: 0;
+}
+
+:where(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body, .sl-markdown-content .markdown-table-scroll) > table:not([style]) :is(th, td)[align='right'] {
+    font-variant-numeric: tabular-nums;
+}
+
 :root {
     --note-html-surface: #f8fafc;
     --note-html-surface-soft: #eef2ff;
