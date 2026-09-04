@@ -1,5 +1,5 @@
 ---
-title: "25 Cache II"
+title: "25 Caches II"
 description: UCB CS61C 直接映射缓存与缓存术语笔记
 ---
 

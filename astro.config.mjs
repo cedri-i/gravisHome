@@ -421,7 +421,7 @@ if (document.readyState === 'loading') {
                                                     link: '/computer-architecture/cs61c/24-caches-i/',
                                                 },
                                                 {
-                                                    label: '25 Cache II',
+                                                    label: '25 Caches II',
                                                     link: '/computer-architecture/cs61c/25-cache-ii/',
                                                 },
                                             ],
