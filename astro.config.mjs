@@ -307,6 +307,20 @@ if (document.readyState === 'loading') {
                             ],
                         },
                         {
+                            label: '编程语言',
+                            collapsed: true,
+                            items: [
+                                {
+                                    label: 'Overview',
+                                    link: '/programming-languages/',
+                                },
+                                {
+                                    label: 'C',
+                                    link: '/programming-languages/c/',
+                                },
+                            ],
+                        },
+                        {
                             label: '数据结构与算法',
                             collapsed: true,
                             items: [
