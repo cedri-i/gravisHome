@@ -20,8 +20,8 @@
     gap: clamp(0.15rem, 1vw, 0.75rem);
     width: 100%;
     max-width: 50rem;
-    margin: clamp(1.25rem, 3vw, 2.4rem) auto 0;
-    padding: 0.4rem clamp(0.25rem, 1.5vw, 1rem) 2.2rem;
+    margin: clamp(1rem, 2.4vw, 1.9rem) auto 0;
+    padding: 0.2rem clamp(0.25rem, 1.5vw, 1rem) 1.4rem;
 }
 
 /* One quiet route is the only decorative structure on the page. */
@@ -42,9 +42,9 @@
     z-index: 1;
     display: grid;
     align-content: center;
-    min-height: clamp(9.4rem, 13vw, 11rem);
+    min-height: clamp(7.3rem, 10vw, 8.4rem);
     margin: 0;
-    padding: clamp(1.05rem, 2vw, 1.55rem) clamp(10rem, 14vw, 12.2rem) clamp(1.05rem, 2vw, 1.55rem) 0.72rem;
+    padding: clamp(0.8rem, 1.4vw, 1.1rem) clamp(8rem, 11vw, 9.6rem) clamp(0.8rem, 1.4vw, 1.1rem) 0.72rem;
     overflow: visible;
     border: 0;
     border-radius: 0;
@@ -60,7 +60,7 @@
 .notes-link-card:nth-child(2),
 .notes-link-card:nth-child(4) {
     padding-right: 0.72rem;
-    padding-left: clamp(10rem, 14vw, 12.2rem);
+    padding-left: clamp(8rem, 11vw, 9.6rem);
 }
 
 .notes-link-card:nth-child(5) {
@@ -79,14 +79,14 @@
 .notes-link-card:nth-child(2)::after,
 .notes-link-card:nth-child(4)::after {
     right: auto;
-    left: clamp(10rem, 14vw, 12.2rem);
+    left: clamp(8rem, 11vw, 9.6rem);
 }
 
 .notes-link-card::before {
     position: absolute;
     inset: 50% 0.25rem auto auto;
-    width: clamp(8.8rem, 13vw, 10.4rem);
-    height: clamp(5.87rem, 8.67vw, 6.94rem);
+    width: clamp(7rem, 10vw, 8.4rem);
+    height: clamp(4.67rem, 6.67vw, 5.6rem);
     background: var(--notes-atlas-art) center / contain no-repeat;
     content: "";
     opacity: 0.58;
@@ -100,7 +100,7 @@
 /* A small waypoint, not a card edge. */
 .notes-link-card::after {
     position: absolute;
-    inset: auto auto 1.12rem 0.72rem;
+    inset: auto auto 0.72rem 0.72rem;
     width: 1.85rem;
     height: 1px;
     border: 0;
@@ -121,6 +121,11 @@
 .notes-link-card-intro {
     --notes-atlas-accent: #55c9f2;
     --notes-atlas-art: url('/cards/atlas-v2/intro.svg');
+}
+
+.notes-link-card-languages {
+    --notes-atlas-accent: #73d6ee;
+    --notes-atlas-art: url('/cards/programming-languages.svg');
 }
 
 .notes-link-card-algorithms {
@@ -171,12 +176,12 @@
 
 .notes-link-card-description {
     max-width: 32ch;
-    margin-top: 0.62rem;
+    margin-top: 0.42rem;
     color: var(--notes-atlas-muted);
     font-family: var(--font-prose);
     font-size: clamp(0.88rem, 0.82rem + 0.2vw, 0.98rem);
     font-weight: 460;
-    line-height: 1.7;
+    line-height: 1.55;
     letter-spacing: -0.012em;
 }
 
@@ -307,9 +312,9 @@
 
 @media (max-width: 49.999rem) {
     .notes-card-grid {
-        gap: 0.2rem;
-        margin-top: 1.1rem;
-        padding: 0.6rem 0 1.1rem 1rem;
+        gap: 0;
+        margin-top: 0.85rem;
+        padding: 0.35rem 0 0.8rem 1rem;
     }
 
     .notes-card-grid::before {
@@ -320,14 +325,14 @@
     .notes-link-card:nth-child(2),
     .notes-link-card:nth-child(4),
     .notes-link-card:nth-child(5) {
-        min-height: 8.4rem;
-        padding: 1rem 6.35rem 1rem 1.35rem;
+        min-height: 7.2rem;
+        padding: 0.8rem 5.5rem 0.8rem 1.35rem;
     }
 
     .notes-link-card::before {
         right: 0.1rem;
-        width: 5.8rem;
-        height: 3.87rem;
+        width: 5rem;
+        height: 3.33rem;
         opacity: 0.6;
     }
 
