@@ -1,4 +1,5 @@
 import { getGitHubSession } from './_session.js';
+import { sendCommentNotification } from './_comment-notification.js';
 import { applySecurityHeaders, consumeRateLimit, isSameOrigin, readJsonBody } from './_security.js';
 
 const markerStart = '<!-- gravis-guestbook:v1 -->';
@@ -256,8 +257,20 @@ export default async function handler(request, response) {
         }
       );
 
+      const parsedComment = parseComment(comment);
+      if (parsedComment) {
+        try {
+          await sendCommentNotification({
+            ...parsedComment,
+            githubUrl: comment.html_url,
+          });
+        } catch (notificationError) {
+          console.error('Comment notification failed:', notificationError);
+        }
+      }
+
       return jsonResponse(response, 201, {
-        message: parseComment(comment),
+        message: parsedComment,
       });
     }
 

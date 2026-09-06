@@ -34,6 +34,30 @@ GUESTBOOK_SESSION_SECRET=a long random string
 
 5. Redeploy the site.
 
+## Email notifications
+
+New comments can trigger an email through Resend after the GitHub Issue comment is created. Notification failures are logged but do not prevent the public comment from being published.
+
+Add these environment variables in Vercel:
+
+```txt
+RESEND_API_KEY=your Resend API key
+COMMENT_NOTIFICATION_TO=your notification email address
+COMMENT_NOTIFICATION_FROM=Gravis Home <onboarding@resend.dev>
+PUBLIC_SITE_URL=https://your-domain.example
+```
+
+`COMMENT_NOTIFICATION_FROM` is optional. The default sender is `Gravis Home <onboarding@resend.dev>`.
+
+The Resend testing sender can only deliver to the email address associated with the Resend account. To deliver to another address, verify a sending domain and set `COMMENT_NOTIFICATION_FROM` to an address on that domain.
+
+Each notification contains:
+
+- the GitHub identity shown with the comment;
+- the public page URL and timestamp;
+- the full comment text;
+- the source GitHub Issue comment URL.
+
 After deployment, visitors must sign in with GitHub before posting. The homepage status line should change from local-only mode to public guestbook mode.
 
 ## Hide comments

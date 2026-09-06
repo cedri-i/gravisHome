@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "check:note-format": "node scripts/test-note-formatting.mjs",
+    "test:comment-notification": "node scripts/test-comment-notification.mjs",
     "build": "npm run check:note-format && astro build",
     "preview": "astro preview",
     "astro": "astro"
