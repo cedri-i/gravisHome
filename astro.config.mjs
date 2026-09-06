@@ -19,8 +19,42 @@ function mermaidClient() {
                 injectScript(
                     'page',
                     `import mermaid from 'mermaid';
+let mermaidDiagramId = 0;
+
 mermaid.initialize({ startOnLoad: false, theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default' });
-await mermaid.run({ querySelector: '.mermaid' });`
+
+async function renderMermaidDiagrams() {
+    const diagrams = document.querySelectorAll('.mermaid:not([data-mermaid-rendered])');
+    if (diagrams.length === 0) return;
+
+    const scratch = document.createElement('div');
+    scratch.style.cssText = 'position:absolute;top:0;left:0;visibility:hidden;pointer-events:none;';
+    document.body.append(scratch);
+
+    for (const diagram of diagrams) {
+        const source = diagram.textContent ?? '';
+        diagram.setAttribute('aria-busy', 'true');
+
+        try {
+            const { svg, bindFunctions } = await mermaid.render(
+                'mermaid-diagram-' + ++mermaidDiagramId,
+                source,
+                scratch
+            );
+            diagram.innerHTML = svg;
+            bindFunctions?.(diagram);
+            diagram.dataset.mermaidRendered = 'true';
+        } catch (error) {
+            console.error('Mermaid diagram failed to render.', error);
+        } finally {
+            diagram.removeAttribute('aria-busy');
+        }
+    }
+
+    scratch.remove();
+}
+
+void renderMermaidDiagrams();`
                 );
             },
         },
