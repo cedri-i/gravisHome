@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Computer introduction open book">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M35 41c34-7 62 0 85 19v72c-23-19-51-26-85-19Z" fill="#55c9f2" fill-opacity=".18" stroke="#687a9b" stroke-width="6"/>
+    <path d="M205 41c-34-7-62 0-85 19v72c23-19 51-26 85-19Z" fill="#9a8ce0" fill-opacity=".16" stroke="#687a9b" stroke-width="6"/>
+    <path d="M120 60v72M48 126c28-5 52 1 72 17 20-16 44-22 72-17" stroke="#55c9f2" stroke-width="5"/>
+  </g>
+</svg>

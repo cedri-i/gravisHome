@@ -2,7 +2,7 @@
  * Reversible navigation-atlas layer.
  * Rollback: remove this file from `customCss` in astro.config.mjs, then delete
  * this file and /public/cards/baiyun-fish.svg. The original card system remains intact.
- * The normalized v2 illustrations live in /public/cards/atlas-v2; the previous
+ * The simplified v3 illustrations live in /public/cards/atlas-v3; all previous
  * artwork remains untouched so this illustration pass can be reverted by only
  * restoring the five URLs below and deleting that directory.
  */
@@ -44,7 +44,7 @@
     align-content: center;
     min-height: clamp(7.3rem, 10vw, 8.4rem);
     margin: 0;
-    padding: clamp(0.8rem, 1.4vw, 1.1rem) clamp(8rem, 11vw, 9.6rem) clamp(0.8rem, 1.4vw, 1.1rem) 0.72rem;
+    padding: clamp(0.8rem, 1.4vw, 1.1rem) clamp(8.8rem, 12vw, 10.4rem) clamp(0.8rem, 1.4vw, 1.1rem) 0.72rem;
     overflow: visible;
     border: 0;
     border-radius: 0;
@@ -60,7 +60,7 @@
 .notes-link-card:nth-child(2),
 .notes-link-card:nth-child(4) {
     padding-right: 0.72rem;
-    padding-left: clamp(8rem, 11vw, 9.6rem);
+    padding-left: clamp(8.8rem, 12vw, 10.4rem);
 }
 
 .notes-link-card:nth-child(5) {
@@ -79,63 +79,67 @@
 .notes-link-card:nth-child(2)::after,
 .notes-link-card:nth-child(4)::after {
     right: auto;
-    left: clamp(8rem, 11vw, 9.6rem);
+    left: clamp(8.8rem, 12vw, 10.4rem);
 }
 
 .notes-link-card::before {
     position: absolute;
     inset: 50% 0.25rem auto auto;
-    width: clamp(7rem, 10vw, 8.4rem);
-    height: clamp(4.67rem, 6.67vw, 5.6rem);
+    width: clamp(7.8rem, 11vw, 9.25rem);
+    height: clamp(5.2rem, 7.33vw, 6.17rem);
     background: var(--notes-atlas-art) center / contain no-repeat;
     content: "";
-    opacity: 0.58;
-    filter: saturate(0.92) brightness(1.08) drop-shadow(0 0.75rem 1.6rem color-mix(in srgb, var(--notes-atlas-accent) 14%, transparent));
+    opacity: 0.7;
+    filter: saturate(0.9) brightness(1.08) drop-shadow(0 0.85rem 1.7rem color-mix(in srgb, var(--notes-atlas-accent) 16%, transparent));
     pointer-events: none;
     transform: translateY(-50%);
     transform-origin: center;
     transition: opacity 240ms ease, transform 320ms cubic-bezier(0.2, 0.75, 0.25, 1), filter 240ms ease;
 }
 
-/* A small waypoint, not a card edge. */
+/* A substantial route marker replaces the previous hairline hover indicator. */
 .notes-link-card::after {
     position: absolute;
-    inset: auto auto 0.72rem 0.72rem;
-    width: 1.85rem;
-    height: 1px;
-    border: 0;
-    border-radius: 0;
-    background: linear-gradient(90deg, var(--notes-atlas-accent), transparent);
+    inset: auto auto 0.58rem 0.72rem;
+    width: 3.75rem;
+    height: 0.48rem;
+    border: 1px solid color-mix(in srgb, var(--notes-atlas-accent) 42%, transparent);
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at calc(100% - 0.24rem) 50%, color-mix(in srgb, var(--notes-atlas-accent) 78%, white) 0 0.12rem, transparent 0.14rem),
+        linear-gradient(90deg, color-mix(in srgb, var(--notes-atlas-accent) 24%, transparent), color-mix(in srgb, var(--notes-atlas-accent) 66%, transparent));
+    box-shadow: 0 0 0.8rem color-mix(in srgb, var(--notes-atlas-accent) 12%, transparent);
     content: "";
-    opacity: 0.32;
+    opacity: 0.5;
     pointer-events: none;
-    transform: none;
-    transition: width 240ms ease, opacity 240ms ease;
+    transform: scaleX(0.82);
+    transform-origin: left center;
+    transition: opacity 220ms ease, transform 260ms cubic-bezier(0.2, 0.75, 0.25, 1), box-shadow 220ms ease;
 }
 
 .notes-link-card-systems {
     --notes-atlas-accent: #55d7b6;
-    --notes-atlas-art: url('/cards/atlas-v2/systems.svg');
+    --notes-atlas-art: url('/cards/atlas-v3/systems.svg');
 }
 
 .notes-link-card-intro {
     --notes-atlas-accent: #55c9f2;
-    --notes-atlas-art: url('/cards/atlas-v2/intro.svg');
+    --notes-atlas-art: url('/cards/atlas-v3/intro.svg');
 }
 
 .notes-link-card-languages {
     --notes-atlas-accent: #73d6ee;
-    --notes-atlas-art: url('/cards/programming-languages.svg');
+    --notes-atlas-art: url('/cards/atlas-v3/languages.svg');
 }
 
 .notes-link-card-algorithms {
     --notes-atlas-accent: #a990ff;
-    --notes-atlas-art: url('/cards/atlas-v2/algorithms.svg');
+    --notes-atlas-art: url('/cards/atlas-v3/algorithms.svg');
 }
 
 .notes-link-card-architecture {
     --notes-atlas-accent: #72d7e7;
-    --notes-atlas-art: url('/cards/atlas-v2/architecture.svg');
+    --notes-atlas-art: url('/cards/atlas-v3/architecture.svg');
 }
 
 .notes-link-card-baiyun {
@@ -201,15 +205,16 @@
 
 .notes-link-card:hover::before,
 .notes-link-card:focus-visible::before {
-    opacity: 0.9;
+    opacity: 0.96;
     filter: saturate(1.08) brightness(1.14) drop-shadow(0 1rem 2rem color-mix(in srgb, var(--notes-atlas-accent) 22%, transparent));
-    transform: translate(0.5rem, -50%) scale(1.035);
+    transform: translateY(-50%) scale(1.045);
 }
 
 .notes-link-card:hover::after,
 .notes-link-card:focus-visible::after {
-    width: 3.5rem;
-    opacity: 0.72;
+    opacity: 0.92;
+    box-shadow: 0 0 1.15rem color-mix(in srgb, var(--notes-atlas-accent) 30%, transparent);
+    transform: scaleX(1);
 }
 
 .notes-link-card:hover .notes-link-card-title,
@@ -225,8 +230,7 @@
 }
 
 .notes-link-card:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--notes-atlas-accent) 72%, transparent);
-    outline-offset: 0.45rem;
+    outline: none;
 }
 
 :root[data-theme='light'] .notes-card-grid::before {
@@ -235,8 +239,8 @@
 }
 
 :root[data-theme='light'] .notes-link-card::before {
-    opacity: 0.7;
-    filter: saturate(0.78) brightness(0.88) drop-shadow(0 0.75rem 1.4rem color-mix(in srgb, var(--notes-atlas-accent) 13%, transparent));
+    opacity: 0.86;
+    filter: saturate(0.9) brightness(0.76) drop-shadow(0 0.75rem 1.4rem color-mix(in srgb, var(--notes-atlas-accent) 15%, transparent));
 }
 
 /* The Baiyun entry intentionally keeps the original JPG, including its canvas. */
@@ -293,20 +297,22 @@
 
     .notes-link-card::after {
         inset: 50% auto auto 0.5rem;
-        width: 0.52rem;
-        height: 0.52rem;
+        width: 0.68rem;
+        height: 0.68rem;
         border: 1px solid var(--notes-atlas-accent);
-        border-radius: 50%;
+        border-radius: 0.18rem;
         background: var(--sl-color-bg);
-        opacity: 0.72;
-        transform: translate(-50%, -50%);
+        box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--notes-atlas-accent) 12%, transparent);
+        opacity: 0.82;
+        transform: translate(-50%, -50%) rotate(45deg);
+        transform-origin: center;
     }
 
     .notes-link-card:hover::after,
     .notes-link-card:focus-visible::after {
-        width: 0.68rem;
-        height: 0.68rem;
         opacity: 1;
+        box-shadow: 0 0 0 0.28rem color-mix(in srgb, var(--notes-atlas-accent) 18%, transparent), 0 0 1rem color-mix(in srgb, var(--notes-atlas-accent) 38%, transparent);
+        transform: translate(-50%, -50%) rotate(45deg) scale(1.12);
     }
 }
 
@@ -326,14 +332,14 @@
     .notes-link-card:nth-child(4),
     .notes-link-card:nth-child(5) {
         min-height: 7.2rem;
-        padding: 0.8rem 5.5rem 0.8rem 1.35rem;
+        padding: 0.8rem 6.25rem 0.8rem 1.35rem;
     }
 
     .notes-link-card::before {
         right: 0.1rem;
-        width: 5rem;
-        height: 3.33rem;
-        opacity: 0.6;
+        width: 5.75rem;
+        height: 3.83rem;
+        opacity: 0.7;
     }
 
     .notes-link-card:nth-child(2)::before,

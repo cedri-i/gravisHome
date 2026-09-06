@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Computer architecture processor">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="70" y="34" width="100" height="92" rx="16" fill="#72d7e7" fill-opacity=".16" stroke="#687a9b" stroke-width="7"/>
+    <path d="M35 58h35m-35 44h35m100-44h35m-35 44h35M95 34V17m50 17V17M95 126v17m50-17v17" stroke="#687a9b" stroke-width="7"/>
+    <path d="M94 80h52m-12-13 13 13-13 13" stroke="#72d7e7" stroke-width="7"/>
+    <circle cx="36" cy="58" r="5" fill="#72d7e7" stroke="none"/>
+    <circle cx="204" cy="102" r="5" fill="#a990ff" stroke="none"/>
+  </g>
+</svg>
