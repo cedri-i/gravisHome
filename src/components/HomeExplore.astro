@@ -1,15 +1,16 @@
 ---
-const noteModules = import.meta.glob('../content/docs/**/*.{md,mdx}');
+import { getCollection } from 'astro:content';
 
-const routes = Object.keys(noteModules)
-  .map((file) => file.split('/content/docs/')[1])
-  .filter((file): file is string => Boolean(file))
-  .filter((file) => !/(^|\/)index\.mdx?$/.test(file))
-  .filter((file) => !/^(my-notes|updates)\.mdx?$/.test(file))
-  .filter((file) => !/^(guides|reference)\//.test(file))
-  .filter((file) => file !== 'computer-systems/csapp.mdx')
-  .filter((file) => file !== 'notes/chap1.md')
-  .map((file) => `/${file.replace(/\.mdx?$/, '')}/`)
+const routes = (await getCollection('docs', ({ data }) => {
+  return import.meta.env.MODE !== 'production' || data.draft === false;
+}))
+  .filter(({ filePath }) => !/(^|\/)index\.mdx?$/.test(filePath ?? ''))
+  .map(({ id }) => id)
+  .filter((id) => !/^(my-notes|updates)$/.test(id))
+  .filter((id) => !/^(guides|reference)\//.test(id))
+  .filter((id) => id !== 'computer-systems/csapp')
+  .filter((id) => id !== 'notes/chap1')
+  .map((id) => `/${id.normalize()}/`)
   .sort();
 ---
 
