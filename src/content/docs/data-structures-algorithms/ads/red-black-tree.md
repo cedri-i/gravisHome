@@ -1,4 +1,7 @@
 ---
+createdAt: "2026-08-10T18:10:53+08:00"
+updatedAt: "2026-08-11T11:51:55+08:00"
+timeSource: git
 title: "Red-Black Tree"
 ---
 

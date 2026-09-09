@@ -1,4 +1,7 @@
 ---
+createdAt: "2026-08-10T18:10:53+08:00"
+updatedAt: "2026-08-10T18:27:11+08:00"
+timeSource: git
 title: "Splay Tree"
 ---
 

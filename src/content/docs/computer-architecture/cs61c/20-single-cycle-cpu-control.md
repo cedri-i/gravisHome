@@ -1,4 +1,7 @@
 ---
+createdAt: "2026-08-16T17:35:13+08:00"
+updatedAt: "2026-08-16T18:53:06+08:00"
+timeSource: git
 title: "20 Single-Cycle CPU Control"
 description: UCB CS61C 单周期 CPU 控制逻辑笔记
 ---

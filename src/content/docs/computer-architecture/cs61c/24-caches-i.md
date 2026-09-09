@@ -1,4 +1,7 @@
 ---
+createdAt: "2026-08-30T22:34:03+08:00"
+updatedAt: "2026-09-03T21:47:23+08:00"
+timeSource: git
 title: "24 Caches I"
 description: UCB CS61C 缓存与局部性笔记
 ---

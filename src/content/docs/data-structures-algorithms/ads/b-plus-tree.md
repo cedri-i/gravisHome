@@ -1,4 +1,7 @@
 ---
+createdAt: "2026-08-11T14:43:39+08:00"
+updatedAt: "2026-08-11T14:43:39+08:00"
+timeSource: git
 title: "B+ Tree"
 ---
 

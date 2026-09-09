@@ -1,4 +1,7 @@
 ---
+createdAt: "2026-04-20T18:10:11+08:00"
+updatedAt: "2026-07-14T00:09:40+08:00"
+timeSource: git
 title: "Lecture 12"
 ---
 

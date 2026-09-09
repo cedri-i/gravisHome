@@ -1,0 +1,33 @@
+---
+import { ClockPlus } from 'lucide-astro';
+const { id, data } = Astro.locals.starlightRoute.entry;
+const excluded = id.startsWith('baiyun/') && id !== 'baiyun/index';
+const { createdAt, updatedAt, timeSource } = data;
+const formatter = new Intl.DateTimeFormat('zh-CN', {
+ timeZone: 'Asia/Shanghai', year: 'numeric', month: 'numeric', day: 'numeric',
+ hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+});
+function format(value: string) {
+ const p = Object.fromEntries(formatter.formatToParts(new Date(value)).map(({ type, value }) => [type, value]));
+ return p.year + '年' + p.month + '月' + p.day + '日 ' + p.hour + ':' + p.minute + ':' + p.second;
+}
+const source = timeSource === 'git' ? '；初始时间依据本站 Git 提交记录' : '';
+---
+{!excluded && createdAt && updatedAt && (
+ <div class="content-dates" aria-label="内容时间（北京时间）">
+  <span class="content-date" title={'建立时间（北京时间）' + source}>
+   <ClockPlus size={21} strokeWidth={1.8} aria-hidden="true" />
+   <span class="sr-only">建立时间：</span><time datetime={createdAt}>{format(createdAt)}</time>
+  </span>
+  <span class="content-date" title={'最近修改时间（北京时间）' + source}>
+   <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a10 10 0 1 1 10-11M12 6v6l3 2M16 21l5-5-2-2-5 5-1 3z" /></svg>
+   <span class="sr-only">最近修改时间：</span><time datetime={updatedAt}>{format(updatedAt)}</time>
+  </span>
+ </div>
+)}
+<style>
+ .content-dates { display:flex; flex-wrap:wrap; gap:0.5rem 1.75rem; margin-top:0.85rem; color:var(--sl-color-gray-2); font-family:var(--font-prose, inherit); font-size:0.875rem; line-height:1.7; font-variant-numeric:tabular-nums; }
+ .content-date { display:inline-flex; align-items:center; gap:0.5rem; }
+ .content-date time { white-space:nowrap; }
+ .content-date :global(svg) { flex-shrink:0; }
+</style>

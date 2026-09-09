@@ -70,6 +70,8 @@ export default defineConfig({
         starlight({
             title: 'My Docs',
             components: {
+                PageTitle: './src/components/PageTitle.astro',
+                Hero: './src/components/Hero.astro',
                 Footer: './src/components/Footer.astro',
                 TwoColumnContent: './src/components/ResizableTwoColumnContent.astro',
             },

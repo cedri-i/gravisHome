@@ -1,4 +1,7 @@
 ---
+createdAt: "2026-08-13T00:15:19+08:00"
+updatedAt: "2026-08-14T12:53:45+08:00"
+timeSource: git
 title: "18 Single-Cycle CPU Datapath I"
 description: UCB CS61C 单周期 CPU 数据通路笔记
 ---

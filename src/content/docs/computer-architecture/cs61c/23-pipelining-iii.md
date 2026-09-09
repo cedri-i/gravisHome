@@ -1,4 +1,7 @@
 ---
+createdAt: "2026-08-23T23:09:33+08:00"
+updatedAt: "2026-08-23T23:09:33+08:00"
+timeSource: git
 title: "23 Pipelining III"
 description: UCB CS61C 流水线与超标量处理器笔记
 ---

@@ -7,9 +7,10 @@
     "start": "astro dev",
     "check:note-format": "node scripts/test-note-formatting.mjs",
     "test:comment-notification": "node scripts/test-comment-notification.mjs",
-    "build": "npm run check:note-format && astro build",
+    "build": "npm run check:note-format && npm run check:content-dates && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:content-dates": "node scripts/check-content-dates.mjs"
   },
   "engines": {
     "node": ">=22.12.0"

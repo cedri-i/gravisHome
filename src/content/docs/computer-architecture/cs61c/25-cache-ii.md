@@ -1,4 +1,7 @@
 ---
+createdAt: "2026-09-03T21:47:23+08:00"
+updatedAt: "2026-09-04T21:54:24+08:00"
+timeSource: git
 title: "25 Caches II"
 description: UCB CS61C 直接映射缓存与缓存术语笔记
 ---
