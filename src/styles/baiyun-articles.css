@@ -6,6 +6,9 @@ body:has(.baiyun-meta) {
     --baiyun-paper: color-mix(in srgb, var(--sl-color-bg) 96%, #a99bc9 4%);
     --baiyun-accent: var(--sl-color-text-accent);
     --baiyun-measure: 48rem;
+    --baiyun-caption-size: .875rem;
+    --baiyun-caption-gap: .65rem;
+    --baiyun-image-space: 1.75rem;
 }
 
 :root[data-theme="light"] body:has(.baiyun-meta) {
@@ -55,7 +58,7 @@ body:has(.baiyun-meta) .sl-markdown-content {
     letter-spacing: .015em;
     overflow-wrap: anywhere;
 }
-body:has(.baiyun-meta) :is(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body) > p {
+body:has(.baiyun-meta) :is(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body) > p:not(.baiyun-caption):not(.baiyun-caption-note) {
     margin-block: 1.25em;
     color: inherit;
     font: inherit;
@@ -135,14 +138,14 @@ body:has(.baiyun-meta) .sl-markdown-content blockquote::before { content: none; 
 body:has(.baiyun-meta) .sl-markdown-content blockquote p { margin-block: .5em; }
 
 body:has(.baiyun-meta) .sl-markdown-content :is(.baiyun-figure, .baiyun-photo-wide, .baiyun-photo-pair) {
-    margin: 2rem 0;
+    margin: var(--baiyun-image-space) 0;
     max-width: 100%;
 }
 .baiyun-photo-pair {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
-    gap: .85rem;
+    gap: var(--baiyun-caption-gap) .85rem;
 }
 body:has(.baiyun-meta) .sl-markdown-content .baiyun-photo-pair > figure {
     min-width: 0;
@@ -165,7 +168,7 @@ body:has(.baiyun-meta) .sl-markdown-content :is(figcaption, .baiyun-caption, .ba
     grid-column: 1 / -1;
     width: auto;
     max-width: 100%;
-    margin: .6rem 0 0;
+    margin: var(--baiyun-caption-gap) 0 0;
     padding: 0;
     border: 0;
     border-radius: 0;
@@ -173,7 +176,7 @@ body:has(.baiyun-meta) .sl-markdown-content :is(figcaption, .baiyun-caption, .ba
     box-shadow: none;
     color: var(--baiyun-muted);
     font-family: var(--font-prose);
-    font-size: .8125rem;
+    font-size: var(--baiyun-caption-size);
     font-weight: 400;
     font-style: normal;
     line-height: 1.8;
@@ -181,8 +184,15 @@ body:has(.baiyun-meta) .sl-markdown-content :is(figcaption, .baiyun-caption, .ba
     text-align: start;
     text-indent: 0;
 }
-body:has(.baiyun-meta) .sl-markdown-content :is(.baiyun-figure, .baiyun-photo-pair) + .baiyun-caption {
-    margin-top: -1.4rem;
+/* A shared caption has the same image gap whether it is inside or after a group. */
+body:has(.baiyun-meta) .sl-markdown-content .baiyun-photo-pair > :is(figcaption, .baiyun-caption, .baiyun-caption-note) {
+    margin-top: 0;
+}
+body:has(.baiyun-meta) .sl-markdown-content :is(.baiyun-figure, .baiyun-photo-wide, .baiyun-photo-pair):has(+ :is(.baiyun-caption, .baiyun-caption-note)) {
+    margin-bottom: 0;
+}
+body:has(.baiyun-meta) .sl-markdown-content :is(.baiyun-figure, .baiyun-photo-wide, .baiyun-photo-pair) + :is(.baiyun-caption, .baiyun-caption-note) {
+    margin-bottom: var(--baiyun-image-space);
 }
 body:has(.baiyun-meta) .sl-markdown-content a:not(.sl-anchor-link) {
     color: var(--baiyun-accent);
@@ -206,7 +216,8 @@ body:has(.baiyun-meta) .sl-markdown-content a:focus-visible {
     .baiyun-meta { gap: .35rem .7rem; }
 }
 @media (max-width: 32rem) {
-    .baiyun-photo-pair { grid-template-columns: 1fr; gap: 1.25rem; }
+    .baiyun-photo-pair { grid-template-columns: 1fr; }
+    body:has(.baiyun-meta) .sl-markdown-content .baiyun-photo-pair > figure + figure { margin-top: .6rem; }
 }
 
 body:has(.baiyun-meta) .sl-markdown-content .sl-heading-wrapper { margin-block: 2rem .85rem; }
