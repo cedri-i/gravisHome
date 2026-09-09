@@ -1,412 +1,238 @@
-/*
- * Reversible navigation-atlas layer.
- * Rollback: remove this file from `customCss` in astro.config.mjs, then delete
- * this file and /public/cards/baiyun-fish.svg. The original card system remains intact.
- * The simplified v3 illustrations live in /public/cards/atlas-v3; all previous
- * artwork remains untouched so this illustration pass can be reverted by only
- * restoring the five URLs below and deleting that directory.
- */
-
-:root {
-    --notes-atlas-route: color-mix(in srgb, var(--sl-color-accent) 40%, var(--sl-color-gray-4));
-    --notes-atlas-muted: color-mix(in srgb, var(--sl-color-gray-2) 88%, transparent);
-}
-
+/* Course atlas: one route, consistent entry rhythm, separate day/night palettes. */
 .notes-card-grid {
+    --atlas-ink: #e7edf8;
+    --atlas-muted: #afbdd0;
+    --atlas-route: #6f98b7;
+    --atlas-surface: #101b30;
     position: relative;
     isolation: isolate;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: clamp(0.15rem, 1vw, 0.75rem);
+    gap: .7rem;
     width: 100%;
-    max-width: 50rem;
-    margin: clamp(1rem, 2.4vw, 1.9rem) auto 0;
-    padding: 0.2rem clamp(0.25rem, 1.5vw, 1rem) 1.4rem;
+    max-width: 49rem;
+    margin: 1.3rem auto 0;
+    padding: .4rem .5rem 1.2rem;
 }
-
-/* One quiet route is the only decorative structure on the page. */
 .notes-card-grid::before {
     position: absolute;
-    inset: 0.5rem 0 0;
-    z-index: 0;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 700' preserveAspectRatio='none'%3E%3Cpath d='M70 124 C 260 18 405 205 553 131 S 832 23 933 162 C 1016 277 806 310 701 378 S 618 596 495 626 C 364 658 249 556 278 444 S 177 274 69 334' fill='none' stroke='%237dd3fc' stroke-opacity='.25' stroke-width='2' stroke-dasharray='4 11'/%3E%3Ccircle cx='70' cy='124' r='4' fill='%23a78bfa' fill-opacity='.42'/%3E%3Ccircle cx='933' cy='162' r='4' fill='%2338bdf8' fill-opacity='.42'/%3E%3Ccircle cx='495' cy='626' r='5' fill='%2322d3ee' fill-opacity='.38'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    inset: 1rem 2rem;
+    z-index: -1;
     content: "";
-    opacity: 0.72;
     pointer-events: none;
+    background: var(--atlas-route);
+    opacity: .22;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 700' preserveAspectRatio='none'%3E%3Cpath d='M70 124 C260 18 405 205 553 131 S832 23 933 162 C1016 277 806 310 701 378 S618 596 495 626 C364 658 249 556 278 444 S177 274 69 334' fill='none' stroke='white' stroke-width='2' stroke-dasharray='4 11'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
 }
-
 .notes-link-card {
-    --notes-atlas-accent: var(--sl-color-text-accent);
-    --notes-atlas-art: none;
+    --notes-atlas-accent: #75bdcf;
     position: relative;
-    z-index: 1;
+    isolation: isolate;
     display: grid;
     align-content: center;
-    min-height: clamp(7.3rem, 10vw, 8.4rem);
+    min-height: 8.5rem;
+    width: 100%;
     margin: 0;
-    padding: clamp(0.8rem, 1.4vw, 1.1rem) clamp(8.8rem, 12vw, 10.4rem) clamp(0.8rem, 1.4vw, 1.1rem) 0.72rem;
+    padding: 1.2rem 10.5rem 1.2rem 1.4rem;
     overflow: visible;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    color: var(--sl-color-text);
+    border: 1px solid color-mix(in srgb, var(--notes-atlas-accent) 14%, transparent);
+    border-radius: .8rem;
+    background: color-mix(in srgb, var(--atlas-surface) 72%, transparent);
+    color: var(--atlas-ink);
     box-shadow: none;
     filter: none;
-    text-decoration: none;
     transform: none;
-    transition: color 220ms ease;
+    text-decoration: none;
+    transition: background 180ms ease, border-color 180ms ease;
 }
-
 .notes-link-card:nth-child(2),
 .notes-link-card:nth-child(4) {
-    padding-right: 0.72rem;
-    padding-left: clamp(8.8rem, 12vw, 10.4rem);
+    padding-inline: 10.5rem 1.4rem;
 }
-
 .notes-link-card:nth-child(5) {
     grid-column: auto;
     justify-self: stretch;
+    margin: 0;
     width: 100%;
-    margin-top: 0;
 }
-
-.notes-link-card:nth-child(2)::before,
-.notes-link-card:nth-child(4)::before {
-    right: auto;
-    left: 0.25rem;
-}
-
-.notes-link-card:nth-child(2)::after,
-.notes-link-card:nth-child(4)::after {
-    right: auto;
-    left: clamp(8.8rem, 12vw, 10.4rem);
-}
-
 .notes-link-card::before {
     position: absolute;
-    inset: 50% 0.25rem auto auto;
-    width: clamp(7.8rem, 11vw, 9.25rem);
-    height: clamp(5.2rem, 7.33vw, 6.17rem);
-    background: var(--notes-atlas-art) center / contain no-repeat;
+    inset: 50% 1.1rem auto auto;
+    width: 8rem;
+    height: 5.4rem;
     content: "";
-    opacity: 0.7;
-    filter: saturate(0.9) brightness(1.08) drop-shadow(0 0.85rem 1.7rem color-mix(in srgb, var(--notes-atlas-accent) 16%, transparent));
+    background: var(--notes-atlas-art) center / contain no-repeat;
+    opacity: 1;
+    filter: none;
     pointer-events: none;
     transform: translateY(-50%);
-    transform-origin: center;
-    transition: opacity 240ms ease, transform 320ms cubic-bezier(0.2, 0.75, 0.25, 1), filter 240ms ease;
+    transition: transform 180ms ease;
 }
-
-/* A curved route spark gives the active link a quick, organic sense of motion. */
+.notes-link-card:nth-child(2)::before,
+.notes-link-card:nth-child(4)::before { inset-inline: 1.1rem auto; }
 .notes-link-card::after {
-    position: absolute;
-    inset: auto auto 0.3rem 0.72rem;
-    width: 4.4rem;
-    height: 1.1rem;
-    border: 0;
-    border-radius: 0;
-    background: linear-gradient(105deg, color-mix(in srgb, var(--notes-atlas-accent) 42%, transparent), var(--notes-atlas-accent) 68%, color-mix(in srgb, var(--notes-atlas-accent) 78%, white));
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 24'%3E%3Cpath d='M4 18 C24 2 43 23 65 10 C76 4 84 6 92 3' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='4' cy='18' r='4' fill='white'/%3E%3Ccircle cx='65' cy='10' r='5' fill='white'/%3E%3Ccircle cx='92' cy='3' r='3' fill='white'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 24'%3E%3Cpath d='M4 18 C24 2 43 23 65 10 C76 4 84 6 92 3' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='4' cy='18' r='4' fill='white'/%3E%3Ccircle cx='65' cy='10' r='5' fill='white'/%3E%3Ccircle cx='92' cy='3' r='3' fill='white'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-    content: "";
-    opacity: 0.48;
-    filter: drop-shadow(0 0.1rem 0.35rem color-mix(in srgb, var(--notes-atlas-accent) 24%, transparent));
-    pointer-events: none;
-    transform: rotate(-4deg) scale(0.9);
-    transform-origin: left bottom;
-    transition: opacity 220ms ease, transform 360ms cubic-bezier(0.2, 1.3, 0.3, 1), filter 220ms ease;
+    content: none;
 }
-
 .notes-link-card-systems {
     --notes-atlas-accent: #55d7b6;
     --notes-atlas-art: url('/cards/atlas-v3/systems.svg');
 }
-
 .notes-link-card-intro {
     --notes-atlas-accent: #55c9f2;
     --notes-atlas-art: url('/cards/atlas-v3/intro.svg');
 }
-
 .notes-link-card-languages {
     --notes-atlas-accent: #73d6ee;
     --notes-atlas-art: url('/cards/atlas-v3/languages.svg');
 }
-
 .notes-link-card-algorithms {
     --notes-atlas-accent: #a990ff;
     --notes-atlas-art: url('/cards/atlas-v3/algorithms.svg');
 }
-
 .notes-link-card-architecture {
     --notes-atlas-accent: #72d7e7;
     --notes-atlas-art: url('/cards/atlas-v3/architecture.svg');
 }
-
 .notes-link-card-baiyun {
     --notes-atlas-accent: #8ccbe2;
     --notes-atlas-art: url('/baiyun/fish-mark.jpg');
 }
-
+.notes-link-card-baiyun::before {
+    border-radius: .6rem;
+    opacity: .8;
+    filter: invert(1);
+    mix-blend-mode: screen;
+}
 .notes-link-card-title,
 .notes-link-card-description {
     position: relative;
-    z-index: 1;
     display: block;
+    font-family: var(--font-prose);
 }
-
 .notes-link-card-title {
     width: fit-content;
-    max-width: 20ch;
-    color: var(--sl-color-text);
-    font-family: var(--font-prose);
-    font-size: clamp(1.26rem, 1rem + 0.65vw, 1.58rem);
-    font-weight: 680;
-    line-height: 1.28;
-    letter-spacing: 0.005em;
-    transition: color 220ms ease, transform 220ms ease;
+    max-width: 100%;
+    color: var(--atlas-ink);
+    font-size: clamp(1.2rem, 1.05rem + .5vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: .015em;
+    text-wrap: balance;
+    transition: color 180ms ease;
 }
-
 .notes-link-card-title::after {
-    display: inline-block;
-    margin-inline-start: 0.46rem;
-    color: var(--notes-atlas-accent);
     content: "↗";
-    font-family: var(--font-ui);
-    font-size: 0.72em;
-    opacity: 0;
-    transform: translate(-0.35rem, 0.08rem);
-    transition: opacity 200ms ease, transform 220ms ease;
+    display: inline-block;
+    margin-inline-start: .6em;
+    font-size: .7em;
+    color: var(--notes-atlas-accent);
+    opacity: .7;
+    transition: transform 180ms ease;
 }
-
 .notes-link-card-description {
-    max-width: 32ch;
-    margin-top: 0.42rem;
-    color: var(--notes-atlas-muted);
-    font-family: var(--font-prose);
-    font-size: clamp(0.88rem, 0.82rem + 0.2vw, 0.98rem);
-    font-weight: 460;
-    line-height: 1.55;
-    letter-spacing: -0.012em;
+    max-width: 100%;
+    text-wrap: pretty;
+    margin-top: .45rem;
+    color: var(--atlas-muted);
+    font-size: .9rem;
+    font-weight: 400;
+    line-height: 1.8;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
 }
-
-.notes-link-card-arrow {
-    display: none;
-}
-
+.notes-link-card-arrow { display: none; }
 .notes-link-card:hover,
 .notes-link-card:focus-visible {
-    border: 0;
-    background: transparent;
-    color: var(--sl-color-text);
+    color: var(--atlas-ink);
+    border-color: color-mix(in srgb, var(--notes-atlas-accent) 55%, transparent);
+    background: color-mix(in srgb, var(--notes-atlas-accent) 8%, var(--atlas-surface));
     box-shadow: none;
     filter: none;
     transform: none;
 }
-
-.notes-link-card:hover::before,
-.notes-link-card:focus-visible::before {
-    opacity: 0.96;
-    filter: saturate(1.08) brightness(1.14) drop-shadow(0 1rem 2rem color-mix(in srgb, var(--notes-atlas-accent) 22%, transparent));
-    transform: translateY(-50%) scale(1.045);
-}
-
-.notes-link-card:hover::after,
-.notes-link-card:focus-visible::after {
-    opacity: 0.96;
-    filter: drop-shadow(0 0.18rem 0.5rem color-mix(in srgb, var(--notes-atlas-accent) 44%, transparent));
-    transform: translate(0.32rem, -0.1rem) rotate(1deg) scale(1.04);
-}
-
 .notes-link-card:hover .notes-link-card-title,
-.notes-link-card:focus-visible .notes-link-card-title {
-    color: color-mix(in srgb, var(--notes-atlas-accent) 72%, var(--sl-color-text));
-    transform: translateX(0.16rem);
-}
-
+.notes-link-card:focus-visible .notes-link-card-title { color: var(--notes-atlas-accent); }
 .notes-link-card:hover .notes-link-card-title::after,
-.notes-link-card:focus-visible .notes-link-card-title::after {
-    opacity: 0.92;
-    transform: translate(0, 0.08rem);
-}
-
+.notes-link-card:focus-visible .notes-link-card-title::after { transform: translate(.12em, -.12em); }
 .notes-link-card:focus-visible {
-    outline: none;
+    outline: 2px solid var(--notes-atlas-accent);
+    outline-offset: 4px;
 }
 
-:root[data-theme='light'] .notes-card-grid::before {
-    opacity: 0.5;
-    filter: saturate(0.72) brightness(0.82);
+:root[data-theme='light'] .notes-card-grid {
+    --atlas-ink: #27374d;
+    --atlas-muted: #52647a;
+    --atlas-route: #526c87;
+    --atlas-surface: #ffffff;
 }
-
-:root[data-theme='light'] .notes-link-card::before {
-    opacity: 0.86;
-    filter: saturate(0.9) brightness(0.76) drop-shadow(0 0.75rem 1.4rem color-mix(in srgb, var(--notes-atlas-accent) 15%, transparent));
+:root[data-theme='light'] main:has(.notes-card-grid) {
+    background: #f2f6fa;
 }
-
-/* The Baiyun entry intentionally keeps the original JPG, including its canvas. */
-.notes-link-card-baiyun::before {
-    background-size: 132% auto;
-    opacity: 0.2;
-    mix-blend-mode: normal;
-    filter: none;
+:root[data-theme='light'] .notes-link-card-systems {
+    --notes-atlas-accent: #197d67;
+    --notes-atlas-art: url('/cards/atlas-light/systems.svg');
 }
-
-:root[data-theme='light'] .notes-link-card-baiyun::before {
-    opacity: 0.42;
-    mix-blend-mode: normal;
-    filter: none;
+:root[data-theme='light'] .notes-link-card-intro {
+    --notes-atlas-accent: #227da4;
+    --notes-atlas-art: url('/cards/atlas-light/intro.svg');
 }
-
-.notes-link-card-baiyun:hover::before,
-.notes-link-card-baiyun:focus-visible::before {
-    opacity: 0.32;
-    filter: none;
+:root[data-theme='light'] .notes-link-card-languages {
+    --notes-atlas-accent: #23778b;
+    --notes-atlas-art: url('/cards/atlas-light/languages.svg');
 }
-
-:root[data-theme='light'] .notes-link-card-baiyun:hover::before,
-:root[data-theme='light'] .notes-link-card-baiyun:focus-visible::before {
-    opacity: 0.58;
-    filter: none;
+:root[data-theme='light'] .notes-link-card-algorithms {
+    --notes-atlas-accent: #7652b4;
+    --notes-atlas-art: url('/cards/atlas-light/algorithms.svg');
 }
+:root[data-theme='light'] .notes-link-card-architecture {
+    --notes-atlas-accent: #277d8b;
+    --notes-atlas-art: url('/cards/atlas-light/architecture.svg');
+}
+:root[data-theme='light'] .notes-link-card-baiyun { --notes-atlas-accent: #376d86; }
+:root[data-theme='light'] .notes-link-card-baiyun::before { opacity: .85; filter: none; mix-blend-mode: multiply; }
 
-@media (max-width: 49.999rem) {
-    .notes-card-grid {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-        padding-inline: clamp(0.5rem, 4vw, 2rem);
-    }
-
-    .notes-card-grid::before {
-        inset: 1.2rem auto 1rem 0.75rem;
-        width: 1px;
-        background: repeating-linear-gradient(to bottom, var(--notes-atlas-route) 0 4px, transparent 4px 12px);
-        opacity: 0.38;
-    }
-
+@media (max-width: 50rem) {
+    .notes-card-grid { gap: .65rem; margin-top: .8rem; padding: .25rem 0 1rem; }
+    .notes-card-grid::before { display: none; }
     .notes-link-card,
     .notes-link-card:nth-child(2),
     .notes-link-card:nth-child(4),
     .notes-link-card:nth-child(5) {
-        grid-column: auto;
-        justify-self: stretch;
-        width: 100%;
-        min-height: 10rem;
-        margin: 0;
-        padding-left: 2.1rem;
+        min-height: 8rem;
+        padding: 1rem 5.7rem 1rem 1rem;
     }
-
-    .notes-link-card::after {
-        inset: 50% auto auto 0.5rem;
-        width: 0.68rem;
-        height: 0.68rem;
-        border: 1px solid var(--notes-atlas-accent);
-        border-radius: 0.18rem;
-        background: var(--sl-color-bg);
-        -webkit-mask: none;
-        mask: none;
-        box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--notes-atlas-accent) 12%, transparent);
-        opacity: 0.82;
-        filter: none;
-        transform: translate(-50%, -50%) rotate(45deg);
-        transform-origin: center;
-    }
-
-    .notes-link-card:hover::after,
-    .notes-link-card:focus-visible::after {
-        opacity: 1;
-        box-shadow: 0 0 0 0.28rem color-mix(in srgb, var(--notes-atlas-accent) 18%, transparent), 0 0 1rem color-mix(in srgb, var(--notes-atlas-accent) 38%, transparent);
-        filter: none;
-        transform: translate(-50%, -50%) rotate(45deg) scale(1.12);
-    }
-}
-
-@media (max-width: 49.999rem) {
-    .notes-card-grid {
-        gap: 0;
-        margin-top: 0.85rem;
-        padding: 0.35rem 0 0.8rem 1rem;
-    }
-
-    .notes-card-grid::before {
-        left: 0.24rem;
-    }
-
-    .notes-link-card,
-    .notes-link-card:nth-child(2),
-    .notes-link-card:nth-child(4),
-    .notes-link-card:nth-child(5) {
-        min-height: 7.2rem;
-        padding: 0.8rem 6.25rem 0.8rem 1.35rem;
-    }
-
-    .notes-link-card::before {
-        right: 0.1rem;
-        width: 5.75rem;
-        height: 3.83rem;
-        opacity: 0.7;
-    }
-
+    .notes-link-card::before,
     .notes-link-card:nth-child(2)::before,
     .notes-link-card:nth-child(4)::before {
-        right: 0.1rem;
-        left: auto;
+        inset-inline: auto .55rem;
+        width: 4.7rem;
+        height: 3.3rem;
     }
-
-    .notes-link-card::after {
-        left: -0.76rem;
-    }
-
-    .notes-link-card-title {
-        max-width: 100%;
-        font-size: 1.16rem;
-    }
-
-    .notes-link-card-description {
-        max-width: 100%;
-        margin-top: 0.42rem;
-        font-size: 0.86rem;
-        line-height: 1.56;
-    }
+    .notes-link-card-title { font-size: 1.125rem; }
+    .notes-link-card-description { font-size: .85rem; line-height: 1.7; }
 }
-
-/* Keep the page hand-off as quiet as the atlas itself. */
+@media (max-width: 24rem) {
+    .notes-link-card,
+    .notes-link-card:nth-child(2),
+    .notes-link-card:nth-child(4),
+    .notes-link-card:nth-child(5) { padding-inline-end: 1rem; padding-top: 3.6rem; }
+    .notes-link-card::before,
+    .notes-link-card:nth-child(2)::before,
+    .notes-link-card:nth-child(4)::before { inset: .45rem auto auto .9rem; width: 3.8rem; height: 2.6rem; transform: none; }
+}
 html:has(.notes-card-grid) .pagination-links > a {
     width: fit-content;
     min-height: 0;
     border: 0;
     background: transparent;
     box-shadow: none;
-    padding: 0.55rem 0;
+    padding: .55rem 0;
     justify-self: end;
-    transition: color 180ms ease, transform 180ms ease;
 }
-
-html:has(.notes-card-grid) .pagination-links > a:hover,
-html:has(.notes-card-grid) .pagination-links > a:focus-visible {
-    color: var(--sl-color-text-accent);
-    transform: translateX(0.2rem);
-}
-
-html:has(.notes-card-grid) .pagination-links .link-title {
-    font-size: 1rem;
-}
-
-@media (max-width: 49.999rem) {
-    html:has(.notes-card-grid) .pagination-links {
-        padding-inline: 1rem;
-    }
-
-    html:has(.notes-card-grid) .pagination-links > a {
-        padding-block: 0.3rem;
-    }
-}
-
+html:has(.notes-card-grid) .pagination-links .link-title { font-size: 1rem; }
 @media (prefers-reduced-motion: reduce) {
     .notes-link-card,
     .notes-link-card::before,
-    .notes-link-card::after,
     .notes-link-card-title,
-    .notes-link-card-title::after {
-        transition: none;
-    }
+    .notes-link-card-title::after { transition: none; }
 }

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Data structures tree">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m120 40-53 43m53-43 53 43M67 83l-30 34m30-34 30 34" stroke="#62758e" stroke-width="7"/>
+    <path d="m120 40-53 43-30 34" stroke="#7652b4" stroke-width="5"/>
+    <circle cx="120" cy="35" r="13" fill="#7652b4" fill-opacity=".55" stroke="#62758e" stroke-width="6"/>
+    <circle cx="67" cy="83" r="12" fill="#23778b" fill-opacity=".45" stroke="#62758e" stroke-width="6"/>
+    <circle cx="173" cy="83" r="12" fill="#7652b4" fill-opacity=".3" stroke="#62758e" stroke-width="6"/>
+    <circle cx="37" cy="121" r="11" fill="#197d67" fill-opacity=".55" stroke="#62758e" stroke-width="6"/>
+    <circle cx="97" cy="121" r="11" fill="#7652b4" fill-opacity=".42" stroke="#62758e" stroke-width="6"/>
+  </g>
+</svg>
