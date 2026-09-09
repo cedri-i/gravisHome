@@ -616,7 +616,13 @@ body:has(.home-starsky) .page {
     opacity: .84;
     filter: saturate(.92) contrast(1.02) brightness(.98);
     transform-origin: 50% 50%;
-    animation: skyGalaxyDrift 56s cubic-bezier(.45, .05, .55, .95) infinite alternate;
+    animation: skyGalaxyDrift 180s ease-in-out infinite alternate;
+}
+
+/* Rotate inside the inclined plane, around the SVG disc's local centre. */
+#sky-galaxy .galaxy-disc {
+    transform-origin: 0 0;
+    animation: skyGalaxyRotate 3600s linear infinite;
 }
 
 #sky-galaxy .galaxy-light {
@@ -633,13 +639,18 @@ body:has(.home-starsky) .page {
         drop-shadow(0 0 12px rgba(129, 190, 255, .7));
 }
 
+@keyframes skyGalaxyRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 @keyframes skyGalaxyDrift {
     from {
-        transform: translate3d(0, 0, 0) scale(.995);
+        transform: translate3d(0, 0, 0);
     }
 
     to {
-        transform: translate3d(-.35vw, .2vh, 0) scale(1.008);
+        transform: translate3d(-12px, 8px, 0);
     }
 }
 
@@ -667,7 +678,8 @@ body:has(.home-starsky) .page {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    #sky-galaxy svg {
+    #sky-galaxy svg,
+    #sky-galaxy .galaxy-disc {
         animation: none;
         transform: none;
     }
