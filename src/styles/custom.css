@@ -1636,101 +1636,6 @@ button[aria-label*="theme"] {
     color: var(--sl-color-gray-2);
 }
 
-main:has(.baiyun-meta) {
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, #1f2937 40%, transparent),
-            color-mix(in srgb, #0f172a 18%, transparent)
-        );
-}
-
-main:has(.baiyun-meta) .content-panel {
-    border-bottom: 0;
-}
-
-main:has(.baiyun-meta) .content-panel > .sl-container {
-    max-width: 50rem;
-    margin-inline: auto;
-}
-
-main:has(.baiyun-meta) h1 {
-    color: color-mix(in srgb, var(--sl-color-white) 94%, #d5eadf 6%);
-    font-family:
-        "STZhongsong", "华文中宋", "FZZhongSong-Z07", "FZYaSongS-R-GB",
-        "Songti SC", SimSun, "Noto Serif SC", "Source Han Serif SC", serif;
-    font-size: clamp(2.6rem, 4vw, 4rem);
-    font-weight: 560;
-  letter-spacing: -0.025em;
-    letter-spacing: 0.04em;
-    text-shadow: 0 10px 36px color-mix(in srgb, #000000 32%, transparent);
-}
-
-main:has(.baiyun-meta) .content-panel:has(.baiyun-meta) > .sl-container {
-    max-width: 54rem;
-    margin: 0 auto 4rem;
-    padding: clamp(1.5rem, 3vw, 3rem);
-    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 32%, transparent);
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--sl-color-bg) 78%, transparent);
-    box-shadow: 0 22px 70px color-mix(in srgb, #000000 18%, transparent);
-    backdrop-filter: blur(10px);
-}
-
-main:has(.baiyun-meta) .sl-markdown-content h2 {
-    margin-top: 2.5rem;
-    color: color-mix(in srgb, var(--sl-color-text) 90%, var(--sl-color-gray-2) 10%);
-    font-family:
-        "STZhongsong", "华文中宋", "FZZhongSong-Z07", "FZYaSongS-R-GB",
-        "Songti SC", SimSun, "Noto Serif SC", "Source Han Serif SC", serif;
-    font-size: 1.55rem;
-    letter-spacing: 0.02em;
-}
-
-.baiyun-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.45rem 0.75rem;
-    margin: 0.35rem 0 2.25rem;
-    color: var(--sl-color-gray-3);
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
-
-.baiyun-meta span {
-    color: inherit;
-}
-
-.baiyun-meta a {
-    color: color-mix(in srgb, var(--sl-color-text-accent) 80%, var(--sl-color-gray-2));
-    text-decoration: none;
-}
-
-.baiyun-badge {
-    border: 1px solid color-mix(in srgb, var(--sl-color-gray-4) 55%, transparent);
-    border-radius: 3px;
-    padding: 0 0.28rem;
-    color: var(--sl-color-gray-3);
-    font-size: 0.78rem;
-}
-
-.baiyun-meta ~ p {
-    color: color-mix(in srgb, var(--sl-color-text) 92%, var(--sl-color-white) 8%);
-    font-family: "Noto Serif SC", "Source Han Serif SC", "Microsoft YaHei", sans-serif;
-    font-size: 1.05rem;
-    line-height: 2.05;
-    letter-spacing: 0.01em;
-    text-align: justify;
-    text-indent: 2em;
-}
-
-.baiyun-preface {
-    color: var(--sl-color-gray-2) !important;
-    font-style: italic;
-    text-indent: 0 !important;
-}
-
 .pagefind-keywords {
     position: absolute;
     width: 1px;
@@ -1738,60 +1643,6 @@ main:has(.baiyun-meta) .sl-markdown-content h2 {
     overflow: hidden;
     clip: rect(0 0 0 0);
     white-space: nowrap;
-}
-
-.baiyun-meta ~ p:first-of-type {
-    margin-top: 2rem;
-}
-
-.baiyun-figure {
-    margin: 2rem 0;
-}
-
-.baiyun-figure img {
-    width: 100%;
-    border-radius: 8px;
-    border: 1px solid color-mix(in srgb, var(--sl-color-gray-4) 28%, transparent);
-    box-shadow: 0 18px 48px color-mix(in srgb, #000000 24%, transparent);
-}
-
-.baiyun-figure-wide {
-    max-width: 42rem;
-}
-
-.baiyun-figure figcaption,
-.baiyun-caption {
-    margin-top: 0.75rem;
-    color: var(--sl-color-gray-3);
-    font-family: "Songti SC", SimSun, "Noto Serif SC", serif;
-    font-size: 0.78rem;
-    line-height: 1.8;
-    text-indent: 0 !important;
-}
-
-.baiyun-photo-pair {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    align-items: start;
-    margin-top: 2rem;
-}
-
-.baiyun-photo-pair .baiyun-figure {
-    margin: 0;
-}
-
-.baiyun-signoff {
-    margin-top: 2.5rem !important;
-    text-align: right !important;
-    color: var(--sl-color-gray-2) !important;
-    text-indent: 0 !important;
-}
-
-@media (max-width: 42rem) {
-    .baiyun-photo-pair {
-        grid-template-columns: 1fr;
-    }
 }
 
 [hidden] {
@@ -2259,67 +2110,6 @@ starlight-theme-select svg,
     filter: blur(1.1px) saturate(.74) brightness(.9);
     opacity: .7;
 }
-/* Baiyun article photo rhythm */
-.baiyun-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .45rem .7rem;
-    margin: -0.35rem 0 2.2rem;
-    color: color-mix(in srgb, var(--sl-color-gray-2) 78%, var(--sl-color-text) 22%);
-    font-size: .94rem;
-}
-
-.baiyun-meta span:first-child {
-    padding: .08rem .36rem;
-    border-radius: .22rem;
-    background: color-mix(in srgb, var(--sl-color-gray-6) 72%, transparent);
-    color: color-mix(in srgb, var(--sl-color-text) 74%, transparent);
-}
-
-.baiyun-photo-pair,
-.baiyun-photo-wide {
-    margin: 1.35rem 0 1.65rem;
-}
-
-.baiyun-photo-pair {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .9rem;
-}
-
-.baiyun-photo-pair figure,
-.baiyun-photo-wide {
-    margin-inline: 0;
-}
-
-.baiyun-photo-pair img,
-.baiyun-photo-wide img {
-    display: block;
-    width: 100%;
-    border-radius: .55rem;
-    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 70%, transparent);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, .16);
-}
-
-.baiyun-photo-pair figcaption,
-.baiyun-photo-wide figcaption {
-    grid-column: 1 / -1;
-    margin-top: .5rem;
-    color: var(--sl-color-gray-2);
-    font-size: .9rem;
-    text-align: center;
-}
-
-.baiyun-signoff {
-    margin-top: 2rem;
-    color: var(--sl-color-gray-2);
-}
-
-@media (max-width: 42rem) {
-    .baiyun-photo-pair {
-        grid-template-columns: 1fr;
-    }
-}
 
 :root[data-theme="light"] body:has(#water-pond) .page {
     background-color: #adcbd2;
@@ -2329,35 +2119,6 @@ starlight-theme-select svg,
 :root[data-theme="light"] .feature-grid,
 :root[data-theme="light"] .guestbook-section {
     color: rgba(23, 39, 48, .92);
-}
-/* Refined Baiyun caption notes */
-.baiyun-caption-note {
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    margin: .72rem auto 0 !important;
-    padding: .34rem .68rem;
-    border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 58%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--sl-color-bg) 86%, var(--sl-color-gray-6) 14%);
-    box-shadow: 0 10px 24px color-mix(in srgb, #000000 8%, transparent);
-    color: color-mix(in srgb, var(--sl-color-gray-2) 86%, var(--sl-color-text) 14%) !important;
-    font-family: "Songti SC", SimSun, "Noto Serif SC", serif;
-    font-size: .82rem;
-    line-height: 1.75;
-    text-align: center;
-    text-indent: 0 !important;
-}
-
-.baiyun-photo-pair figure > .baiyun-caption-note {
-    margin-inline: auto !important;
-}
-
-:root[data-theme="light"] .baiyun-caption-note {
-    background: rgba(255, 255, 255, .72);
-    border-color: rgba(120, 130, 145, .2);
-    box-shadow: 0 12px 26px rgba(35, 48, 64, .1);
-    color: #4b5563 !important;
 }
 
 
@@ -2745,82 +2506,6 @@ body:not(:has(.baiyun-meta)) .sl-markdown-content blockquote::before {
     font-family: var(--font-display);
     font-size: 2rem;
     line-height: 1;
-}
-
-/* Baiyun prose keeps its serif voice while sharing the same quote frame. */
-body:has(.baiyun-meta) .sl-markdown-content blockquote {
-    position: relative;
-    margin-block: 1rem;
-    padding: .85rem 1rem .85rem 1.65rem;
-    border: 1px solid color-mix(in srgb, var(--sl-color-hairline) 72%, transparent);
-    border-inline-start: 2px solid color-mix(in srgb, var(--sl-color-accent) 58%, var(--sl-color-hairline));
-    border-radius: .45rem;
-    background: linear-gradient(112deg, color-mix(in srgb, var(--sl-color-bg-inline-code) 72%, transparent), transparent 78%);
-    box-shadow: inset 0 1px color-mix(in srgb, var(--sl-color-white) 7%, transparent);
-}
-
-body:has(.baiyun-meta) .sl-markdown-content blockquote::before {
-    position: absolute;
-    inset-block-start: .18rem;
-    inset-inline-start: .48rem;
-    color: color-mix(in srgb, var(--sl-color-accent) 58%, transparent);
-    font-family: var(--font-display);
-    font-size: 2rem;
-    line-height: 1;
-    content: "“";
-}
-
-/* Unified Baiyun display title and image captions */
-body:has(.baiyun-meta) .sl-markdown-content > h1:first-of-type,
-body:has(.baiyun-meta) .content-panel h1:first-of-type {
-    font-family:
-        "LiuGongQuan",
-        "FZLiuGongQuanKaiShu",
-        "方正柳公权楷书",
-        "Liu Gong Quan Kai",
-        "STKaiti",
-        "KaiTi",
-        "楷体",
-        serif;
-    font-weight: 600;
-    letter-spacing: .055em;
-}
-
-body:has(.baiyun-meta) figcaption.baiyun-caption-note,
-body:has(.baiyun-meta) p.baiyun-caption-note,
-body:has(.baiyun-meta) .baiyun-caption.baiyun-caption-note {
-    box-sizing: border-box;
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    margin: .72rem auto 0 !important;
-    padding: .34rem .68rem !important;
-    font-family: "Songti SC", SimSun, "Noto Serif SC", serif !important;
-    font-size: .82rem !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    line-height: 1.75 !important;
-    letter-spacing: 0 !important;
-    text-align: center !important;
-    text-indent: 0 !important;
-}
-
-
-/* Unified Baiyun article body typography */
-body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun-signoff),
-body:has(.baiyun-meta) .sl-markdown-content > ul,
-body:has(.baiyun-meta) .sl-markdown-content > ol,
-body:has(.baiyun-meta) .sl-markdown-content blockquote {
-    color: color-mix(in srgb, var(--sl-color-text) 92%, var(--sl-color-white) 8%);
-    font-family: "Songti SC", SimSun, "Noto Serif SC", "Source Han Serif SC", serif;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 2.05;
-    letter-spacing: .01em;
-}
-body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun-caption-note):not(.baiyun-signoff):not(.baiyun-preface) {
-    text-align: justify;
-    text-indent: 2em !important;
 }
 
 /* Preserve source-note indentation on plain paragraphs without list markers. */

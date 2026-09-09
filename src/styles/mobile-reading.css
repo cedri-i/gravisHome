@@ -349,55 +349,7 @@
         line-height: 1.35;
     }
 
-    /* Essays keep their literary voice, but lose the oversized glass frame. */
-    main:has(.baiyun-meta) .content-panel {
-        padding-inline: var(--mobile-reading-gutter);
-    }
 
-    main:has(.baiyun-meta) h1 {
-        font-size: clamp(2rem, 9.5vw, 2.45rem);
-        line-height: 1.22;
-        letter-spacing: 0.035em;
-        text-wrap: balance;
-    }
-
-    main:has(.baiyun-meta) .content-panel:has(.baiyun-meta) > .sl-container {
-        max-width: none;
-        margin: 0 auto 2rem;
-        padding: 1.15rem 1rem 1.5rem;
-        border-color: var(--mobile-reading-rule);
-        border-radius: var(--mobile-reading-radius);
-        background: color-mix(in srgb, var(--sl-color-bg) 91%, transparent);
-        box-shadow: 0 0.5rem 1.6rem color-mix(in srgb, #000 10%, transparent);
-        backdrop-filter: none;
-    }
-
-    .baiyun-meta {
-        gap: 0.34rem 0.62rem;
-        margin-bottom: 1.55rem;
-        font-size: 0.8rem;
-    }
-
-    body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun-signoff),
-    body:has(.baiyun-meta) .sl-markdown-content > ul,
-    body:has(.baiyun-meta) .sl-markdown-content > ol,
-    body:has(.baiyun-meta) .sl-markdown-content blockquote {
-        font-size: 0.98rem;
-        line-height: 1.98;
-    }
-
-    body:has(.baiyun-meta) .sl-markdown-content > p:not(.baiyun-caption):not(.baiyun-caption-note):not(.baiyun-signoff):not(.baiyun-preface) {
-        text-align: start;
-    }
-
-    .baiyun-figure {
-        margin-block: 1.45rem;
-    }
-
-    .baiyun-figure img {
-        border-radius: 0.55rem;
-        box-shadow: 0 0.6rem 1.6rem color-mix(in srgb, #000 18%, transparent);
-    }
 }
 
 @media (hover: none) and (pointer: coarse) {

@@ -85,6 +85,7 @@ export default defineConfig({
                 './src/styles/collapsible-headings.css',
                 './src/styles/mobile-reading.css',
                 './src/styles/notes-atlas.css',
+                './src/styles/baiyun-articles.css',
             ],
             head: [
                 { tag: 'script', attrs: { type: 'module', src: '/seasonal-world.js' } },

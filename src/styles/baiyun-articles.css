@@ -1,0 +1,213 @@
+/* Shared reading system for every Baiyun article. Archive shelves are independent. */
+body:has(.baiyun-meta) {
+    --baiyun-ink: var(--sl-color-text);
+    --baiyun-muted: var(--sl-color-gray-2);
+    --baiyun-rule: color-mix(in srgb, var(--sl-color-hairline) 80%, transparent);
+    --baiyun-paper: color-mix(in srgb, var(--sl-color-bg) 96%, #a99bc9 4%);
+    --baiyun-accent: var(--sl-color-text-accent);
+    --baiyun-measure: 48rem;
+}
+
+:root[data-theme="light"] body:has(.baiyun-meta) {
+    --baiyun-ink: #302c3c;
+    --baiyun-muted: #655e73;
+    --baiyun-rule: #d9d3e4;
+    --baiyun-paper: #fcfbfe;
+    --baiyun-accent: #71529c;
+}
+
+main:has(.baiyun-meta) {
+    background: none;
+}
+main:has(.baiyun-meta) .content-panel {
+    border: 0;
+    padding-inline: clamp(1rem, 3vw, 2.5rem);
+}
+main:has(.baiyun-meta) .content-panel > .sl-container {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--baiyun-measure);
+    margin-inline: auto;
+}
+main:has(.baiyun-meta) h1 {
+    color: var(--baiyun-ink);
+    font-family: "LiuGongQuan", "FZLiuGongQuanKaiShu", "方正柳公权楷书", "STKaiti", "KaiTi", serif;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: .045em;
+    text-wrap: balance;
+    text-shadow: none;
+}
+main:has(.baiyun-meta) .content-panel:has(.baiyun-meta) > .sl-container {
+    margin-block: 0 2.5rem;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    border: 1px solid var(--baiyun-rule);
+    border-radius: .6rem;
+    background: var(--baiyun-paper);
+    box-shadow: none;
+}
+body:has(.baiyun-meta) .sl-markdown-content {
+    color: var(--baiyun-ink);
+    font-family: var(--font-prose);
+    font-size: 1.0625rem;
+    line-height: 2;
+    letter-spacing: .015em;
+    overflow-wrap: anywhere;
+}
+body:has(.baiyun-meta) :is(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body) > p {
+    margin-block: 1.25em;
+    color: inherit;
+    font: inherit;
+}
+body:has(.baiyun-meta) :is(.sl-markdown-content, .sl-markdown-content .obsidian-heading-body) > p:not(.baiyun-caption):not(.baiyun-caption-note):not(.baiyun-preface):not(.baiyun-signoff) {
+    text-indent: 2em;
+    text-align: start;
+}
+body:has(.baiyun-meta) .sl-markdown-content :is(h2, h3, h4, h5, h6) {
+    color: var(--baiyun-ink);
+    font-family: var(--font-prose);
+    font-weight: 700;
+    line-height: 1.6;
+    letter-spacing: .025em;
+    text-wrap: balance;
+    margin-block: 0;
+}
+body:has(.baiyun-meta) .sl-markdown-content h2 { font-size: 1.5rem; }
+body:has(.baiyun-meta) .sl-markdown-content h3 { font-size: 1.25rem; }
+body:has(.baiyun-meta) .sl-markdown-content :is(h4, h5, h6) { font-size: 1.1rem; }
+body:has(.baiyun-meta) .sl-markdown-content :is(ul, ol) {
+    margin-block: 1.25em;
+    padding-inline-start: 1.6em;
+}
+body:has(.baiyun-meta) .sl-markdown-content li + li { margin-top: .45em; }
+
+.baiyun-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .45rem .85rem;
+    margin: 0 0 1.75rem;
+    padding-bottom: 1.15rem;
+    border-bottom: 1px solid var(--baiyun-rule);
+    color: var(--baiyun-muted);
+    font-family: var(--font-prose);
+    font-size: .8125rem;
+    line-height: 1.8;
+    letter-spacing: 0;
+}
+.baiyun-meta > span {
+    margin: 0;
+    color: inherit;
+}
+.baiyun-meta > span:first-child {
+    padding: 0 .4em;
+    border: 1px solid var(--baiyun-rule);
+    border-radius: .2rem;
+    font-size: inherit;
+}
+.baiyun-meta > span:nth-child(2) { color: var(--baiyun-accent); }
+body:has(.baiyun-meta) .sl-markdown-content .baiyun-preface {
+    color: var(--baiyun-muted);
+    font-size: .95em;
+    font-style: normal;
+    text-indent: 0;
+}
+body:has(.baiyun-meta) .sl-markdown-content .baiyun-signoff {
+    margin-top: 2em;
+    color: var(--baiyun-muted);
+    font-size: .9em;
+    text-align: end;
+    text-indent: 0;
+}
+body:has(.baiyun-meta) .sl-markdown-content blockquote {
+    margin: 1.5em 0;
+    padding: .65em 1.1em;
+    border: 0;
+    border-inline-start: 2px solid var(--baiyun-accent);
+    border-radius: 0;
+    background: color-mix(in srgb, var(--baiyun-accent) 5%, var(--baiyun-paper));
+    box-shadow: none;
+    color: var(--baiyun-ink);
+    font: inherit;
+}
+body:has(.baiyun-meta) .sl-markdown-content blockquote::before { content: none; }
+body:has(.baiyun-meta) .sl-markdown-content blockquote p { margin-block: .5em; }
+
+body:has(.baiyun-meta) .sl-markdown-content :is(.baiyun-figure, .baiyun-photo-wide, .baiyun-photo-pair) {
+    margin: 2rem 0;
+    max-width: 100%;
+}
+.baiyun-photo-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: .85rem;
+}
+body:has(.baiyun-meta) .sl-markdown-content .baiyun-photo-pair > figure {
+    min-width: 0;
+    margin: 0;
+}
+body:has(.baiyun-meta) .sl-markdown-content img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+    border: 1px solid var(--baiyun-rule);
+    border-radius: .4rem;
+    box-sizing: border-box;
+    box-shadow: none;
+    transform: none;
+}
+body:has(.baiyun-meta) .sl-markdown-content :is(figcaption, .baiyun-caption, .baiyun-caption-note) {
+    display: block;
+    grid-column: 1 / -1;
+    width: auto;
+    max-width: 100%;
+    margin: .6rem 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--baiyun-muted);
+    font-family: var(--font-prose);
+    font-size: .8125rem;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1.8;
+    letter-spacing: 0;
+    text-align: start;
+    text-indent: 0;
+}
+body:has(.baiyun-meta) .sl-markdown-content :is(.baiyun-figure, .baiyun-photo-pair) + .baiyun-caption {
+    margin-top: -1.4rem;
+}
+body:has(.baiyun-meta) .sl-markdown-content a:not(.sl-anchor-link) {
+    color: var(--baiyun-accent);
+    text-underline-offset: .2em;
+}
+body:has(.baiyun-meta) .sl-markdown-content a:focus-visible {
+    outline: 2px solid var(--baiyun-accent);
+    outline-offset: 3px;
+}
+
+@media (max-width: 50rem) {
+    main:has(.baiyun-meta) .content-panel { padding-inline: 1rem; }
+    main:has(.baiyun-meta) .content-panel:has(.baiyun-meta) > .sl-container {
+        padding: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    body:has(.baiyun-meta) .sl-markdown-content {
+        font-size: 1rem;
+        line-height: 1.95;
+    }
+    .baiyun-meta { gap: .35rem .7rem; }
+}
+@media (max-width: 32rem) {
+    .baiyun-photo-pair { grid-template-columns: 1fr; gap: 1.25rem; }
+}
+
+body:has(.baiyun-meta) .sl-markdown-content .sl-heading-wrapper { margin-block: 2rem .85rem; }
+body:has(.baiyun-meta) .sl-markdown-content > .baiyun-meta + .obsidian-heading-section > .sl-heading-wrapper { margin-top: 0; }
