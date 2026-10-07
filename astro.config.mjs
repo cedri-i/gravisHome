@@ -205,6 +205,10 @@ if (document.readyState === 'loading') {
             },
             sidebar: [
                 {
+                    label: '📚 读书札记',
+                    link: 'https://gravi-lamplight-reading.pijathamil1.chatgpt.site/',
+                },
+                {
                     label: 'My Notes',
                     items: [
                         {
