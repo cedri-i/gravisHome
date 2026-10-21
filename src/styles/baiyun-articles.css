@@ -222,3 +222,15 @@ body:has(.baiyun-meta) .sl-markdown-content a:focus-visible {
 
 body:has(.baiyun-meta) .sl-markdown-content .sl-heading-wrapper { margin-block: 2rem .85rem; }
 body:has(.baiyun-meta) .sl-markdown-content > .baiyun-meta + .obsidian-heading-section > .sl-heading-wrapper { margin-top: 0; }
+
+/* Verse preserves source line breaks and has no prose first-line indent. */
+body:has(.baiyun-meta) .sl-markdown-content .baiyun-verse p {
+    margin-block: 1.25em;
+    font: inherit;
+    text-indent: 0;
+}
+.baiyun-meta > span.baiyun-author {
+    padding: 0;
+    border: 0;
+    color: var(--baiyun-accent);
+}

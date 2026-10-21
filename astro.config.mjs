@@ -518,6 +518,14 @@ if (document.readyState === 'loading') {
                                     label: '如何在火车上度过一天',
                                     link: '/baiyun/ru-he-zai-huo-che-shang-du-guo-yi-tian/',
                                 },
+                                {
+                                    label: '九月二十七日雨',
+                                    link: '/baiyun/jiu-yue-er-shi-qi-ri-yu/',
+                                },
+                                {
+                                    label: '扬州快',
+                                    link: '/baiyun/yang-zhou-kuai/',
+                                },
                             ],
                         },
                     ],
