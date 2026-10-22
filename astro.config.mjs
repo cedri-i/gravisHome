@@ -209,6 +209,10 @@ if (document.readyState === 'loading') {
                     link: 'https://gravi-lamplight-reading.pijathamil1.chatgpt.site/',
                 },
                 {
+                    label: '🎬 观影记录',
+                    link: 'https://gravi-lamplight-movies.pijathamil1.chatgpt.site/',
+                },
+                {
                     label: 'My Notes',
                     items: [
                         {

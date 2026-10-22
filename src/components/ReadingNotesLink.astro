@@ -1,16 +1,32 @@
 ---
-const href = 'https://gravi-lamplight-reading.pijathamil1.chatgpt.site/';
+interface Props { kind?: 'reading' | 'movies'; }
+const { kind = 'reading' } = Astro.props;
+const isMovies = kind === 'movies';
+const href = isMovies
+  ? 'https://gravi-lamplight-movies.pijathamil1.chatgpt.site/'
+  : 'https://gravi-lamplight-reading.pijathamil1.chatgpt.site/';
+const title = isMovies ? '观影记录' : '读书札记';
+const description = isMovies ? '电影清单与观后感' : '阅读我的读书札记';
 ---
 
 <a class="home-entry-card home-entry-card-notes reading-notes-card" href={href}>
+  {isMovies ? (
+    <svg class="reading-notes-mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <rect class="reading-notes-paper" x="9" y="12" width="46" height="40" rx="5" />
+      <rect x="9" y="12" width="46" height="40" rx="5" stroke="currentColor" stroke-width="1.8" />
+      <path d="M19 12V52M45 12V52M9 22H19M9 32H19M9 42H19M45 22H55M45 32H55M45 42H55" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <path class="reading-notes-bookmark" d="M27 24L39 32L27 40Z" />
+    </svg>
+  ) : (
   <svg class="reading-notes-mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
     <path class="reading-notes-paper" d="M10 14C18 11 25 13 32 18C39 13 46 11 54 14V47C46 44 39 46 32 51C25 46 18 44 10 47Z" />
     <path d="M10 14C18 11 25 13 32 18V51C25 46 18 44 10 47V14ZM32 18C39 13 46 11 54 14V47C46 44 39 46 32 51M17 25C20 25 23 26 26 28M17 33C20 33 23 34 26 36M38 34C41 32 44 31 47 31M38 41C41 39 44 38 47 38" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
     <path class="reading-notes-bookmark" d="M42 10L49 9V29L45.5 26L42 30V10Z" />
   </svg>
+  )}
   <div class="home-entry-content">
-    <div class="home-entry-title">读书札记 →</div>
-    <div class="home-entry-desc">阅读我的读书札记</div>
+    <div class="home-entry-title">{title} →</div>
+    <div class="home-entry-desc">{description}</div>
   </div>
 </a>
 
