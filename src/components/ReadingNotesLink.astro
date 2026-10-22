@@ -2,72 +2,36 @@
 const href = 'https://gravi-lamplight-reading.pijathamil1.chatgpt.site/';
 ---
 
-<a class="reading-notes-link" href={href}>
+<a class="home-entry-card home-entry-card-notes reading-notes-card" href={href}>
   <svg class="reading-notes-mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
     <path class="reading-notes-paper" d="M10 14C18 11 25 13 32 18C39 13 46 11 54 14V47C46 44 39 46 32 51C25 46 18 44 10 47Z" />
     <path d="M10 14C18 11 25 13 32 18V51C25 46 18 44 10 47V14ZM32 18C39 13 46 11 54 14V47C46 44 39 46 32 51M17 25C20 25 23 26 26 28M17 33C20 33 23 34 26 36M38 34C41 32 44 31 47 31M38 41C41 39 44 38 47 38" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
     <path class="reading-notes-bookmark" d="M42 10L49 9V29L45.5 26L42 30V10Z" />
   </svg>
-  <span class="reading-notes-wordmark">读书札记</span>
-  <svg class="reading-notes-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M4 10H16M11 5L16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-  </svg>
+  <div class="home-entry-content">
+    <div class="home-entry-title">读书札记 →</div>
+    <div class="home-entry-desc">阅读我的读书札记</div>
+  </div>
 </a>
 
 <style>
-  .reading-notes-link {
-    --reading-ink: #a0d5cf;
-    --reading-paper: #243f43;
-    --reading-ribbon: #e9b873;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.85rem;
-    max-width: 100%;
-    margin-block-end: 1rem;
-    padding: 0.5rem 0.9rem 0.5rem 0.4rem;
-    border: 1px solid color-mix(in srgb, var(--reading-ink) 30%, transparent);
-    border-radius: 0.4rem 1.1rem 1.1rem 0.4rem;
-    background: color-mix(in srgb, var(--sl-color-bg) 88%, var(--reading-paper));
-    color: var(--reading-ink);
-    text-decoration: none;
-    vertical-align: middle;
-    transition: border-color 180ms ease, background-color 180ms ease;
-  }
   .reading-notes-mark {
-    flex: 0 0 auto;
-    width: 3.6rem;
-    height: 3.6rem;
+    flex: 0 0 2.7rem;
+    width: 2.7rem;
+    height: 2.7rem;
+    color: var(--sl-color-text);
   }
-  .reading-notes-paper { fill: var(--reading-paper); }
-  .reading-notes-bookmark { fill: var(--reading-ribbon); }
-  .reading-notes-wordmark {
-    font-family: var(--font-prose);
-    font-size: 1.2rem;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    white-space: nowrap;
+  .reading-notes-paper {
+    fill: color-mix(in srgb, var(--entry-border) 16%, transparent);
   }
-  .reading-notes-arrow {
-    flex: 0 0 auto;
-    width: 1.15rem;
-    height: 1.15rem;
-    margin-inline-start: 0.65rem;
-    opacity: 0.7;
-  }
-  .reading-notes-link:hover {
-    border-color: var(--reading-ink);
-    background: color-mix(in srgb, var(--sl-color-bg) 76%, var(--reading-paper));
-  }
-  .reading-notes-link:focus-visible {
-    outline: 2px solid var(--reading-ink);
+  .reading-notes-bookmark { fill: var(--entry-border); }
+  .reading-notes-card:focus-visible {
+    outline: 2px solid var(--entry-border);
     outline-offset: 4px;
   }
-  :global([data-theme='light']) .reading-notes-link {
-    --reading-ink: #285f60;
-    --reading-paper: #deeeeb;
-    --reading-ribbon: #a16a24;
-  }
   @media (prefers-reduced-motion: reduce) {
-    .reading-notes-link { transition: none; }
+    .reading-notes-card,
+    .reading-notes-card::after { transition: none; }
+    .reading-notes-card:hover { transform: none; }
   }
 </style>
