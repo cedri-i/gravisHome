@@ -17,14 +17,6 @@ const send = (res, code, data) => {
   res.end(JSON.stringify(data));
 };
 
-const body = async (req) => {
-  if (typeof req.body === 'object' && req.body) return req.body;
-  if (typeof req.body === 'string') return JSON.parse(req.body || '{}');
-  const chunks = [];
-  for await (const chunk of req) chunks.push(chunk);
-  return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
-};
-
 const config = () => {
   const repo = process.env.VISITOR_STATS_REPO || process.env.GUESTBOOK_REPO || (
     process.env.VERCEL_GIT_REPO_OWNER && process.env.VERCEL_GIT_REPO_SLUG

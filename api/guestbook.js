@@ -45,15 +45,6 @@ const jsonResponse = (response, status, payload) => {
   response.end(JSON.stringify(payload));
 };
 
-const readRequestBody = async (request) => {
-  if (request.body && typeof request.body === 'object') return request.body;
-  if (typeof request.body === 'string') return JSON.parse(request.body || '{}');
-
-  const chunks = [];
-  for await (const chunk of request) chunks.push(chunk);
-  return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
-};
-
 const getConfig = () => {
   const token = process.env.GUESTBOOK_GITHUB_TOKEN;
   const vercelRepository =
@@ -276,43 +267,72 @@ export default async function handler(request, response) {
 
     if (request.method === 'PATCH') {
       return serializeMutation(async () => {
-      const body = await readJsonBody(request, 4096);
-      const commentId = String(body.id || '').replace(/^github-/, '').trim();
+        const body = await readJsonBody(request, 4096);
+        const commentId = String(body.id || '').replace(/^github-/, '').trim();
 
-      if (!/^\d+$/.test(commentId)) {
-        return jsonResponse(response, 400, { error: 'Valid comment id is required.' });
-      }
-
-      const comment = await githubRequest(
-        config,
-        `/repos/${config.repository}/issues/comments/${commentId}`
-      );
-      const parsed = readPayload(comment.body);
-      if (!parsed) {
-        return jsonResponse(response, 400, { error: 'Comment is not a guestbook message.' });
-      }
-
-      if (body.action === 'claim') {
-        return jsonResponse(response, 410, {
-          error: 'Legacy comment claiming is no longer supported.',
-        });
-      }
-
-      if (body.action === 'like') {
-        const session = getGitHubSession(request);
-        if (!session) {
-          return jsonResponse(response, 401, { error: 'GitHub login is required.' });
+        if (!/^\d+$/.test(commentId)) {
+          return jsonResponse(response, 400, { error: 'Valid comment id is required.' });
         }
 
-        const login = normalizeLogin(session.user.login);
-        const likedBy = normalizeLikedBy(parsed.payload.likedBy);
-        const nextLikedBy = likedBy.includes(login)
-          ? likedBy.filter((item) => item !== login)
-          : [...likedBy, login];
+        const comment = await githubRequest(
+          config,
+          `/repos/${config.repository}/issues/comments/${commentId}`
+        );
+        const parsed = readPayload(comment.body);
+        if (!parsed) {
+          return jsonResponse(response, 400, { error: 'Comment is not a guestbook message.' });
+        }
+
+        if (body.action === 'claim') {
+          return jsonResponse(response, 410, {
+            error: 'Legacy comment claiming is no longer supported.',
+          });
+        }
+
+        if (body.action === 'like') {
+          const session = getGitHubSession(request);
+          if (!session) {
+            return jsonResponse(response, 401, { error: 'GitHub login is required.' });
+          }
+
+          const login = normalizeLogin(session.user.login);
+          const likedBy = normalizeLikedBy(parsed.payload.likedBy);
+          const nextLikedBy = likedBy.includes(login)
+            ? likedBy.filter((item) => item !== login)
+            : [...likedBy, login];
+
+          const nextPayload = {
+            ...parsed.payload,
+            likedBy: nextLikedBy,
+          };
+          const nextBody = `${comment.body.slice(0, parsed.markerStartIndex + markerStart.length)}
+${JSON.stringify(nextPayload)}
+${comment.body.slice(parsed.markerEndIndex)}`;
+
+          const updatedComment = await githubRequest(
+            config,
+            `/repos/${config.repository}/issues/comments/${commentId}`,
+            {
+              method: 'PATCH',
+              body: JSON.stringify({ body: nextBody }),
+            }
+          );
+
+          return jsonResponse(response, 200, {
+            message: parseComment(updatedComment),
+          });
+        }
+
+        if (!isAuthorizedAdmin(request)) {
+          return jsonResponse(response, 401, { error: 'Unauthorized.' });
+        }
+
+        const hidden = Boolean(body.hidden);
 
         const nextPayload = {
           ...parsed.payload,
-          likedBy: nextLikedBy,
+          hidden,
+          hiddenAt: hidden ? new Date().toISOString() : undefined,
         };
         const nextBody = `${comment.body.slice(0, parsed.markerStartIndex + markerStart.length)}
 ${JSON.stringify(nextPayload)}
@@ -330,35 +350,6 @@ ${comment.body.slice(parsed.markerEndIndex)}`;
         return jsonResponse(response, 200, {
           message: parseComment(updatedComment),
         });
-      }
-
-      if (!isAuthorizedAdmin(request)) {
-        return jsonResponse(response, 401, { error: 'Unauthorized.' });
-      }
-
-      const hidden = Boolean(body.hidden);
-
-      const nextPayload = {
-        ...parsed.payload,
-        hidden,
-        hiddenAt: hidden ? new Date().toISOString() : undefined,
-      };
-      const nextBody = `${comment.body.slice(0, parsed.markerStartIndex + markerStart.length)}
-${JSON.stringify(nextPayload)}
-${comment.body.slice(parsed.markerEndIndex)}`;
-
-      const updatedComment = await githubRequest(
-        config,
-        `/repos/${config.repository}/issues/comments/${commentId}`,
-        {
-          method: 'PATCH',
-          body: JSON.stringify({ body: nextBody }),
-        }
-      );
-
-      return jsonResponse(response, 200, {
-        message: parseComment(updatedComment),
-      });
       });
     }
 
