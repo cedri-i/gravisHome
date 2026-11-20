@@ -22,9 +22,13 @@ function find(node, predicate) {
 const clean = (text) => text.replace(/\s+/g, ' ').trim();
 
 function indexPage(html, url) {
-    const main = find(parse(html), (node) => attribute(node, 'data-pagefind-body') !== undefined);
+    const document = parse(html);
+    const main = find(document, (node) => attribute(node, 'data-pagefind-body') !== undefined);
     if (!main) return;
 
+    const descriptionTag = find(document, (node) =>
+        node.tagName === 'meta' && attribute(node, 'name') === 'description');
+    const description = descriptionTag ? attribute(descriptionTag, 'content') : '';
     const sections = [];
     const keywords = [];
     let title = '';
@@ -75,7 +79,7 @@ function indexPage(html, url) {
 
     read(main);
     finishSection();
-    if (title) return { title, url, keywords: keywords.join(' '), sections };
+    if (title) return { title, url, description, keywords: keywords.join(' '), sections };
 }
 
 export function notesSearchIndex() {
