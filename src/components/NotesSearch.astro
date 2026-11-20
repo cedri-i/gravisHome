@@ -1,0 +1,273 @@
+---
+import { Icon } from '@astrojs/starlight/components';
+
+const label = Astro.locals.t('search.label');
+const cancel = Astro.locals.t('search.cancelLabel');
+---
+
+<site-search data-index={import.meta.env.BASE_URL.replace(/\/$/, '') + '/search-index.json'}>
+    <button data-open type="button" aria-label={label} aria-keyshortcuts="Control+K Meta+K" disabled>
+        <Icon name="magnifier" />
+        <span class="sl-hidden md:sl-block">{label}</span>
+        <kbd class="sl-hidden md:sl-block" aria-hidden="true">Ctrl K</kbd>
+    </button>
+    <dialog aria-label={label}>
+        <form role="search">
+            <input type="search" aria-label={label} placeholder="搜索标题或正文" autocomplete="off" autofocus />
+            <button data-close type="button">{cancel}</button>
+        </form>
+        <p class="search-status" role="status">输入关键词开始搜索</p>
+        <ol class="search-results" aria-label="搜索结果"></ol>
+        <button data-more type="button" hidden>显示更多结果</button>
+    </dialog>
+</site-search>
+
+<script>
+    import { findNotes, prepareIndex, type SearchEntry } from '../lib/notes-search';
+
+    const pageSize = 10;
+
+    class SiteSearch extends HTMLElement {
+        connectedCallback() {
+            const open = this.querySelector<HTMLButtonElement>('[data-open]')!;
+            const close = this.querySelector<HTMLButtonElement>('[data-close]')!;
+            const dialog = this.querySelector('dialog')!;
+            const form = this.querySelector('form')!;
+            const input = this.querySelector('input')!;
+            const status = this.querySelector<HTMLElement>('.search-status')!;
+            const results = this.querySelector<HTMLOListElement>('.search-results')!;
+            const more = this.querySelector<HTMLButtonElement>('[data-more]')!;
+            const shortcut = open.querySelector('kbd')!;
+
+            if (/Mac|iPhone|iPad/i.test(navigator.platform)) shortcut.textContent = '⌘ K';
+
+            let index: Promise<ReturnType<typeof prepareIndex>> | undefined;
+            let request = 0;
+            let matches: ReturnType<typeof findNotes> = [];
+            let rendered = 0;
+            let searchFailed = false;
+
+            const loadIndex = () => index ??= fetch(this.dataset.index!, { signal: AbortSignal.timeout(10_000) })
+                .then((response) => {
+                    if (!response.ok) throw new Error('Search index unavailable');
+                    return response.json() as Promise<SearchEntry[]>;
+                })
+                .then(prepareIndex)
+                .catch((error) => {
+                    index = undefined;
+                    throw error;
+                });
+
+            const preload = () => {
+                if (!import.meta.env.DEV) void loadIndex().catch(() => {});
+            };
+
+            const showMore = () => {
+                const page = matches.slice(rendered, rendered + pageSize);
+                for (const entry of page) {
+                    const item = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = entry.url;
+                    const title = document.createElement('strong');
+                    title.textContent = entry.title;
+                    link.append(title);
+                    if (entry.heading || entry.excerpt) {
+                        const detail = document.createElement('span');
+                        detail.textContent = [entry.heading, entry.excerpt].filter(Boolean).join(' · ');
+                        link.append(detail);
+                    }
+                    item.append(link);
+                    results.append(item);
+                }
+                rendered += page.length;
+                more.hidden = rendered >= matches.length;
+            };
+
+            const search = async () => {
+                const id = ++request;
+                const query = input.value.trim();
+                matches = [];
+                rendered = 0;
+                searchFailed = false;
+                results.replaceChildren();
+                more.hidden = true;
+                if (!query) {
+                    status.textContent = '输入关键词开始搜索';
+                    return;
+                }
+                if (import.meta.env.DEV) {
+                    status.textContent = '请构建并预览站点后使用搜索。';
+                    return;
+                }
+
+                status.textContent = '正在搜索…';
+                try {
+                    const entries = await loadIndex();
+                    if (id !== request) return;
+                    matches = findNotes(entries, query);
+                    status.textContent = matches.length
+                        ? `找到 ${matches.length} 条结果`
+                        : '未找到结果，试试更短的关键词';
+                    showMore();
+                } catch {
+                    if (id !== request) return;
+                    searchFailed = true;
+                    status.textContent = '搜索索引加载失败，按回车重试。';
+                }
+            };
+
+            const openDialog = () => {
+                dialog.showModal();
+                document.body.toggleAttribute('data-search-modal-open', true);
+                preload();
+                input.focus();
+                input.select();
+            };
+
+            open.addEventListener('pointerenter', preload, { once: true });
+            open.addEventListener('focus', preload, { once: true });
+            open.addEventListener('click', openDialog);
+            open.disabled = false;
+            close.addEventListener('click', () => dialog.close());
+            dialog.addEventListener('click', (event) => {
+                if (event.target === dialog || (event.target as Element).closest('.search-results a')) {
+                    dialog.close();
+                }
+            });
+            dialog.addEventListener('close', () => {
+                document.body.toggleAttribute('data-search-modal-open', false);
+                open.focus();
+            });
+            window.addEventListener('keydown', (event) => {
+                if ((!event.ctrlKey && !event.metaKey) || event.key.toLowerCase() !== 'k') return;
+                event.preventDefault();
+                if (dialog.open) dialog.close();
+                else openDialog();
+            });
+
+            input.addEventListener('input', (event) => {
+                if (!(event as InputEvent).isComposing) void search();
+            });
+            input.addEventListener('compositionend', search);
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                if (searchFailed) void search();
+                else results.querySelector('a')?.click();
+            });
+            more.addEventListener('click', () => {
+                const previous = rendered;
+                showMore();
+                results.children[previous]?.querySelector('a')?.focus();
+            });
+        }
+    }
+
+    customElements.define('site-search', SiteSearch);
+</script>
+
+<style>
+    site-search { display: contents; }
+    :global(body[data-search-modal-open]) { overflow: hidden; }
+
+    button { cursor: pointer; font: inherit; }
+    [data-open] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .6rem;
+        padding: .5rem;
+        height: 2.5rem;
+        color: var(--sl-color-gray-1);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: .5rem;
+    }
+    [data-open] kbd {
+        margin-inline-start: 1.25rem;
+        padding: .05rem .35rem;
+        background: var(--sl-color-gray-6);
+        border-radius: .25rem;
+        font-size: var(--sl-text-2xs);
+    }
+    dialog {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        max-height: none;
+        margin: 0;
+        padding: 1rem;
+        color: var(--sl-color-text);
+        background: var(--sl-color-bg);
+        border: 1px solid var(--sl-color-gray-5);
+        box-shadow: var(--sl-shadow-lg);
+        overflow: auto;
+    }
+    dialog::backdrop { background: var(--sl-color-backdrop-overlay); }
+    form {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+    }
+    input {
+        width: 100%;
+        min-width: 0;
+        padding: .65rem .85rem;
+        background: var(--sl-color-bg);
+        color: var(--sl-color-text);
+        border: 1px solid var(--sl-color-gray-4);
+        border-radius: .4rem;
+        font: inherit;
+    }
+    [data-close], [data-more] {
+        color: var(--sl-color-text-accent);
+        border: 1px solid var(--sl-color-gray-5);
+        background: transparent;
+        padding: .4rem .6rem;
+        border-radius: .4rem;
+        white-space: nowrap;
+    }
+    .search-status {
+        color: var(--sl-color-gray-2);
+        margin-block: .75rem;
+        font-size: var(--sl-text-sm);
+    }
+    ol { padding: 0; list-style: none; }
+    ol:empty { display: none; }
+    ol :global(li + li) { margin-block-start: .45rem; }
+    ol :global(a) {
+        display: block;
+        background: var(--sl-color-gray-6);
+        color: var(--sl-color-text);
+        padding: .7rem .85rem;
+        border: 1px solid transparent;
+        border-radius: .4rem;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+    }
+    ol :global(a:hover), ol :global(a:focus-visible) { border-color: var(--sl-color-text-accent); }
+    ol :global(span) {
+        display: block;
+        margin-block-start: .2rem;
+        font-size: var(--sl-text-sm);
+        color: var(--sl-color-gray-2);
+    }
+    [data-more] { margin-block-start: .8rem; }
+    @media (min-width: 50rem) {
+        [data-open] {
+            background: var(--sl-color-black);
+            border-color: var(--sl-color-gray-5);
+            font-size: var(--sl-text-sm);
+        }
+        [data-open]:hover { border-color: var(--sl-color-gray-3); }
+        dialog {
+            width: min(90vw, 42rem);
+            height: max-content;
+            max-height: calc(100dvh - 6rem);
+            margin: 3rem auto auto;
+            padding: 1.25rem;
+            border-radius: .65rem;
+        }
+    }
+</style>

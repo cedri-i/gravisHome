@@ -10,6 +10,7 @@ import { remarkCodeLanguageAliases } from './remark-code-language-aliases.mjs';
 import { remarkCjkSpacing } from './remark-cjk-spacing.mjs';
 import { remarkPreserveParagraphBreaks } from './remark-preserve-paragraph-breaks.mjs';
 import { rehypeMermaid } from './rehype-mermaid.mjs';
+import { notesSearchIndex } from './scripts/search-index.mjs';
 
 function mermaidClient() {
     return {
@@ -69,7 +70,9 @@ export default defineConfig({
     integrations: [
         starlight({
             title: 'My Docs',
+            pagefind: false,
             components: {
+                Search: './src/components/NotesSearch.astro',
                 PageTitle: './src/components/PageTitle.astro',
                 Hero: './src/components/Hero.astro',
                 Footer: './src/components/Footer.astro',
@@ -541,6 +544,7 @@ if (document.readyState === 'loading') {
             ],
         }),
         mermaidClient(),
+        notesSearchIndex(),
     ],
     markdown: {
         gfm: false,
