@@ -486,6 +486,10 @@ if (document.readyState === 'loading') {
                                     label: 'Overview',
                                     link: '/artificial-intelligence/',
                                 },
+                                {
+                                    label: 'Essay Reading',
+                                    link: '/artificial-intelligence/essay-reading/',
+                                },
                             ],
                         },
                         {
