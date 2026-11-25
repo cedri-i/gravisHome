@@ -479,6 +479,16 @@ if (document.readyState === 'loading') {
                             ],
                         },
                         {
+                            label: '人工智能',
+                            collapsed: true,
+                            items: [
+                                {
+                                    label: 'Overview',
+                                    link: '/artificial-intelligence/',
+                                },
+                            ],
+                        },
+                        {
                             label: '白鱼n',
                             items: [
                                 {
